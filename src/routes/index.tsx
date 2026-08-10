@@ -22,12 +22,13 @@ export const Route = createFileRoute('/')({
 
 function HomeComponent() {
   return (
-    <div className="p-4 max-w-3xl mx-auto">
-      <section className='mb-6 flex justify-between items-center'>
-        <h1 className="text-2xl font-bold mb-4">
-          Focus<br />
-          Tracking<br />
-          Board<br />
+    <div className="mx-auto max-w-3xl p-4">
+      <section className="mb-6 flex items-center justify-between">
+        <h1 className="mb-4 text-2xl font-bold">
+          Matej's
+          <br />
+          Zines
+          <br />
         </h1>
 
         <ModeToggle />
@@ -35,19 +36,16 @@ function HomeComponent() {
 
       <Separator />
 
-      <section className="mb-6 mt-2 p-4">
-        <div className='text-2xl text-center'>
-          This is for you if you like tracking your progress. <br />
-          <small>Screenshots will be added soon.</small>
+      <section className="mt-2 mb-6 p-4">
+        <div className="text-center text-2xl">
+          Zines will be shown here soon!
         </div>
       </section>
 
       <Separator />
 
       <section className="mt-6">
-        <h2 className="text-xl font-semibold mb-2 text-center">You should probably log in first</h2>
-
-        <div className='flex justify-center'>
+        <div className="flex justify-center">
           <GithubLogin />
         </div>
       </section>
