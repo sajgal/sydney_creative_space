@@ -4,18 +4,17 @@ import { redirect } from '@tanstack/react-router'
 import { ModeToggle } from '@/components/mode-toggle'
 
 import { Separator } from '@/components/ui/separator'
-import { GithubLogin } from '@/components/github-login'
 
 export const Route = createFileRoute('/')({
   beforeLoad: ({ context }) => {
     // Log for debugging
     console.log('Checking context on index.tsx:', context) // Check if user is authenticated
-    if (context.auth.isAuthenticated) {
-      console.log('User authenticated, proceeding...')
-      throw redirect({
-        to: '/dashboard',
-      })
-    }
+    // if (context.auth.isAuthenticated) {
+    //   console.log('User authenticated, proceeding...')
+    //   throw redirect({
+    //     to: '/dashboard',
+    //   })
+    // }
   },
   component: HomeComponent,
 })
@@ -37,17 +36,8 @@ function HomeComponent() {
       <Separator />
 
       <section className="mt-2 mb-6 p-4">
-        <div className="text-center text-2xl">
-          Zines will be shown here soon!
-        </div>
-      </section>
-
-      <Separator />
-
-      <section className="mt-6">
-        <div className="flex justify-center">
-          <GithubLogin />
-        </div>
+        <div className="text-center text-2xl">Zines here</div>
+        <div className="text-center text-2xl">soon</div>
       </section>
     </div>
   )

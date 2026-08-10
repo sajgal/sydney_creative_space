@@ -9,26 +9,12 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TailwindRouteImport } from './routes/tailwind'
-import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthInvoicesRouteImport } from './routes/_auth.invoices'
+import { Route as AuthPhotoRouteImport } from './routes/_auth.photo'
 import { Route as AuthDashboardRouteImport } from './routes/_auth.dashboard'
-import { Route as AuthInvoicesIndexRouteImport } from './routes/_auth.invoices.index'
-import { Route as AuthInvoicesInvoiceIdRouteImport } from './routes/_auth.invoices.$invoiceId'
 
-const TailwindRoute = TailwindRouteImport.update({
-  id: '/tailwind',
-  path: '/tailwind',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SettingsRoute = SettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -43,9 +29,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthInvoicesRoute = AuthInvoicesRouteImport.update({
-  id: '/invoices',
-  path: '/invoices',
+const AuthPhotoRoute = AuthPhotoRouteImport.update({
+  id: '/photo',
+  path: '/photo',
   getParentRoute: () => AuthRoute,
 } as any)
 const AuthDashboardRoute = AuthDashboardRouteImport.update({
@@ -53,105 +39,49 @@ const AuthDashboardRoute = AuthDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthRoute,
 } as any)
-const AuthInvoicesIndexRoute = AuthInvoicesIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AuthInvoicesRoute,
-} as any)
-const AuthInvoicesInvoiceIdRoute = AuthInvoicesInvoiceIdRouteImport.update({
-  id: '/$invoiceId',
-  path: '/$invoiceId',
-  getParentRoute: () => AuthInvoicesRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/settings': typeof SettingsRoute
-  '/tailwind': typeof TailwindRoute
   '/dashboard': typeof AuthDashboardRoute
-  '/invoices': typeof AuthInvoicesRouteWithChildren
-  '/invoices/$invoiceId': typeof AuthInvoicesInvoiceIdRoute
-  '/invoices/': typeof AuthInvoicesIndexRoute
+  '/photo': typeof AuthPhotoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/settings': typeof SettingsRoute
-  '/tailwind': typeof TailwindRoute
   '/dashboard': typeof AuthDashboardRoute
-  '/invoices/$invoiceId': typeof AuthInvoicesInvoiceIdRoute
-  '/invoices': typeof AuthInvoicesIndexRoute
+  '/photo': typeof AuthPhotoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
-  '/settings': typeof SettingsRoute
-  '/tailwind': typeof TailwindRoute
   '/_auth/dashboard': typeof AuthDashboardRoute
-  '/_auth/invoices': typeof AuthInvoicesRouteWithChildren
-  '/_auth/invoices/$invoiceId': typeof AuthInvoicesInvoiceIdRoute
-  '/_auth/invoices/': typeof AuthInvoicesIndexRoute
+  '/_auth/photo': typeof AuthPhotoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/login'
-    | '/settings'
-    | '/tailwind'
-    | '/dashboard'
-    | '/invoices'
-    | '/invoices/$invoiceId'
-    | '/invoices/'
+  fullPaths: '/' | '/login' | '/dashboard' | '/photo'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/login'
-    | '/settings'
-    | '/tailwind'
-    | '/dashboard'
-    | '/invoices/$invoiceId'
-    | '/invoices'
+  to: '/' | '/login' | '/dashboard' | '/photo'
   id:
     | '__root__'
     | '/'
     | '/_auth'
     | '/login'
-    | '/settings'
-    | '/tailwind'
     | '/_auth/dashboard'
-    | '/_auth/invoices'
-    | '/_auth/invoices/$invoiceId'
-    | '/_auth/invoices/'
+    | '/_auth/photo'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRouteWithChildren
   LoginRoute: typeof LoginRoute
-  SettingsRoute: typeof SettingsRoute
-  TailwindRoute: typeof TailwindRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/tailwind': {
-      id: '/tailwind'
-      path: '/tailwind'
-      fullPath: '/tailwind'
-      preLoaderRoute: typeof TailwindRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/settings': {
-      id: '/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof SettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -173,11 +103,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_auth/invoices': {
-      id: '/_auth/invoices'
-      path: '/invoices'
-      fullPath: '/invoices'
-      preLoaderRoute: typeof AuthInvoicesRouteImport
+    '/_auth/photo': {
+      id: '/_auth/photo'
+      path: '/photo'
+      fullPath: '/photo'
+      preLoaderRoute: typeof AuthPhotoRouteImport
       parentRoute: typeof AuthRoute
     }
     '/_auth/dashboard': {
@@ -187,45 +117,17 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDashboardRouteImport
       parentRoute: typeof AuthRoute
     }
-    '/_auth/invoices/': {
-      id: '/_auth/invoices/'
-      path: '/'
-      fullPath: '/invoices/'
-      preLoaderRoute: typeof AuthInvoicesIndexRouteImport
-      parentRoute: typeof AuthInvoicesRoute
-    }
-    '/_auth/invoices/$invoiceId': {
-      id: '/_auth/invoices/$invoiceId'
-      path: '/$invoiceId'
-      fullPath: '/invoices/$invoiceId'
-      preLoaderRoute: typeof AuthInvoicesInvoiceIdRouteImport
-      parentRoute: typeof AuthInvoicesRoute
-    }
   }
 }
 
-interface AuthInvoicesRouteChildren {
-  AuthInvoicesInvoiceIdRoute: typeof AuthInvoicesInvoiceIdRoute
-  AuthInvoicesIndexRoute: typeof AuthInvoicesIndexRoute
-}
-
-const AuthInvoicesRouteChildren: AuthInvoicesRouteChildren = {
-  AuthInvoicesInvoiceIdRoute: AuthInvoicesInvoiceIdRoute,
-  AuthInvoicesIndexRoute: AuthInvoicesIndexRoute,
-}
-
-const AuthInvoicesRouteWithChildren = AuthInvoicesRoute._addFileChildren(
-  AuthInvoicesRouteChildren,
-)
-
 interface AuthRouteChildren {
   AuthDashboardRoute: typeof AuthDashboardRoute
-  AuthInvoicesRoute: typeof AuthInvoicesRouteWithChildren
+  AuthPhotoRoute: typeof AuthPhotoRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthDashboardRoute: AuthDashboardRoute,
-  AuthInvoicesRoute: AuthInvoicesRouteWithChildren,
+  AuthPhotoRoute: AuthPhotoRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
@@ -234,8 +136,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRouteWithChildren,
   LoginRoute: LoginRoute,
-  SettingsRoute: SettingsRoute,
-  TailwindRoute: TailwindRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

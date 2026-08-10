@@ -8,7 +8,7 @@ export const Route = createFileRoute('/_auth')({
     if (!context.auth.isAuthenticated) {
       console.log('User not authenticated, redirecting to login...')
       throw redirect({
-        to: '/',
+        to: '/login',
         search: {
           redirect: location.href,
         },
@@ -35,10 +35,8 @@ function AuthLayout() {
   }
 
   return (
-    <div className="p-2 h-full">
-      <h1>Authenticated Route</h1>
-      <p>This route's content is only visible to authenticated users.</p>
-      <ul className="py-2 flex gap-2">
+    <div className="h-full p-2">
+      <ul className="flex gap-2 py-2">
         <li>
           <Link
             to="/dashboard"
@@ -49,10 +47,10 @@ function AuthLayout() {
         </li>
         <li>
           <Link
-            to="/invoices"
+            to="/photo"
             className="hover:underline data-[status='active']:font-semibold"
           >
-            Invoices
+            Photo
           </Link>
         </li>
         <li>
@@ -63,22 +61,6 @@ function AuthLayout() {
           >
             Logout
           </button>
-        </li>
-        <li>
-          <Link
-            to="/settings"
-            className="hover:underline data-[status='active']:font-extrabold"
-          >
-            Settings
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/tailwind"
-            className="hover:underline data-[status='active']:font-semibold"
-          >
-            Tailwind
-          </Link>
         </li>
       </ul>
       <hr />
