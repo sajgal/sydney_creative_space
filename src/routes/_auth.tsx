@@ -39,6 +39,14 @@ function AuthLayout() {
       <ul className="flex gap-2 py-2">
         <li>
           <Link
+            to="/"
+            className="hover:underline data-[status='active']:font-semibold"
+          >
+            Home
+          </Link>
+        </li>
+        <li>
+          <Link
             to="/dashboard"
             className="hover:underline data-[status='active']:font-semibold"
           >

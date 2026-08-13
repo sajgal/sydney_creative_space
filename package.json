@@ -1,5 +1,5 @@
 {
-  "name": "focus tracking board",
+  "name": "gallery",
   "private": true,
   "type": "module",
   "scripts": {
@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
+    "@cloudinary/react": "^1.14.4",
+    "@cloudinary/url-gen": "^1.22.0",
     "@fontsource-variable/montserrat": "^5.2.8",
     "@hookform/resolvers": "^5.2.2",
     "@tabler/icons-react": "^3.44.0",
@@ -25,7 +27,9 @@
     "@tanstack/react-router-ssr-query": "^1.131.7",
     "@tanstack/react-start": "^1.132.0",
     "@tanstack/router-plugin": "^1.132.0",
+    "base64-transcode": "^1.0.5",
     "class-variance-authority": "^0.7.1",
+    "cloudinary": "^2.10.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "date-fns": "^4.4.0",
@@ -58,6 +62,7 @@
     "@tanstack/eslint-plugin-query": "^5.91.4",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",
+    "@types/cloudinary-uploadwidget-browser": "^2.3.5",
     "@types/node": "^22.10.2",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",

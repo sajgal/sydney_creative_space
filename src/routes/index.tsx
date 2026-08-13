@@ -7,14 +7,14 @@ import { Separator } from '@/components/ui/separator'
 
 export const Route = createFileRoute('/')({
   // beforeLoad: ({ context }) => {
-    // Log for debugging
-    // console.log('Checking context on index.tsx:', context) // Check if user is authenticated
-    // if (context.auth.isAuthenticated) {
-    //   console.log('User authenticated, proceeding...')
-    //   throw redirect({
-    //     to: '/dashboard',
-    //   })
-    // }
+  // Log for debugging
+  // console.log('Checking context on index.tsx:', context) // Check if user is authenticated
+  // if (context.auth.isAuthenticated) {
+  //   console.log('User authenticated, proceeding...')
+  //   throw redirect({
+  //     to: '/dashboard',
+  //   })
+  // }
   // },
   component: HomeComponent,
 })
@@ -26,7 +26,7 @@ function HomeComponent() {
         <h1 className="mb-4 text-2xl font-bold">
           Matej's
           <br />
-          Zines
+          Gallery
           <br />
         </h1>
 
@@ -36,7 +36,7 @@ function HomeComponent() {
       <Separator />
 
       <section className="mt-2 mb-6 p-4">
-        <div className="text-center text-2xl">Zines here</div>
+        <div className="text-center text-2xl">Images comming</div>
         <div className="text-center text-2xl">soon</div>
       </section>
     </div>
