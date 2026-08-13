@@ -17,7 +17,7 @@ export const Route = createFileRoute('/_auth/photo')({
   component: RouteComponent,
   loader: async () => {
     const data = await fetch(
-      `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_PUBLIC_CLOUDINARY_KEY}/resources/image`,
+      `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_PUBLIC_CLOUDINARY_CLOUD_NAME}/resources/image`,
       {
         method: 'get',
         headers: {
