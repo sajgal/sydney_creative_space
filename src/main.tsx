@@ -36,7 +36,6 @@ function InnerApp() {
   if (auth.isInitialLoading) {
     return (
       <div className="flex h-screen w-full items-center justify-center p-4">
-        {/* <div className="size-10 rounded-full border-4 border-gray-200 border-t-foreground animate-spin" /> */}
         <Spinner className='size-10' />
       </div>
     )
