@@ -1,7 +1,10 @@
+import { TanStackDevtools } from '@tanstack/react-devtools'
+import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools'
+import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
+
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import type { AuthContextType } from '../auth'
-import { ThemeProvider } from "@/components/theme-provider"
+import { ThemeProvider } from '@/components/theme-provider'
 
 export type MyRouterContext = {
   auth: AuthContextType
@@ -12,8 +15,20 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     <>
       <ThemeProvider defaultTheme="system" storageKey="theme">
         <Outlet />
+        <TanStackDevtools
+          config={{ hideUntilHover: true }}
+          plugins={[
+            {
+              name: 'TanStack Query',
+              render: <ReactQueryDevtoolsPanel />,
+            },
+            {
+              name: 'TanStack Router',
+              render: <TanStackRouterDevtoolsPanel />,
+            },
+          ]}
+        />
       </ThemeProvider>
-      <TanStackRouterDevtools position="bottom-right" initialIsOpen={false} />
     </>
   ),
 })
