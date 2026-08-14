@@ -1,8 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
-import Base64 from 'base64-transcode';
+// import Base64 from 'base64-transcode'
 // import { v2 as cloudinary } from 'cloudinary'
 
 import { CloudinaryUploadWidget } from '@/components/CloudinaryUploadWidget'
+import { getFolder } from '@/cloudinary/server'
 // import { cld } from '../cloudinary/config'
 // import { useEffect } from 'react'
 // import { getFolder } from '@/cloudinary/config'
@@ -15,19 +16,7 @@ import { CloudinaryUploadWidget } from '@/components/CloudinaryUploadWidget'
 
 export const Route = createFileRoute('/_auth/photo')({
   component: RouteComponent,
-  loader: async () => {
-    const data = await fetch(
-      `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_PUBLIC_CLOUDINARY_CLOUD_NAME}/resources/image`,
-      {
-        method: 'get',
-        headers: {
-          'Authorization': 'Basic ' + Base64.encode(import.meta.env.VITE_PUBLIC_CLOUDINARY_KEY + ":" + import.meta.env.VITE_PUBLIC_CLOUDINARY_SECRET),
-      },
-    }).then(res => res.json());
-
-    return data;
-
-  },
+  loader: () => [], //getFolder(),
 })
 
 function RouteComponent() {
