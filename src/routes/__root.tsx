@@ -16,7 +16,10 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       <ThemeProvider defaultTheme="system" storageKey="theme">
         <Outlet />
         <TanStackDevtools
-          config={{ hideUntilHover: true }}
+          config={{
+            defaultOpen: false,
+            // hideUntilHover: true,
+          }}
           plugins={[
             {
               name: 'TanStack Query',
