@@ -1,15 +1,52 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { CloudinaryUploadWidget } from '@/components/CloudinaryUploadWidget'
+import { useAuth } from '@/auth'
+import { Button } from '@/components/ui/button'
+import { db } from '@/firebase/config'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { addDoc, collection } from 'firebase/firestore'
+import { getUserGalleries } from '@/firebase/gallery'
+import { useQuery } from '@tanstack/react-query'
+import { Separator } from '@/components/ui/separator'
 
 export const Route = createFileRoute('/_auth/gallery/')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
+  const navigate = useNavigate()
+  const { user } = useAuth()
+  const userId = user?.uid ?? '-'
+  const doc = collection(db, 'gallery')
+
+  const { isPending, error, data } = useQuery({
+    queryKey: ['galleryData'],
+    queryFn: async () => getUserGalleries(userId),
+  })
+
+  const handleNewGalleryClick = async () => {
+    const docRef = await addDoc(doc, { userId })
+    navigate({ to: '/gallery/$galleryId', params: { galleryId: docRef.id } })
+  }
+
+  if (isPending) return 'Loading...'
+
+  if (error) return 'An error has occurred: ' + error.message
+
   return (
     <div>
-      <div>Hello, try to upload an image</div>
-      <CloudinaryUploadWidget testingFolder="whoa" />
+      <div className="mt-3">
+        {data.map((doc, key) => {
+          // const {userId} = doc.data()
+          return (
+            <div key={key}>
+              <Link to="/gallery/$galleryId" params={{ galleryId: doc.id }}>
+                Gallery: {doc.id}
+              </Link>
+            </div>
+          )
+        })}
+      </div>
+      <Separator className="my-6" />
+      <Button onClick={handleNewGalleryClick}>Create new gallery</Button>
     </div>
   )
 }

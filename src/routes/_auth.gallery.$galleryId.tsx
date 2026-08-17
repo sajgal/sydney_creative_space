@@ -1,3 +1,4 @@
+import { CloudinaryUploadWidget } from '@/components/CloudinaryUploadWidget'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_auth/gallery/$galleryId')({
@@ -14,5 +15,8 @@ function RouteComponent() {
   const data = Route.useLoaderData()
   console.log('------------ data', data)
 
-  return <div>Hello "/_auth/gallery/{`${data}`}"!</div>
+  return <div>
+    <p>Hello "/_auth/gallery/{`${data}`}"!</p>
+    <CloudinaryUploadWidget testingFolder="whoa" />
+  </div>
 }
