@@ -12,10 +12,11 @@ function HomeComponent() {
     <div className="mx-auto max-w-3xl p-4">
       <section className="mb-6 flex items-center justify-between">
         <h1 className="mb-4 text-2xl font-bold">
-          Matej's
+          Sydney
           <br />
-          Gallery
+          Creative
           <br />
+          .space
         </h1>
 
         <ModeToggle />

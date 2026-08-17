@@ -13,7 +13,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthDashboardRouteImport } from './routes/_auth.dashboard'
-import { Route as AuthPhotoRouteImport } from './routes/_auth.photo'
+import { Route as AuthGalleryIndexRouteImport } from './routes/_auth.gallery.index'
+import { Route as AuthGalleryGalleryIdRouteImport } from './routes/_auth.gallery.$galleryId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,9 +35,14 @@ const AuthDashboardRoute = AuthDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthRoute,
 } as any)
-const AuthPhotoRoute = AuthPhotoRouteImport.update({
-  id: '/photo',
-  path: '/photo',
+const AuthGalleryIndexRoute = AuthGalleryIndexRouteImport.update({
+  id: '/gallery/',
+  path: '/gallery/',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthGalleryGalleryIdRoute = AuthGalleryGalleryIdRouteImport.update({
+  id: '/gallery/$galleryId',
+  path: '/gallery/$galleryId',
   getParentRoute: () => AuthRoute,
 } as any)
 
@@ -44,13 +50,15 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/dashboard': typeof AuthDashboardRoute
-  '/photo': typeof AuthPhotoRoute
+  '/gallery/$galleryId': typeof AuthGalleryGalleryIdRoute
+  '/gallery/': typeof AuthGalleryIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/dashboard': typeof AuthDashboardRoute
-  '/photo': typeof AuthPhotoRoute
+  '/gallery/$galleryId': typeof AuthGalleryGalleryIdRoute
+  '/gallery': typeof AuthGalleryIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -58,20 +66,22 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
   '/_auth/dashboard': typeof AuthDashboardRoute
-  '/_auth/photo': typeof AuthPhotoRoute
+  '/_auth/gallery/$galleryId': typeof AuthGalleryGalleryIdRoute
+  '/_auth/gallery/': typeof AuthGalleryIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/dashboard' | '/photo'
+  fullPaths: '/' | '/login' | '/dashboard' | '/gallery/$galleryId' | '/gallery/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/dashboard' | '/photo'
+  to: '/' | '/login' | '/dashboard' | '/gallery/$galleryId' | '/gallery'
   id:
     | '__root__'
     | '/'
     | '/_auth'
     | '/login'
     | '/_auth/dashboard'
-    | '/_auth/photo'
+    | '/_auth/gallery/$galleryId'
+    | '/_auth/gallery/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -110,11 +120,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDashboardRouteImport
       parentRoute: typeof AuthRoute
     }
-    '/_auth/photo': {
-      id: '/_auth/photo'
-      path: '/photo'
-      fullPath: '/photo'
-      preLoaderRoute: typeof AuthPhotoRouteImport
+    '/_auth/gallery/': {
+      id: '/_auth/gallery/'
+      path: '/gallery'
+      fullPath: '/gallery/'
+      preLoaderRoute: typeof AuthGalleryIndexRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/gallery/$galleryId': {
+      id: '/_auth/gallery/$galleryId'
+      path: '/gallery/$galleryId'
+      fullPath: '/gallery/$galleryId'
+      preLoaderRoute: typeof AuthGalleryGalleryIdRouteImport
       parentRoute: typeof AuthRoute
     }
   }
@@ -122,12 +139,14 @@ declare module '@tanstack/react-router' {
 
 interface AuthRouteChildren {
   AuthDashboardRoute: typeof AuthDashboardRoute
-  AuthPhotoRoute: typeof AuthPhotoRoute
+  AuthGalleryGalleryIdRoute: typeof AuthGalleryGalleryIdRoute
+  AuthGalleryIndexRoute: typeof AuthGalleryIndexRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthDashboardRoute: AuthDashboardRoute,
-  AuthPhotoRoute: AuthPhotoRoute,
+  AuthGalleryGalleryIdRoute: AuthGalleryGalleryIdRoute,
+  AuthGalleryIndexRoute: AuthGalleryIndexRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)

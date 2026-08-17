@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { CloudinaryUploadWidget } from '@/components/CloudinaryUploadWidget'
 
-export const Route = createFileRoute('/_auth/photo')({
+export const Route = createFileRoute('/_auth/gallery/')({
   component: RouteComponent,
 })
 

@@ -53,10 +53,10 @@ function AuthLayout() {
         </li>
         <li>
           <Link
-            to="/photo"
+            to="/gallery"
             className="hover:underline data-[status='active']:font-semibold"
           >
-            Photo
+            Gallery
           </Link>
         </li>
         <li>
