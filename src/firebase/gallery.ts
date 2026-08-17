@@ -1,4 +1,4 @@
-import { collection, getDocs, query, where } from 'firebase/firestore'
+import { addDoc, collection, getDocs, query, where } from 'firebase/firestore'
 import type { QueryDocumentSnapshot } from 'firebase/firestore'
 import { db } from '@/firebase/config'
 
@@ -12,4 +12,10 @@ export const getUserGalleries = async (
   const querySnapshot = await getDocs(q)
 
   return querySnapshot.docs
+}
+
+export const addGallery = async ( userId: string): Promise<string> => {
+  const docRef = await addDoc(doc, { userId })
+
+  return docRef.id;
 }

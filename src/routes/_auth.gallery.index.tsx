@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { db } from '@/firebase/config'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { addDoc, collection } from 'firebase/firestore'
-import { getUserGalleries } from '@/firebase/gallery'
+import { addGallery, getUserGalleries } from '@/firebase/gallery'
 import { useQuery } from '@tanstack/react-query'
 import { Separator } from '@/components/ui/separator'
 
@@ -15,7 +15,6 @@ function RouteComponent() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const userId = user?.uid ?? '-'
-  const doc = collection(db, 'gallery')
 
   const { isPending, error, data } = useQuery({
     queryKey: ['galleryData'],
@@ -23,8 +22,8 @@ function RouteComponent() {
   })
 
   const handleNewGalleryClick = async () => {
-    const docRef = await addDoc(doc, { userId })
-    navigate({ to: '/gallery/$galleryId', params: { galleryId: docRef.id } })
+    const galleryId = await addGallery(userId)
+    navigate({ to: '/gallery/$galleryId', params: { galleryId } })
   }
 
   if (isPending) return 'Loading...'
