@@ -1,8 +1,6 @@
 import { useAuth } from '@/auth'
 import { Button } from '@/components/ui/button'
-import { db } from '@/firebase/config'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
-import { addDoc, collection } from 'firebase/firestore'
 import { addGallery, getUserGalleries } from '@/firebase/gallery'
 import { useQuery } from '@tanstack/react-query'
 import { Separator } from '@/components/ui/separator'
