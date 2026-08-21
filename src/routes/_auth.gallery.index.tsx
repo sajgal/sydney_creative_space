@@ -1,4 +1,3 @@
-import { useAuth } from '@/auth'
 import { Button } from '@/components/ui/button'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { addGallery, getUserGalleries } from '@/firebase/gallery'
@@ -11,8 +10,8 @@ export const Route = createFileRoute('/_auth/gallery/')({
 
 function RouteComponent() {
   const navigate = useNavigate()
-  const { user } = useAuth()
-  const userId = user?.uid ?? '-'
+  const { user } = Route.useRouteContext()
+  const userId = user?.id ?? '-'
 
   const { isPending, error, data } = useQuery({
     queryKey: ['galleryData'],
@@ -31,16 +30,19 @@ function RouteComponent() {
   return (
     <div>
       <div className="mt-3">
-        {data.map((doc, key) => {
-          // const {userId} = doc.data()
-          return (
-            <div key={key}>
-              <Link to="/gallery/$galleryId" params={{ galleryId: doc.id }}>
-                Gallery: {doc.id}
-              </Link>
-            </div>
-          )
-        })}
+        {!data.length && <div>No galleries</div>}
+
+        {!!data.length &&
+          data.map((doc, key) => {
+            // const {userId} = doc.data()
+            return (
+              <div key={key}>
+                <Link to="/gallery/$galleryId" params={{ galleryId: doc.id }}>
+                  <Button>{doc.id}</Button>
+                </Link>
+              </div>
+            )
+          })}
       </div>
       <Separator className="my-6" />
       <Button onClick={handleNewGalleryClick}>Create new gallery</Button>

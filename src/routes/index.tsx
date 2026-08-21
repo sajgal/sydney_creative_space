@@ -1,13 +1,23 @@
-import { createFileRoute } from '@tanstack/react-router'
-
-import { ModeToggle } from '@/components/mode-toggle'
-import { Separator } from '@/components/ui/separator'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { Button } from '~/components/ui/button'
+// import { deleteImage, getServerTime } from "../server-functions";
+// import toast from "react-hot-toast";
+import { Separator } from '~/components/ui/separator'
 
 export const Route = createFileRoute('/')({
-  component: HomeComponent,
+  component: Home,
+  // loader: () => getServerTime(),
 })
 
-function HomeComponent() {
+function Home() {
+  // const servertime = Route.useLoaderData();
+  // const handleDeleteImage = async () => {
+  //   const {result} = await deleteImage();
+
+  //   console.log("---------- deleteImage result", result);
+  //   toast.error(result);
+  // };
+
   return (
     <div className="mx-auto max-w-3xl p-4">
       <section className="mb-6 flex items-center justify-between">
@@ -18,8 +28,6 @@ function HomeComponent() {
           <br />
           .space
         </h1>
-
-        <ModeToggle />
       </section>
 
       <Separator />
@@ -27,6 +35,12 @@ function HomeComponent() {
       <section className="mt-2 mb-6 p-4">
         <div className="text-center text-2xl">Images comming</div>
         <div className="text-center text-2xl">soon</div>
+
+        <Separator />
+
+        <Link to="/gallery">
+          <Button>Dashboard &gt; Gallery</Button>
+        </Link>
       </section>
     </div>
   )
