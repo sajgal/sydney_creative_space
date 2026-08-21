@@ -68,9 +68,6 @@ importers:
       firebase-admin:
         specifier: ^14.2.0
         version: 14.2.0(@firebase/app-compat@0.5.16)(@firebase/app@0.16.0)(supports-color@7.2.0)
-      jose:
-        specifier: ^6.2.9
-        version: 6.2.9
       lucide-react:
         specifier: ^1.32.0
         version: 1.32.0(react@19.2.8)
