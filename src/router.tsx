@@ -1,10 +1,17 @@
-import { createRouter } from '@tanstack/react-router'
-import { routeTree } from './routeTree.gen'
+import { createRouter as createTanStackRouter } from '@tanstack/react-router'
+
+import { routeTree } from '#/routeTree.gen'
+import { getInitialAuthObject } from '#/auth'
 
 export function getRouter() {
-  const router = createRouter({
+  const router = createTanStackRouter({
     routeTree,
     scrollRestoration: true,
+    defaultPreload: 'intent',
+    defaultPreloadStaleTime: 0,
+    context: {
+      auth: getInitialAuthObject(), // This will be set after we wrap the app in AuthContextProvider
+    },
   })
 
   return router

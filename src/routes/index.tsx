@@ -1,22 +1,15 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { Button } from '~/components/ui/button'
-// import { deleteImage, getServerTime } from "../server-functions";
-// import toast from "react-hot-toast";
-import { Separator } from '~/components/ui/separator'
+import { createFileRoute } from '@tanstack/react-router'
+
+import { Separator } from '#/components/ui/separator'
+import { getServerTime } from '#/server-functions'
 
 export const Route = createFileRoute('/')({
-  component: Home,
-  // loader: () => getServerTime(),
+  component: HomeComponent,
+  loader: () => getServerTime(),
 })
 
-function Home() {
-  // const servertime = Route.useLoaderData();
-  // const handleDeleteImage = async () => {
-  //   const {result} = await deleteImage();
-
-  //   console.log("---------- deleteImage result", result);
-  //   toast.error(result);
-  // };
+function HomeComponent() {
+  const data = Route.useLoaderData()
 
   return (
     <div className="mx-auto max-w-3xl p-4">
@@ -35,12 +28,7 @@ function Home() {
       <section className="mt-2 mb-6 p-4">
         <div className="text-center text-2xl">Images comming</div>
         <div className="text-center text-2xl">soon</div>
-
-        <Separator />
-
-        <Link to="/gallery">
-          <Button>Dashboard &gt; Gallery</Button>
-        </Link>
+        <div>Server time {data}</div>
       </section>
     </div>
   )

@@ -1,9 +1,12 @@
-import { Link, Outlet, createFileRoute, redirect } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
+import { Link, Outlet, redirect, useRouter } from '@tanstack/react-router'
+
+import { useAuth } from '#/auth'
 
 export const Route = createFileRoute('/_auth')({
   beforeLoad: ({ context, location }) => {
-    if (!context.user) {
-      // throw new Error('Not authenticated')
+    // Check if user is authenticated
+    if (!context.auth.isAuthenticated) {
       throw redirect({
         to: '/login',
         search: {
@@ -16,6 +19,20 @@ export const Route = createFileRoute('/_auth')({
 })
 
 function AuthLayout() {
+  const router = useRouter()
+  const navigate = Route.useNavigate()
+  const auth = useAuth()
+
+  const handleLogout = () => {
+    if (window.confirm('Are you sure you want to logout?')) {
+      auth.logout().then(() => {
+        router.invalidate().finally(() => {
+          navigate({ to: '/' })
+        })
+      })
+    }
+  }
+
   return (
     <div className="h-full p-2">
       <ul className="flex gap-2 py-2">
@@ -44,12 +61,13 @@ function AuthLayout() {
           </Link>
         </li>
         <li>
-          <Link
-            to="/logout"
-            className="hover:underline data-[status='active']:font-semibold"
+          <button
+            type="button"
+            className="hover:underline"
+            onClick={handleLogout}
           >
             Logout
-          </Link>
+          </button>
         </li>
       </ul>
       <hr />
