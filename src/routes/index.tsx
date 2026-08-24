@@ -1,7 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { ShieldKeyhole } from 'lucide-react'
 
 import { Separator } from '#/components/ui/separator'
 import { getServerTime } from '#/server-functions'
+import { Button } from '#/components/ui/button'
 
 export const Route = createFileRoute('/')({
   component: HomeComponent,
@@ -21,6 +23,12 @@ function HomeComponent() {
           <br />
           .space
         </h1>
+
+        <Link to="/dashboard">
+          <Button size="icon-lg" aria-label="Admin" variant="outline">
+            <ShieldKeyhole />
+          </Button>
+        </Link>
       </section>
 
       <Separator />
