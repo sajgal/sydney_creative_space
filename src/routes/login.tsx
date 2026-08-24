@@ -1,8 +1,7 @@
 import { z } from 'zod'
 import { redirect } from '@tanstack/react-router'
 import { createFileRoute } from '@tanstack/react-router'
-
-import { GithubLogin } from '#/components/github-login'
+import { EmailLogin } from '#/components/EmailLogin'
 
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 const fallback = '/dashboard' as const
@@ -22,7 +21,8 @@ export const Route = createFileRoute('/login')({
 function LoginComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center">
-      <GithubLogin />
+      <EmailLogin />
+      {/* <GithubLogin /> //disabled for now */}
     </div>
   )
 }

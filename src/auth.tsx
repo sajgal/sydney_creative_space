@@ -6,6 +6,8 @@ import {
   type AuthProvider,
   signInWithPopup,
   signOut,
+  signInWithCredential,
+  AuthCredential,
 } from 'firebase/auth'
 import { flushSync } from 'react-dom'
 import { auth } from './firebase/config'
@@ -27,8 +29,7 @@ export function AuthContextProvider({
 }) {
   const [user, setUser] = React.useState<User | null>(auth.currentUser)
   const [isInitialLoading, setIsInitialLoading] = React.useState(true)
-  const isAuthenticated =
-    !!user && user.email === import.meta.env.VITE_PUBLIC_AUTH_ADMIN_EMAIL
+  const isAuthenticated = !!user
 
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -46,14 +47,19 @@ export function AuthContextProvider({
     setIsInitialLoading(false)
   }, [])
 
-  const login = React.useCallback(async (provider: AuthProvider) => {
-    const result = await signInWithPopup(auth, provider)
+  const login = React.useCallback(
+    async (provider: AuthProvider, credentials?: AuthCredential) => {
+      const result = credentials
+        ? await signInWithCredential(auth, credentials)
+        : await signInWithPopup(auth, provider)
 
-    flushSync(() => {
-      setUser(result.user)
-      setIsInitialLoading(false)
-    })
-  }, [])
+      flushSync(() => {
+        setUser(result.user)
+        setIsInitialLoading(false)
+      })
+    },
+    [],
+  )
 
   return (
     <AuthContext

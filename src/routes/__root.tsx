@@ -9,6 +9,7 @@ import { TanStackDevtools } from '@tanstack/react-devtools'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
+import { Toaster } from 'react-hot-toast'
 
 import { AuthContextProvider, useAuth, type AuthContextType } from '#/auth'
 import appCss from '#/styles.css?url'
@@ -79,22 +80,25 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <body>
         <QueryClientProvider client={queryClient}>
           <AuthContextProvider>
-            <AuthProviderInnerApp>{children}</AuthProviderInnerApp>
-            <TanStackDevtools
-              config={{
-                defaultOpen: false,
-              }}
-              plugins={[
-                {
-                  name: 'TanStack Query',
-                  render: <ReactQueryDevtoolsPanel />,
-                },
-                {
-                  name: 'TanStack Router',
-                  render: <TanStackRouterDevtoolsPanel />,
-                },
-              ]}
-            />
+            <AuthProviderInnerApp>
+              <Toaster />
+              {children}
+              <TanStackDevtools
+                config={{
+                  defaultOpen: false,
+                }}
+                plugins={[
+                  {
+                    name: 'TanStack Query',
+                    render: <ReactQueryDevtoolsPanel />,
+                  },
+                  {
+                    name: 'TanStack Router',
+                    render: <TanStackRouterDevtoolsPanel />,
+                  },
+                ]}
+              />
+            </AuthProviderInnerApp>
           </AuthContextProvider>
         </QueryClientProvider>
         <Scripts />
