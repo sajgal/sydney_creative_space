@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Link, Outlet, redirect, useRouter } from '@tanstack/react-router'
 
 import { useAuth } from '#/auth'
+import { Card } from '#/components/ui/card'
 
 export const Route = createFileRoute('/_auth')({
   beforeLoad: ({ context, location }) => {
@@ -34,7 +35,7 @@ function AuthLayout() {
   }
 
   return (
-    <div className="h-full p-2">
+    <div className="mx-auto flex w-full max-w-3xl flex-col gap-3 py-12">
       <ul className="flex gap-2 py-2">
         <li>
           <Link
@@ -71,7 +72,9 @@ function AuthLayout() {
         </li>
       </ul>
       <hr />
-      <Outlet />
+      <Card className="w-full">
+        <Outlet />
+      </Card>
     </div>
   )
 }
