@@ -71,7 +71,7 @@ function AuthLayout() {
           </button>
         </li>
       </ul>
-      <hr />
+
       <Card className="w-full">
         <Outlet />
       </Card>
