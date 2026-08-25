@@ -21,6 +21,7 @@ import { useAuth } from '#/auth'
 import { EmailAuthProvider } from 'firebase/auth'
 import { handleSignInUtil } from '#/utils/handleSignIn'
 import toast from 'react-hot-toast'
+import { Spinner } from './ui/spinner'
 
 const formSchema = z.object({
   email: z.email(),
@@ -127,16 +128,25 @@ export function EmailLogin() {
       </CardContent>
       <CardFooter>
         <form.Subscribe
-          selector={({ canSubmit }) => canSubmit}
-          children={(canSubmit) => (
+          selector={({ canSubmit, isSubmitting }) => [canSubmit, isSubmitting]}
+          children={([canSubmit, isSubmitting]) => (
             <Field orientation="horizontal" className="flex justify-end">
-              <Button
-                type="submit"
-                form="bug-report-form"
-                disabled={!canSubmit}
-              >
-                Submit
-              </Button>
+              {!isSubmitting && (
+                <Button
+                  type="submit"
+                  form="bug-report-form"
+                  disabled={!canSubmit}
+                >
+                  Submit
+                </Button>
+              )}
+
+              {!!isSubmitting && (
+                <Button disabled>
+                  <Spinner data-icon="inline-start" />
+                  Submitting...
+                </Button>
+              )}
             </Field>
           )}
         />
