@@ -1,3 +1,5 @@
-# https://www.robotstxt.org/robotstxt.html
+# F**k off everyone >:)
+User-agent: Googlebot
+User-agent: AdsBot-Google
 User-agent: *
-Disallow:
+Disallow: /
