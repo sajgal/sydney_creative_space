@@ -68,7 +68,7 @@ function AuthProviderInnerApp({ children }: { children: React.ReactNode }) {
     )
   }
 
-  return <div>{children}</div>
+  return children
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
@@ -77,7 +77,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className='bg-sidebar-accent'>
+      <body className="bg-sidebar-accent">
         <QueryClientProvider client={queryClient}>
           <AuthContextProvider>
             <AuthProviderInnerApp>
