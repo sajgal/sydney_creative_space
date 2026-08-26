@@ -1,10 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { Plus } from 'lucide-react'
 
 import { useAuth } from '#/auth'
 import { Button } from '#/components/ui/button'
-import { Separator } from '#/components/ui/separator'
 import { addGallery, getUserGalleries } from '#/firebase/gallery'
+import GalleryListItem from '#/components/GalleryListItem'
+import { ItemGroup } from '#/components/ui/item'
+import FullWidthSpinner from '#/components/FullWidthSpinner'
 
 export const Route = createFileRoute('/_auth/gallery/')({
   component: RouteComponent,
@@ -25,26 +28,31 @@ function RouteComponent() {
     navigate({ to: '/gallery/$galleryId', params: { galleryId } })
   }
 
-  if (isPending) return 'Loading...'
-
   if (error) return 'An error has occurred: ' + error.message
 
   return (
-    <div>
-      <div className="mt-3">
-        {data.map((doc, key) => {
-          // const {userId} = doc.data()
-          return (
-            <div key={key}>
-              <Link to="/gallery/$galleryId" params={{ galleryId: doc.id }}>
-                Gallery: {doc.id}
-              </Link>
-            </div>
-          )
-        })}
+    <section className="p-2 pt-0">
+      <div className="flex max-w-full items-end justify-between">
+        <h1 className="text-lg font-semibold">Your galleries:</h1>
+        <Button className="max-w-xs" onClick={handleNewGalleryClick}>
+          <Plus /> New gallery
+        </Button>
       </div>
-      <Separator className="my-6" />
-      <Button onClick={handleNewGalleryClick}>Create new gallery</Button>
-    </div>
+
+      {!!isPending && <FullWidthSpinner />}
+
+      {!!data && (
+        <div className="mt-4 flex max-w-full flex-col">
+          <ItemGroup className="gap-2">
+            {data.map((doc, key) => (
+              <GalleryListItem
+                key={key}
+                gallery={{ ...doc.data(), id: doc.id }}
+              />
+            ))}
+          </ItemGroup>
+        </div>
+      )}
+    </section>
   )
 }
