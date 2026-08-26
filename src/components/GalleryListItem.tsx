@@ -16,7 +16,7 @@ type Gallery = {
   artist?: string
   album?: string
   duration?: string
-  created?: string
+  created?: number
 }
 
 export default function GalleryListItem({ gallery }: { gallery: Gallery }) {
