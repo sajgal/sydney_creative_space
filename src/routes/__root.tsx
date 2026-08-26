@@ -14,6 +14,8 @@ import { Toaster } from 'react-hot-toast'
 import { AuthContextProvider, useAuth, type AuthContextType } from '#/auth'
 import appCss from '#/styles.css?url'
 import { Spinner } from '#/components/ui/spinner'
+import { NotFound } from '#/components/NotFound'
+import { Error } from '#/components/Error'
 
 export type MyRouterContext = {
   auth: AuthContextType
@@ -49,6 +51,8 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     ],
   }),
   shellComponent: RootDocument,
+  errorComponent: () => <Error />,
+  notFoundComponent: () => <NotFound />,
 })
 
 function AuthProviderInnerApp({ children }: { children: React.ReactNode }) {
