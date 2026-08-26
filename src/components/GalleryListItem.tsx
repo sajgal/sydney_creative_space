@@ -1,4 +1,5 @@
 import { Image } from '@unpic/react'
+import dayjs from 'dayjs'
 
 import {
   Item,
@@ -10,14 +11,19 @@ import {
 import { Link } from '@tanstack/react-router'
 
 type Gallery = {
-  id: string,
+  id: string
   title?: string
   artist?: string
   album?: string
   duration?: string
+  created?: string
 }
 
 export default function GalleryListItem({ gallery }: { gallery: Gallery }) {
+  const formattedDate = dayjs(gallery.created || 0 * 1000).format(
+    'DD.MM.YYYY HH:mm:ss',
+  )
+
   return (
     <Item
       key={gallery.title || 'title'}
@@ -25,7 +31,7 @@ export default function GalleryListItem({ gallery }: { gallery: Gallery }) {
       asChild
       role="listitem"
     >
-      <Link to="/gallery/$galleryId" params={{galleryId: gallery.id}}>
+      <Link to="/gallery/$galleryId" params={{ galleryId: gallery.id }}>
         <ItemMedia variant="image">
           <Image
             src={`https://avatar.vercel.sh/${gallery.title || 'title'}`}
@@ -38,9 +44,7 @@ export default function GalleryListItem({ gallery }: { gallery: Gallery }) {
         <ItemContent>
           <ItemTitle className="line-clamp-1">
             {gallery.title || 'title'} -{' '}
-            <span className="text-muted-foreground">
-              {gallery.album || 'album'}
-            </span>
+            <span className="text-muted-foreground">{formattedDate}</span>
           </ItemTitle>
           <ItemDescription>{gallery.artist || gallery.id}</ItemDescription>
         </ItemContent>

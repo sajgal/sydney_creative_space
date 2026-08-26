@@ -4,6 +4,7 @@ import {
   collection,
   doc,
   getDocs,
+  orderBy,
   query,
   updateDoc,
   where,
@@ -14,14 +15,19 @@ const COLLECTION_NAME_GALLERY = 'gallery'
 const col = collection(db, COLLECTION_NAME_GALLERY)
 
 export const getUserGalleries = async (userId: string) => {
-  const q = query(col, where('userId', '==', userId))
+  const q = query(
+    col,
+    where('userId', '==', userId),
+    orderBy('created', 'desc'),
+  )
+  // const q = query(col, where('userId', '==', userId))
   const querySnapshot = await getDocs(q)
 
   return querySnapshot.docs
 }
 
 export const addGallery = async (userId: string) => {
-  const docRef = await addDoc(col, { userId })
+  const docRef = await addDoc(col, { userId, created: Date.now() })
 
   return docRef.id
 }
