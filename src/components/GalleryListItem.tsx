@@ -42,7 +42,7 @@ export default function GalleryListItem({ gallery }: { gallery: Gallery }) {
               {gallery.album || 'album'}
             </span>
           </ItemTitle>
-          <ItemDescription>{gallery.artist || 'artist'}</ItemDescription>
+          <ItemDescription>{gallery.artist || gallery.id}</ItemDescription>
         </ItemContent>
         <ItemContent className="flex-none text-center">
           <ItemDescription>{gallery.duration || '3:21'}</ItemDescription>
