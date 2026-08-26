@@ -24,7 +24,7 @@ function HomeComponent() {
           .space
         </h1>
 
-        <Link to="/dashboard">
+        <Link to="/gallery">
           <Button size="icon-lg" aria-label="Admin" variant="outline">
             <ShieldKeyhole />
           </Button>
