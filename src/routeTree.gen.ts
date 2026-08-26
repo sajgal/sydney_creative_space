@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as LogoutRouteImport } from './routes/logout'
 import { Route as AuthDashboardRouteImport } from './routes/_auth.dashboard'
 import { Route as AuthGalleryIndexRouteImport } from './routes/_auth.gallery.index'
 import { Route as AuthGalleryGalleryIdRouteImport } from './routes/_auth.gallery.$galleryId'
@@ -28,6 +29,11 @@ const AuthRoute = AuthRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LogoutRoute = LogoutRouteImport.update({
+  id: '/logout',
+  path: '/logout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthDashboardRoute = AuthDashboardRouteImport.update({
@@ -49,6 +55,7 @@ const AuthGalleryGalleryIdRoute = AuthGalleryGalleryIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/logout': typeof LogoutRoute
   '/dashboard': typeof AuthDashboardRoute
   '/gallery/$galleryId': typeof AuthGalleryGalleryIdRoute
   '/gallery/': typeof AuthGalleryIndexRoute
@@ -56,6 +63,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/logout': typeof LogoutRoute
   '/dashboard': typeof AuthDashboardRoute
   '/gallery/$galleryId': typeof AuthGalleryGalleryIdRoute
   '/gallery': typeof AuthGalleryIndexRoute
@@ -65,20 +73,34 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
+  '/logout': typeof LogoutRoute
   '/_auth/dashboard': typeof AuthDashboardRoute
   '/_auth/gallery/$galleryId': typeof AuthGalleryGalleryIdRoute
   '/_auth/gallery/': typeof AuthGalleryIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/dashboard' | '/gallery/$galleryId' | '/gallery/'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/logout'
+    | '/dashboard'
+    | '/gallery/$galleryId'
+    | '/gallery/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/dashboard' | '/gallery/$galleryId' | '/gallery'
+  to:
+    | '/'
+    | '/login'
+    | '/logout'
+    | '/dashboard'
+    | '/gallery/$galleryId'
+    | '/gallery'
   id:
     | '__root__'
     | '/'
     | '/_auth'
     | '/login'
+    | '/logout'
     | '/_auth/dashboard'
     | '/_auth/gallery/$galleryId'
     | '/_auth/gallery/'
@@ -88,6 +110,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRouteWithChildren
   LoginRoute: typeof LoginRoute
+  LogoutRoute: typeof LogoutRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -111,6 +134,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/logout': {
+      id: '/logout'
+      path: '/logout'
+      fullPath: '/logout'
+      preLoaderRoute: typeof LogoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth/dashboard': {
@@ -155,6 +185,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRouteWithChildren,
   LoginRoute: LoginRoute,
+  LogoutRoute: LogoutRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
