@@ -9,6 +9,7 @@ import {
   updateDoc,
   where,
   getDoc,
+  arrayRemove,
 } from 'firebase/firestore'
 import { db } from '@/firebase/config'
 
@@ -41,6 +42,17 @@ export const addPhotoToGallery = async (
 
   await updateDoc(gallery, {
     photos: arrayUnion(uploadInfo),
+  })
+}
+
+export const removePhotoFromGallery = async (
+  galleryId: string,
+  uploadInfo: { thumbnail_url: string; secure_url: string },
+) => {
+  const gallery = doc(db, COLLECTION_NAME_GALLERY, galleryId)
+
+  await updateDoc(gallery, {
+    photos: arrayRemove(uploadInfo),
   })
 }
 

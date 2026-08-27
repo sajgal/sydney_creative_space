@@ -54,6 +54,8 @@ function RouteComponent() {
           </ItemGroup>
         </div>
       )}
+
+      {!isPending && !data.length && <div>No galleries yet</div>}
     </section>
   )
 }

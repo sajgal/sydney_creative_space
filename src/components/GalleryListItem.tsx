@@ -17,12 +17,16 @@ type Gallery = {
   album?: string
   duration?: string
   created?: number
+  photos?: { thumbnail_url: string; secure_url: string }[]
 }
 
 export default function GalleryListItem({ gallery }: { gallery: Gallery }) {
   const formattedDate = dayjs(gallery.created || 0 * 1000).format(
     'DD.MM.YYYY HH:mm:ss',
   )
+
+  const thumbnailUrl =
+    gallery?.photos && gallery?.photos[0] && gallery?.photos[0]?.thumbnail_url
 
   return (
     <Item
@@ -34,7 +38,7 @@ export default function GalleryListItem({ gallery }: { gallery: Gallery }) {
       <Link to="/gallery/$galleryId" params={{ galleryId: gallery.id }}>
         <ItemMedia variant="image">
           <Image
-            src={`https://avatar.vercel.sh/${gallery.title || 'title'}`}
+            src={thumbnailUrl || `https://avatar.vercel.sh/mat`}
             alt={gallery.title || 'title'}
             width={32}
             height={32}
