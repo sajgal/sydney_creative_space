@@ -21,7 +21,7 @@ type Gallery = {
 }
 
 export default function GalleryListItem({ gallery }: { gallery: Gallery }) {
-  const formattedDate = dayjs(gallery.created || 0 * 1000).format(
+  const formattedDate = dayjs(gallery.created || 0).format(
     'DD.MM.YYYY HH:mm:ss',
   )
 

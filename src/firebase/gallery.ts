@@ -10,8 +10,10 @@ import {
   where,
   getDoc,
   arrayRemove,
+  deleteField,
 } from 'firebase/firestore'
 import { db } from '@/firebase/config'
+import { getServerTime } from '#/utils/server-functions'
 
 const COLLECTION_NAME_GALLERY = 'gallery'
 const col = collection(db, COLLECTION_NAME_GALLERY)
@@ -66,4 +68,29 @@ export const getGalleryById = async (userId: string, galleryId: string) => {
   }
 
   return data
+}
+
+export const publishGallery = async (galleryId: string) => {
+  const galleryRef = doc(db, COLLECTION_NAME_GALLERY, galleryId)
+
+  try {
+    const serverTime = await getServerTime()
+    await updateDoc(galleryRef, {
+      publishedAt: serverTime,
+    })
+  } catch (error) {
+    console.error('Error publishing gallery', error)
+  }
+}
+
+export const unpublishGallery = async (galleryId: string) => {
+  const galleryRef = doc(db, COLLECTION_NAME_GALLERY, galleryId)
+
+  try {
+    await updateDoc(galleryRef, {
+      publishedAt: deleteField(),
+    })
+  } catch (error) {
+    console.error('Error unpublishing gallery', error)
+  }
 }

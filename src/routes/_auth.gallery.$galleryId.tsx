@@ -1,4 +1,7 @@
-import { createFileRoute } from '@tanstack/react-router'
+import {
+  createFileRoute,
+  useRouter,
+} from '@tanstack/react-router'
 
 import { CloudinaryUploadWidget } from '#/components/CloudinaryUploadWidget'
 import {
@@ -12,6 +15,8 @@ import { useAuth } from '#/auth'
 import { Error } from '#/components/Error'
 import { destroyImage } from '#/cloudinary/cloudinary-server-functions'
 import { useState } from 'react'
+import { GalleryStatus } from '#/components/GalleryStatus'
+import { getServerTime } from '#/utils/server-functions'
 
 export type GalleryPhoto = {
   secure_url: string
@@ -21,16 +26,22 @@ export type GalleryPhoto = {
 
 export const Route = createFileRoute('/_auth/gallery/$galleryId')({
   component: RouteComponent,
+  loader: () => getServerTime(),
 })
 
 function RouteComponent() {
-  const { galleryId } = Route.useParams()
-  const queryClient = useQueryClient()
-  const queryKey = ['galleryData', galleryId]
+  const router = useRouter()
   const { user } = useAuth()
+  const queryClient = useQueryClient()
+  const { galleryId } = Route.useParams()
+  const serverTime = Route.useLoaderData()
+  const queryKey = ['galleryData', galleryId]
   const [pendingDeleteImageId, setPendingDeleteImageId] = useState('')
 
-  const invalidateQuery = () => queryClient.invalidateQueries({ queryKey })
+  const invalidateRouteData = async () => {
+    await queryClient.invalidateQueries({ queryKey })
+    await router.invalidate()
+  }
 
   const { isPending, error, data } = useQuery({
     queryKey,
@@ -48,7 +59,7 @@ function RouteComponent() {
     }
 
     await removePhotoFromGallery(galleryId, photo)
-    await invalidateQuery()
+    await invalidateRouteData()
     setPendingDeleteImageId('')
   }
 
@@ -60,10 +71,16 @@ function RouteComponent() {
 
       {!!data && (
         <>
-          <div className="flex max-w-full items-end justify-end">
+          <div className="flex max-w-full items-end justify-between gap-2">
+            <GalleryStatus
+              publishedAt={data?.publishedAt}
+              serverTime={serverTime}
+              galleryId={galleryId}
+              invalidateRouteData={invalidateRouteData}
+            />
             <CloudinaryUploadWidget
               galleryId={galleryId}
-              onUpload={[addPhotoToGallery, invalidateQuery]}
+              onUpload={[addPhotoToGallery, invalidateRouteData]}
             />
           </div>
           <div className="mt-4 flex max-w-full flex-col">
