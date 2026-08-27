@@ -1,7 +1,4 @@
-import {
-  createFileRoute,
-  useRouter,
-} from '@tanstack/react-router'
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 
 import { CloudinaryUploadWidget } from '#/components/CloudinaryUploadWidget'
 import {
@@ -17,6 +14,8 @@ import { destroyImage } from '#/cloudinary/cloudinary-server-functions'
 import { useState } from 'react'
 import { GalleryStatus } from '#/components/GalleryStatus'
 import { getServerTime } from '#/utils/server-functions'
+import { Button } from '#/components/ui/button'
+import { ChevronLeft } from 'lucide-react'
 
 export type GalleryPhoto = {
   secure_url: string
@@ -72,6 +71,11 @@ function RouteComponent() {
       {!!data && (
         <>
           <div className="flex max-w-full items-end justify-between gap-2">
+            <Link to="/gallery">
+              <Button variant="outline">
+                <ChevronLeft data-icon="inline-start" /> Back
+              </Button>
+            </Link>
             <GalleryStatus
               publishedAt={data?.publishedAt}
               serverTime={serverTime}

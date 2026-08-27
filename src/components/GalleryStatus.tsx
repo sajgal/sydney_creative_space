@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Button } from './ui/button'
 import { Spinner } from './ui/spinner'
 import dayjs from 'dayjs'
+import { Rocket, Unplug } from 'lucide-react'
 
 export function GalleryStatus({
   publishedAt,
@@ -17,9 +18,7 @@ export function GalleryStatus({
 }) {
   const published = publishedAt <= serverTime
   const [isPending, setIsPending] = useState(false)
-  const formattedDate = dayjs(publishedAt || 0).format(
-    'DD.MM.YYYY HH:mm:ss',
-  )
+  const formattedDate = dayjs(publishedAt || 0).format('DD.MM.YYYY HH:mm:ss')
 
   const handlePublish = async () => {
     setIsPending(true)
@@ -39,12 +38,20 @@ export function GalleryStatus({
     <div className="flex items-center gap-2">
       {published ? (
         <Button variant="destructive" onClick={() => handleUnPublish()}>
-          {!!isPending && <Spinner data-icon="inline-start" />}
+          {!!isPending ? (
+            <Spinner data-icon="inline-start" />
+          ) : (
+            <Unplug data-icon="inline-start" />
+          )}
           Unpublish
         </Button>
       ) : (
         <Button onClick={() => handlePublish()}>
-          {!!isPending && <Spinner data-icon="inline-start" />}
+          {!!isPending ? (
+            <Spinner data-icon="inline-start" />
+          ) : (
+            <Rocket data-icon="inline-start" />
+          )}
           Publish
         </Button>
       )}

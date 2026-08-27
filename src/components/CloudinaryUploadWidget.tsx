@@ -1,4 +1,6 @@
+import { FileUp } from 'lucide-react'
 import { useEffect, useRef } from 'react'
+import { Button } from './ui/button'
 
 declare global {
   interface Window {
@@ -75,12 +77,12 @@ export const CloudinaryUploadWidget: React.FC<CloudinaryUploadWidgetProps> = ({
   }, []) //onUpload
 
   return (
-    <button
+    <Button
       ref={uploadButtonRef}
       id="upload_widget"
-      className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+      className="bg-blue-500 text-white hover:bg-blue-600"
     >
-      Upload
-    </button>
+      <FileUp data-icon="inline-start" /> Upload
+    </Button>
   )
 }
