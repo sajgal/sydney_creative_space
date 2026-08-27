@@ -1,10 +1,21 @@
 import { Film } from 'lucide-react'
 
-export function Error() {
+export function Error({
+  message,
+  fullHeight,
+}: {
+  fullHeight?: boolean
+  message?: string
+}) {
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center p-4">
+    <div
+      className={
+        'flex w-full flex-col items-center justify-center p-4 ' +
+        (fullHeight === false ? '' : 'h-screen')
+      }
+    >
       <Film />
-      Error, sorry
+      {message || 'Error, sorry'}
     </div>
   )
 }

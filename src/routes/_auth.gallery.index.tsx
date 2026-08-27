@@ -8,6 +8,7 @@ import { addGallery, getUserGalleries } from '#/firebase/gallery'
 import GalleryListItem from '#/components/GalleryListItem'
 import { ItemGroup } from '#/components/ui/item'
 import FullWidthSpinner from '#/components/FullWidthSpinner'
+import { Error } from '#/components/Error'
 
 export const Route = createFileRoute('/_auth/gallery/')({
   component: RouteComponent,
@@ -19,7 +20,7 @@ function RouteComponent() {
   const userId = user?.uid ?? '-'
 
   const { isPending, error, data } = useQuery({
-    queryKey: ['galleryData'],
+    queryKey: ['galleryList'],
     queryFn: async () => getUserGalleries(userId),
   })
 
@@ -28,7 +29,7 @@ function RouteComponent() {
     navigate({ to: '/gallery/$galleryId', params: { galleryId } })
   }
 
-  if (error) return 'An error has occurred: ' + error.message
+  if (error) return <Error message={error.message} fullHeight={false} />
 
   return (
     <section className="p-2 pt-0">

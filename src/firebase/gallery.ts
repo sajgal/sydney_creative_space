@@ -8,6 +8,7 @@ import {
   query,
   updateDoc,
   where,
+  getDoc,
 } from 'firebase/firestore'
 import { db } from '@/firebase/config'
 
@@ -41,4 +42,16 @@ export const addPhotoToGallery = async (
   await updateDoc(gallery, {
     photos: arrayUnion(uploadInfo),
   })
+}
+
+export const getGalleryById = async (userId: string, galleryId: string) => {
+  const docRef = doc(db, COLLECTION_NAME_GALLERY, galleryId)
+  const docSnap = await getDoc(docRef)
+  const data = docSnap.data()
+
+  if (data?.userId !== userId) {
+    throw new Error('Unauthorized: userId mismatch')
+  }
+
+  return data
 }

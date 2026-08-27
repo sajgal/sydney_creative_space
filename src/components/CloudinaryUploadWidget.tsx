@@ -7,10 +7,13 @@ declare global {
 }
 
 interface CloudinaryUploadWidgetProps {
-  onUpload?: (
-    galleryId: string,
-    uploadInfo: { thumbnail_url: string; secure_url: string },
-  ) => Promise<void>
+  onUpload: [
+    (
+      galleryId: string,
+      uploadInfo: { thumbnail_url: string; secure_url: string },
+    ) => Promise<void>,
+    () => Promise<void>,
+  ]
   galleryId: string
 }
 
@@ -33,9 +36,11 @@ export const CloudinaryUploadWidget: React.FC<CloudinaryUploadWidgetProps> = ({
           },
           (error: any, result: any) => {
             if (!error && result && result.event === 'success') {
-              console.log('-------- result.info', result.info);
               const { thumbnail_url, secure_url } = result.info
-              onUpload?.(galleryId, { thumbnail_url, secure_url })
+
+              const [addPhotoToGallery, invalidateQuery] = onUpload
+              addPhotoToGallery?.(galleryId, { thumbnail_url, secure_url })
+              invalidateQuery()
             }
           },
         )
