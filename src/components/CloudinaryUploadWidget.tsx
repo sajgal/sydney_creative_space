@@ -39,6 +39,7 @@ export const CloudinaryUploadWidget: React.FC<CloudinaryUploadWidgetProps> = ({
             cloudName: 'dqjl6uv1s', //"your_cloud_name",
             uploadPreset: 'matejs-gallery', //"upload_preset_id"
             folder: galleryId,
+            tags: [galleryId]
           },
           (error: any, result: any) => {
             if (!error && result && result.event === 'success') {

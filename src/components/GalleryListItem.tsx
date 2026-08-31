@@ -8,7 +8,8 @@ import {
   ItemMedia,
   ItemTitle,
 } from '@/components/ui/item'
-import { Link } from '@tanstack/react-router'
+import { useNavigate } from '@tanstack/react-router'
+import { DeleteGalleryAlertDialog } from './DeleteGalleryAlertDialog'
 
 type Gallery = {
   id: string
@@ -20,13 +21,21 @@ type Gallery = {
   photos?: { thumbnail_url: string; secure_url: string }[]
 }
 
-export default function GalleryListItem({ gallery }: { gallery: Gallery }) {
+export default function GalleryListItem({
+  gallery,
+  invalidateRouteData,
+}: {
+  gallery: Gallery
+  invalidateRouteData: () => Promise<void>
+}) {
   const formattedDate = dayjs(gallery.created || 0).format(
     'DD.MM.YYYY HH:mm:ss',
   )
 
   const thumbnailUrl =
     gallery?.photos && gallery?.photos[0] && gallery?.photos[0]?.thumbnail_url
+
+  const navigate = useNavigate()
 
   return (
     <Item
@@ -35,7 +44,14 @@ export default function GalleryListItem({ gallery }: { gallery: Gallery }) {
       asChild
       role="listitem"
     >
-      <Link to="/gallery/$galleryId" params={{ galleryId: gallery.id }}>
+      <a
+        onClick={() =>
+          navigate({
+            to: '/gallery/$galleryId',
+            params: { galleryId: gallery.id },
+          })
+        }
+      >
         <ItemMedia variant="image">
           <Image
             src={thumbnailUrl || `https://avatar.vercel.sh/mat`}
@@ -53,9 +69,14 @@ export default function GalleryListItem({ gallery }: { gallery: Gallery }) {
           <ItemDescription>{gallery.artist || gallery.id}</ItemDescription>
         </ItemContent>
         <ItemContent className="flex-none text-center">
-          <ItemDescription>{gallery.duration || '3:21'}</ItemDescription>
+          <ItemDescription onClick={(event) => event.stopPropagation()}>
+            <DeleteGalleryAlertDialog
+              galleryId={gallery.id}
+              invalidateRouteData={invalidateRouteData}
+            />
+          </ItemDescription>
         </ItemContent>
-      </Link>
+      </a>
     </Item>
   )
 }

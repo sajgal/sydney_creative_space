@@ -11,6 +11,7 @@ import {
   getDoc,
   arrayRemove,
   deleteField,
+  deleteDoc,
 } from 'firebase/firestore'
 import { db } from '@/firebase/config'
 import { getServerTime } from '#/utils/server-functions'
@@ -36,6 +37,10 @@ export const addGallery = async (userId: string) => {
   return docRef.id
 }
 
+export const deleteGallery = async (galleryId: string) => {
+  return await deleteDoc(doc(db, COLLECTION_NAME_GALLERY, galleryId))
+}
+
 export const addPhotoToGallery = async (
   galleryId: string,
   uploadInfo: { thumbnail_url: string; secure_url: string },
@@ -55,6 +60,14 @@ export const removePhotoFromGallery = async (
 
   await updateDoc(gallery, {
     photos: arrayRemove(uploadInfo),
+  })
+}
+
+export const removeAllPhotosFromGallery = async (galleryId: string) => {
+  const gallery = doc(db, COLLECTION_NAME_GALLERY, galleryId)
+
+  await updateDoc(gallery, {
+    photos: deleteField(),
   })
 }
 

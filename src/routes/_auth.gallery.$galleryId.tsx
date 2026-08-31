@@ -16,6 +16,8 @@ import { GalleryStatus } from '#/components/GalleryStatus'
 import { getServerTime } from '#/utils/server-functions'
 import { Button } from '#/components/ui/button'
 import { ChevronLeft } from 'lucide-react'
+import { deleteAllGalleryPhotos } from '#/utils/handleDelete'
+import { Spinner } from '#/components/ui/spinner'
 
 export type GalleryPhoto = {
   secure_url: string
@@ -36,6 +38,8 @@ function RouteComponent() {
   const serverTime = Route.useLoaderData()
   const queryKey = ['galleryData', galleryId]
   const [pendingDeleteImageId, setPendingDeleteImageId] = useState('')
+  const [isPendingBatchImageDeletion, setIsPendingBatchImageDeletion] =
+    useState(false)
 
   const invalidateRouteData = async () => {
     await queryClient.invalidateQueries({ queryKey })
@@ -62,7 +66,22 @@ function RouteComponent() {
     setPendingDeleteImageId('')
   }
 
+  const handleDeleteAll = async (galleryId: string) => {
+    setIsPendingBatchImageDeletion(true)
+
+    try {
+      await deleteAllGalleryPhotos(galleryId)
+    } catch (error) {
+      console.error('Error while deleting images from gallery', error)
+    }
+
+    await invalidateRouteData()
+    setIsPendingBatchImageDeletion(false)
+  }
+
   if (error) return <Error message={error.message} fullHeight={false} />
+
+  const isEmpty = !data?.photos?.length
 
   return (
     <section className="p-2 pt-0">
@@ -88,8 +107,18 @@ function RouteComponent() {
             />
           </div>
           <div className="mt-4 flex max-w-full flex-col">
+            <Button
+              disabled={isPendingBatchImageDeletion || isEmpty}
+              onClick={() => handleDeleteAll(galleryId)}
+            >
+              {!!isPendingBatchImageDeletion ? (
+                <Spinner data-icon="inline-start" />
+              ) : (
+                'Delete all photos'
+              )}
+            </Button>
             <div className="flex gap-2">
-              {!data?.photos?.length && <div>No photos yet.</div>}
+              {isEmpty && <div>No photos yet.</div>}
 
               {data?.photos?.length &&
                 data.photos.map((photo: GalleryPhoto, key: number) => {

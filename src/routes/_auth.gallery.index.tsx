@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query'
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { Plus } from 'lucide-react'
 
 import { useAuth } from '#/auth'
@@ -18,15 +18,23 @@ function RouteComponent() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const userId = user?.uid ?? '-'
+  const queryKey = ['galleryList']
+  const router = useRouter()
+  const queryClient = useQueryClient()
 
   const { isPending, error, data } = useQuery({
-    queryKey: ['galleryList'],
+    queryKey,
     queryFn: async () => getUserGalleries(userId),
   })
 
   const handleNewGalleryClick = async () => {
     const galleryId = await addGallery(userId)
     navigate({ to: '/gallery/$galleryId', params: { galleryId } })
+  }
+
+  const invalidateRouteData = async () => {
+    await queryClient.invalidateQueries({ queryKey })
+    await router.invalidate()
   }
 
   if (error) return <Error message={error.message} fullHeight={false} />
@@ -49,6 +57,7 @@ function RouteComponent() {
               <GalleryListItem
                 key={key}
                 gallery={{ ...doc.data(), id: doc.id }}
+                invalidateRouteData={invalidateRouteData}
               />
             ))}
           </ItemGroup>
