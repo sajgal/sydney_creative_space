@@ -2,6 +2,17 @@ import { FileUp } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { Button } from './ui/button'
 
+interface CloudinaryBase {
+  createUploadWidget: (
+    options: Record<string, unknown>,
+    callback: (error: unknown, result: unknown) => void
+  ) => {
+    open: () => void;
+    close: () => void;
+    destroy: () => void;
+  };
+}
+
 declare global {
   interface Window {
     cloudinary: CloudinaryBase
