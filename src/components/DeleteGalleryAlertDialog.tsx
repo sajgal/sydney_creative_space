@@ -32,7 +32,13 @@ export function DeleteGalleryAlertDialog({
     event.preventDefault()
 
     setIsPending(true)
-    await deleteGallery(galleryId, invalidateRouteData)
+
+    try {
+      await deleteGallery(galleryId, invalidateRouteData)
+    } catch (error) {
+      console.error(error)
+    }
+
     setIsPending(false)
   }
 

@@ -45,6 +45,7 @@ export default function GalleryListItem({
       role="listitem"
     >
       <a
+        className='cursor-pointer'
         onClick={() =>
           navigate({
             to: '/gallery/$galleryId',

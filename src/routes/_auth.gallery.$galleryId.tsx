@@ -123,7 +123,7 @@ function RouteComponent() {
               {data?.photos?.length &&
                 data.photos.map((photo: GalleryPhoto, key: number) => {
                   if (pendingDeleteImageId === photo.public_id) {
-                    return <div>Loading</div>
+                    return <div key={key}>Loading</div>
                   }
 
                   return (
