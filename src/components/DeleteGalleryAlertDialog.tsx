@@ -43,7 +43,7 @@ export function DeleteGalleryAlertDialog({
   }
 
   return (
-    <AlertDialog>
+    <AlertDialog key={galleryId}>
       <AlertDialogTrigger asChild>
         <Button
           variant="destructive"

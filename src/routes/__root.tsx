@@ -10,6 +10,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { Toaster } from 'react-hot-toast'
+import { pacerDevtoolsPlugin } from '@tanstack/react-pacer-devtools'
 
 import { AuthContextProvider, useAuth, type AuthContextType } from '#/auth'
 import appCss from '#/styles.css?url'
@@ -91,6 +92,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                 config={{
                   defaultOpen: false,
                 }}
+                eventBusConfig={{
+                  debug: false,
+                }}
                 plugins={[
                   {
                     name: 'TanStack Query',
@@ -100,6 +104,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                     name: 'TanStack Router',
                     render: <TanStackRouterDevtoolsPanel />,
                   },
+                  pacerDevtoolsPlugin(),
                 ]}
               />
             </AuthProviderInnerApp>

@@ -35,7 +35,12 @@ export function GalleryStatus({
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-col items-center gap-2">
+      {!isPending && (
+        <p className="text-sidebar-ring text-xs">
+          {published ? `Published on ${formattedDate}` : 'Not published yet'}
+        </p>
+      )}
       {published ? (
         <Button variant="destructive" onClick={() => handleUnPublish()}>
           {!!isPending ? (
@@ -54,11 +59,6 @@ export function GalleryStatus({
           )}
           Publish
         </Button>
-      )}
-      {!isPending && (
-        <p className="text-sidebar-ring">
-          {published ? `Published on ${formattedDate}` : 'Not published yet'}
-        </p>
       )}
     </div>
   )

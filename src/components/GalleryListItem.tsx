@@ -45,7 +45,7 @@ export default function GalleryListItem({
       role="listitem"
     >
       <a
-        className='cursor-pointer'
+        className="cursor-pointer"
         onClick={() =>
           navigate({
             to: '/gallery/$galleryId',
@@ -64,10 +64,12 @@ export default function GalleryListItem({
         </ItemMedia>
         <ItemContent>
           <ItemTitle className="line-clamp-1">
-            {gallery.title || 'title'} -{' '}
-            <span className="text-muted-foreground">{formattedDate}</span>
+            {gallery.title || '-- title not set --'}
           </ItemTitle>
-          <ItemDescription>{gallery.artist || gallery.id}</ItemDescription>
+          <ItemDescription>
+            Created:{' '}
+            <span className="text-muted-foreground">{formattedDate}</span>
+          </ItemDescription>
         </ItemContent>
         <ItemContent className="flex-none text-center">
           <ItemDescription onClick={(event) => event.stopPropagation()}>

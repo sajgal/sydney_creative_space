@@ -16,6 +16,8 @@ import {
 import { db } from '@/firebase/config'
 import { getServerTime } from '#/utils/server-functions'
 
+export type UpdateableFields = 'title' | 'description'
+
 const COLLECTION_NAME_GALLERY = 'gallery'
 const col = collection(db, COLLECTION_NAME_GALLERY)
 
@@ -105,5 +107,21 @@ export const unpublishGallery = async (galleryId: string) => {
     })
   } catch (error) {
     console.error('Error unpublishing gallery', error)
+  }
+}
+
+export const updateGalleryField = async (
+  galleryId: string,
+  fieldName: UpdateableFields,
+  fieldContent: string,
+) => {
+  const galleryRef = doc(db, COLLECTION_NAME_GALLERY, galleryId)
+
+  try {
+    await updateDoc(galleryRef, {
+      [fieldName]: fieldContent,
+    })
+  } catch (error) {
+    console.error(`Firestore: Error updating ${fieldName} field`, error)
   }
 }

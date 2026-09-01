@@ -9,6 +9,8 @@ import GalleryListItem from '#/components/GalleryListItem'
 import { ItemGroup } from '#/components/ui/item'
 import FullWidthSpinner from '#/components/FullWidthSpinner'
 import { Error } from '#/components/Error'
+import { useState } from 'react'
+import { Spinner } from '#/components/ui/spinner'
 
 export const Route = createFileRoute('/_auth/gallery/')({
   component: RouteComponent,
@@ -21,6 +23,7 @@ function RouteComponent() {
   const queryKey = ['galleryList']
   const router = useRouter()
   const queryClient = useQueryClient()
+  const [isNewGalleryLoading, setNewGalleryLoading] = useState(false)
 
   const { isPending, error, data } = useQuery({
     queryKey,
@@ -28,12 +31,13 @@ function RouteComponent() {
   })
 
   const handleNewGalleryClick = async () => {
+    setNewGalleryLoading(true)
     const galleryId = await addGallery(userId)
     navigate({ to: '/gallery/$galleryId', params: { galleryId } })
   }
 
   const invalidateRouteData = async () => {
-    await queryClient.invalidateQueries({ queryKey })
+    await queryClient.refetchQueries({ queryKey })
     await router.invalidate()
   }
 
@@ -43,8 +47,18 @@ function RouteComponent() {
     <section className="p-2 pt-0">
       <div className="flex max-w-full items-end justify-between">
         <h1 className="text-lg font-semibold">Your galleries:</h1>
-        <Button className="max-w-xs" onClick={handleNewGalleryClick}>
-          <Plus /> New gallery
+        <Button
+          className="w-48"
+          onClick={handleNewGalleryClick}
+          disabled={isNewGalleryLoading}
+        >
+          {!!isNewGalleryLoading ? (
+            <Spinner data-icon="inline-start" />
+          ) : (
+            <>
+              <Plus /> New gallery
+            </>
+          )}
         </Button>
       </div>
 
