@@ -15,8 +15,9 @@ import {
 } from 'firebase/firestore'
 import { db } from '@/firebase/config'
 import { getServerTime } from '#/utils/server-functions'
+import type { GalleryPhoto } from '#/types/gallery'
 
-export type UpdateableFields = 'title' | 'description'
+export type UpdateableFields = 'title' | 'description' | 'photos'
 
 const COLLECTION_NAME_GALLERY = 'gallery'
 const col = collection(db, COLLECTION_NAME_GALLERY)
@@ -113,7 +114,7 @@ export const unpublishGallery = async (galleryId: string) => {
 export const updateGalleryField = async (
   galleryId: string,
   fieldName: UpdateableFields,
-  fieldContent: string,
+  fieldContent: string | Array<GalleryPhoto>,
 ) => {
   const galleryRef = doc(db, COLLECTION_NAME_GALLERY, galleryId)
 
