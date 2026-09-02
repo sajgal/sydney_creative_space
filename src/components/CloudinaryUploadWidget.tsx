@@ -1,6 +1,7 @@
 import { FileUp } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { Button } from './ui/button'
+import type { GalleryPhoto } from '#/types/gallery';
 
 interface CloudinaryBase {
   createUploadWidget: (
@@ -23,11 +24,7 @@ interface CloudinaryUploadWidgetProps {
   onUpload: [
     (
       galleryId: string,
-      uploadInfo: {
-        thumbnail_url: string
-        secure_url: string
-        public_id: string
-      },
+      uploadInfo: GalleryPhoto,
     ) => Promise<void>,
     () => Promise<void>,
   ]
@@ -61,7 +58,7 @@ export const CloudinaryUploadWidget: React.FC<CloudinaryUploadWidgetProps> = ({
               addPhotoToGallery?.(galleryId, {
                 thumbnail_url,
                 secure_url,
-                public_id,
+                id: public_id,
               })
               invalidateQuery()
             }

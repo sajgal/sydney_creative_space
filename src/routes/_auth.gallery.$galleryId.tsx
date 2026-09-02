@@ -19,12 +19,7 @@ import { ChevronLeft } from 'lucide-react'
 import { deleteAllGalleryPhotos } from '#/utils/handleDelete'
 import { Spinner } from '#/components/ui/spinner'
 import { GalleryDetailsForm } from '#/components/GalleryDetailsForm'
-
-export type GalleryPhoto = {
-  secure_url: string
-  thumbnail_url: string
-  public_id: string
-}
+import type { GalleryPhoto } from '#/types/gallery'
 
 export const Route = createFileRoute('/_auth/gallery/$galleryId')({
   component: RouteComponent,
@@ -53,7 +48,7 @@ function RouteComponent() {
   })
 
   const handleImageDelete = async (photo: GalleryPhoto) => {
-    setPendingDeleteImageId(photo.public_id)
+    setPendingDeleteImageId(photo.id)
 
     const { error, response } = await destroyImage({ data: { photo } })
 
@@ -119,14 +114,17 @@ function RouteComponent() {
               )}
             </Button>
             <div className="flex flex-col gap-2">
-              <GalleryDetailsForm galleryData={{...data, galleryId}} onSave={invalidateRouteData} />
+              <GalleryDetailsForm
+                galleryData={{ ...data, galleryId }}
+                onSave={invalidateRouteData}
+              />
 
               {isEmpty && <div>No photos yet.</div>}
 
               <div className="flex gap-2">
                 {!!data?.photos?.length &&
                   data.photos.map((photo: GalleryPhoto, key: number) => {
-                    if (pendingDeleteImageId === photo.public_id) {
+                    if (pendingDeleteImageId === photo.id) {
                       return <Spinner key={key} className="size-14" />
                     }
 

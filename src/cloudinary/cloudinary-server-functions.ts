@@ -1,4 +1,4 @@
-import type { GalleryPhoto } from '#/routes/_auth.gallery.$galleryId'
+import type { GalleryPhoto } from '#/types/gallery'
 import { createServerFn } from '@tanstack/react-start'
 import { v2 as cloudinary } from 'cloudinary'
 
@@ -23,7 +23,7 @@ export const destroyImage = createServerFn()
   .validator((data: { photo: GalleryPhoto }) => data)
   .handler(async ({ data: { photo } }) => {
     try {
-      return await cloudinary.uploader.destroy(photo.public_id)
+      return await cloudinary.uploader.destroy(photo.id)
     } catch (error) {
       console.error(error)
       throw new Error('Cloudinary: Deleting image not successful')
