@@ -42,7 +42,7 @@ export function GalleryStatus({
         </p>
       )}
       {published ? (
-        <Button variant="destructive" onClick={() => handleUnPublish()}>
+        <Button variant="destructive" onClick={handleUnPublish}>
           {!!isPending ? (
             <Spinner data-icon="inline-start" />
           ) : (
@@ -51,7 +51,7 @@ export function GalleryStatus({
           Unpublish
         </Button>
       ) : (
-        <Button onClick={() => handlePublish()}>
+        <Button onClick={handlePublish}>
           {!!isPending ? (
             <Spinner data-icon="inline-start" />
           ) : (

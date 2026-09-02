@@ -6,6 +6,8 @@ import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { Spinner } from './ui/spinner'
 import { destroyImage } from '#/cloudinary/cloudinary-server-functions'
 import { removePhotoFromGallery, updateGalleryField } from '#/firebase/gallery'
+import { Button } from './ui/button'
+import { Trash2 } from 'lucide-react'
 
 // Keep SortableItem above component context
 const SortableItem = memo(
@@ -24,12 +26,16 @@ const SortableItem = memo(
   }) => {
     const { ref } = useSortable({ id, index })
 
-    if (isDeleting) return <Spinner className="size-14" />
-
     return (
-      <div ref={ref}>
+      <div ref={ref} className="flex max-w-24 flex-col">
         <img src={photo.thumbnail_url} />
-        <button onClick={() => handleImageDelete(photo)}>Delete</button>
+        <Button variant="destructive" onClick={() => handleImageDelete(photo)}>
+          {!!isDeleting ? (
+            <Spinner data-icon="inline-start" />
+          ) : (
+            <Trash2 data-icon="inline-start" />
+          )}
+        </Button>
       </div>
     )
   },
@@ -46,7 +52,9 @@ export function AdminPhotoList({
 }) {
   const isDragging = useRef(false)
   const [items, setItems] = useState(photos ?? [])
-  const [pendingDeleteImageId, setPendingDeleteImageId] = useState('')
+  const [pendingDeleteImages, setPendingDeleteImages] = useState(
+    [] as Array<string>,
+  )
 
   useEffect(() => {
     if (photos && !isDragging.current) {
@@ -62,20 +70,24 @@ export function AdminPhotoList({
 
   const handleImageDelete = useCallback(
     async (photo: GalleryPhoto) => {
-      setPendingDeleteImageId(photo.id)
+      setPendingDeleteImages([...pendingDeleteImages, photo.id])
 
       const { error, response } = await destroyImage({ data: { photo } })
 
       if (error) {
         console.error(response)
-        return setPendingDeleteImageId('')
+        return setPendingDeleteImages(
+          pendingDeleteImages.splice(pendingDeleteImages.indexOf(photo.id), 1),
+        )
       }
 
       await removePhotoFromGallery(galleryId, photo)
       await invalidateRouteData()
-      setPendingDeleteImageId('')
+      setPendingDeleteImages(
+        pendingDeleteImages.splice(pendingDeleteImages.indexOf(photo.id), 1),
+      )
     },
-    [galleryId],
+    [galleryId, pendingDeleteImages],
   )
 
   return (
@@ -104,7 +116,7 @@ export function AdminPhotoList({
             photo={photo}
             key={photo.id}
             handleImageDelete={handleImageDelete}
-            isDeleting={pendingDeleteImageId === photo.id}
+            isDeleting={pendingDeleteImages.includes(photo.id)}
           />
         ))}
       </DragDropProvider>
