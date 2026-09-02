@@ -1,10 +1,7 @@
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 
 import { CloudinaryUploadWidget } from '#/components/CloudinaryUploadWidget'
-import {
-  addPhotoToGallery,
-  getGalleryById,
-} from '#/firebase/gallery'
+import { addPhotoToGallery, getGalleryById } from '#/firebase/gallery'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import FullWidthSpinner from '#/components/FullWidthSpinner'
 import { useAuth } from '#/auth'
@@ -103,11 +100,13 @@ function RouteComponent() {
 
               {isEmpty && <div>No photos yet.</div>}
 
-              <AdminPhotoList
-                photos={data?.photos}
-                galleryId={galleryId}
-                invalidateRouteData={invalidateRouteData}
-              />
+              {!isEmpty && (
+                <AdminPhotoList
+                  photos={data?.photos}
+                  galleryId={galleryId}
+                  invalidateRouteData={invalidateRouteData}
+                />
+              )}
             </div>
           </div>
         </>

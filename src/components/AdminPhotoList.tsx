@@ -7,6 +7,7 @@ import { Spinner } from './ui/spinner'
 import { destroyImage } from '#/cloudinary/cloudinary-server-functions'
 import { removePhotoFromGallery, updateGalleryField } from '#/firebase/gallery'
 
+// Keep SortableItem above component context
 const SortableItem = memo(
   ({
     id,
