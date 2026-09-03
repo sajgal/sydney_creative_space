@@ -9,6 +9,8 @@ import {
   type ReactElement,
   type ReactNode,
 } from 'react'
+import { Button } from './ui/button'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
 
 type RenderProps = { photo: GalleryPhoto } & React.ComponentProps<'div'>
 
@@ -19,15 +21,33 @@ const Dialog = ({
   return (
     <div
       {...props}
-      className="absolute top-0 left-0 min-h-screen min-w-screen bg-white/30 backdrop-blur-sm"
+      className="absolute top-0 left-0 h-screen w-screen overflow-hidden bg-white/30 backdrop-blur-sm"
     >
       {children}
     </div>
   )
 }
 
-const DialogContent = ({ children }: { children: React.ReactNode }) => {
-  return <div>{children}</div>
+const DialogContent = ({
+  children,
+  handleLeftArrowClick,
+  handleRightArrowClick,
+}: {
+  children: React.ReactNode
+  handleRightArrowClick: (event: React.MouseEvent<HTMLButtonElement>) => void
+  handleLeftArrowClick: (event: React.MouseEvent<HTMLButtonElement>) => void
+}) => {
+  return (
+    <div className="flex h-screen items-center">
+      <Button className="mr-2" onClick={handleLeftArrowClick}>
+        <ArrowLeft />
+      </Button>
+      <div className="flex grow justify-center">{children}</div>
+      <Button className="ml-2" onClick={handleRightArrowClick}>
+        <ArrowRight />
+      </Button>
+    </div>
+  )
 }
 
 export function Gallery({
@@ -90,6 +110,18 @@ export function Gallery({
     setIsModalVisible(false)
   }
 
+  const handleLeftArrowClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation()
+    setActivePhotoWithinRange(photos.indexOf(activePhoto) - 1)
+  }
+
+  const handleRightArrowClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    event.stopPropagation()
+    setActivePhotoWithinRange(photos.indexOf(activePhoto) + 1)
+  }
+
   Children.forEach(children, (child) => {
     if (isValidElement(child)) {
       const clonedChild = cloneElement(child, {
@@ -107,10 +139,13 @@ export function Gallery({
 
       {isModalVisible && (
         <Dialog onClick={() => handleCloseDialog()}>
-          <DialogContent>
+          <DialogContent
+            handleLeftArrowClick={handleLeftArrowClick}
+            handleRightArrowClick={handleRightArrowClick}
+          >
             <img
+              className="max-h-screen object-contain"
               src={activePhoto.secure_url}
-              loading="lazy"
               alt="gallery picture"
             />
           </DialogContent>
