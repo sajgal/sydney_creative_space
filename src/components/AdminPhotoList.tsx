@@ -2,12 +2,22 @@ import type { GalleryPhoto } from '#/types/gallery'
 import { move } from '@dnd-kit/helpers'
 import { DragDropProvider } from '@dnd-kit/react'
 import { useSortable } from '@dnd-kit/react/sortable'
+import {
+  DndContext,
+  KeyboardSensor,
+  MouseSensor,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { Spinner } from './ui/spinner'
 import { destroyImage } from '#/cloudinary/cloudinary-server-functions'
 import { removePhotoFromGallery, updateGalleryField } from '#/firebase/gallery'
 import { Button } from './ui/button'
 import { Trash2 } from 'lucide-react'
+import { Gallery } from './Gallery'
 
 // Keep SortableItem above component context
 const SortableItem = memo(
@@ -17,19 +27,26 @@ const SortableItem = memo(
     photo,
     handleImageDelete,
     isDeleting,
+    ...props
   }: {
     id: string
     index: number
     photo: GalleryPhoto
-    handleImageDelete: (photo: GalleryPhoto) => Promise<void>
+    handleImageDelete: (
+      event: React.MouseEvent<HTMLButtonElement>,
+      photo: GalleryPhoto,
+    ) => Promise<void>
     isDeleting: boolean
   }) => {
     const { ref } = useSortable({ id, index })
 
     return (
-      <div ref={ref} className="flex max-w-24 flex-col">
+      <div {...props} ref={ref} className="flex max-w-24 flex-col">
         <img src={photo.thumbnail_url} />
-        <Button variant="destructive" onClick={() => handleImageDelete(photo)}>
+        <Button
+          variant="destructive"
+          onClick={(event) => handleImageDelete(event, photo)}
+        >
           {!!isDeleting ? (
             <Spinner data-icon="inline-start" />
           ) : (
@@ -69,7 +86,8 @@ export function AdminPhotoList({
   }, [items])
 
   const handleImageDelete = useCallback(
-    async (photo: GalleryPhoto) => {
+    async (event: React.MouseEvent<HTMLButtonElement>, photo: GalleryPhoto) => {
+      event.stopPropagation()
       setPendingDeleteImages([...pendingDeleteImages, photo.id])
 
       const { error, response } = await destroyImage({ data: { photo } })
@@ -90,8 +108,25 @@ export function AdminPhotoList({
     [galleryId, pendingDeleteImages],
   )
 
+  // this sensor section helps differenciate between drag and click
+  const mouseSensor = useSensor(MouseSensor)
+  const touchSensor = useSensor(TouchSensor)
+  const keyboardSensor = useSensor(KeyboardSensor)
+  const pointerSensor = useSensor(PointerSensor, {
+    activationConstraint: {
+      distance: 0.01,
+    },
+  })
+
+  const sensors = useSensors(
+    mouseSensor,
+    touchSensor,
+    keyboardSensor,
+    pointerSensor,
+  )
+
   return (
-    <div className="mx-auto flex gap-4">
+    <DndContext sensors={sensors}>
       <DragDropProvider
         onDragStart={() => {
           isDragging.current = true
@@ -109,17 +144,19 @@ export function AdminPhotoList({
           setItems((items: Array<GalleryPhoto>) => move(items, event))
         }}
       >
-        {items.map((photo: GalleryPhoto, index: number) => (
-          <SortableItem
-            id={photo.id}
-            index={index}
-            photo={photo}
-            key={photo.id}
-            handleImageDelete={handleImageDelete}
-            isDeleting={pendingDeleteImages.includes(photo.id)}
-          />
-        ))}
+        <Gallery className="mx-auto flex max-w-max gap-4">
+          {items.map((photo: GalleryPhoto, index: number) => (
+            <SortableItem
+              id={photo.id}
+              index={index}
+              photo={photo}
+              key={photo.id}
+              handleImageDelete={handleImageDelete}
+              isDeleting={pendingDeleteImages.includes(photo.id)}
+            />
+          ))}
+        </Gallery>
       </DragDropProvider>
-    </div>
+    </DndContext>
   )
 }

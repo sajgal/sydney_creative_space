@@ -1,4 +1,3 @@
-import { Image } from '@unpic/react'
 import dayjs from 'dayjs'
 
 import {
@@ -54,12 +53,12 @@ export default function GalleryListItem({
         }
       >
         <ItemMedia variant="image">
-          <Image
+          <img
             src={thumbnailUrl || `https://avatar.vercel.sh/mat`}
             alt={gallery.title || 'title'}
             width={32}
             height={32}
-            className="object-cover grayscale"
+            className="object-cover"
           />
         </ItemMedia>
         <ItemContent>

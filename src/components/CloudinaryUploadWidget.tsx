@@ -1,17 +1,17 @@
 import { FileUp } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { Button } from './ui/button'
-import type { GalleryPhoto } from '#/types/gallery';
+import type { GalleryPhoto } from '#/types/gallery'
 
 interface CloudinaryBase {
   createUploadWidget: (
     options: Record<string, unknown>,
-    callback: (error: unknown, result: unknown) => void
+    callback: (error: unknown, result: unknown) => void,
   ) => {
-    open: () => void;
-    close: () => void;
-    destroy: () => void;
-  };
+    open: () => void
+    close: () => void
+    destroy: () => void
+  }
 }
 
 declare global {
@@ -22,10 +22,7 @@ declare global {
 
 interface CloudinaryUploadWidgetProps {
   onUpload: [
-    (
-      galleryId: string,
-      uploadInfo: GalleryPhoto,
-    ) => Promise<void>,
+    (galleryId: string, uploadInfo: GalleryPhoto) => Promise<void>,
     () => Promise<void>,
   ]
   galleryId: string
@@ -44,20 +41,20 @@ export const CloudinaryUploadWidget: React.FC<CloudinaryUploadWidgetProps> = ({
         // Create upload widget
         uploadWidgetRef.current = window.cloudinary.createUploadWidget(
           {
-            cloudName: 'dqjl6uv1s', //"your_cloud_name",
-            uploadPreset: 'matejs-gallery', //"upload_preset_id"
+            cloudName: import.meta.env.VITE_PUBLIC_CLOUDINARY_CLOUD_NAME,
+            uploadPreset: import.meta.env.VITE_PUBLIC_CLOUDINARY_UPLOAD_PRESET,
             folder: galleryId,
-            tags: [galleryId]
+            tags: [galleryId],
           },
           (error: any, result: any) => {
             if (!error && result && result.event === 'success') {
               // console.log('--------- Cloudinary upload result', result.info)
-              const { thumbnail_url, secure_url, public_id } = result.info
+              const { thumbnail_url, eager, public_id } = result.info
 
               const [addPhotoToGallery, invalidateQuery] = onUpload
               addPhotoToGallery?.(galleryId, {
                 thumbnail_url,
-                secure_url,
+                secure_url: eager[0].secure_url,
                 id: public_id,
               })
               invalidateQuery()
