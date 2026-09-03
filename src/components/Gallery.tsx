@@ -21,7 +21,7 @@ const Dialog = ({
   return (
     <div
       {...props}
-      className="absolute top-0 left-0 h-screen w-screen overflow-hidden bg-white/30 backdrop-blur-sm"
+      className="fixed top-0 left-0 h-screen w-screen overflow-hidden bg-white/30 backdrop-blur-sm"
     >
       {children}
     </div>
