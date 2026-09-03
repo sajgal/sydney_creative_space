@@ -39,12 +39,12 @@ const DialogContent = ({
 }) => {
   return (
     <div className="flex h-screen items-center">
-      <Button className="mr-2" onClick={handleLeftArrowClick}>
-        <ArrowLeft />
+      <Button className="mr-2 size-20" onClick={handleLeftArrowClick}>
+        <ArrowLeft className="size-5" />
       </Button>
       <div className="flex grow justify-center">{children}</div>
-      <Button className="ml-2" onClick={handleRightArrowClick}>
-        <ArrowRight />
+      <Button className="ml-2 size-20" onClick={handleRightArrowClick}>
+        <ArrowRight className="size-5" />
       </Button>
     </div>
   )
