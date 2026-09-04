@@ -10,7 +10,7 @@ export function Error({
   return (
     <div
       className={
-        'flex w-full flex-col items-center justify-center p-4 ' +
+        'flex w-full max-w-screen flex-col items-center justify-center p-4 ' +
         (fullHeight === false ? '' : 'h-screen')
       }
     >

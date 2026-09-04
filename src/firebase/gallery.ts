@@ -34,6 +34,20 @@ export const getUserGalleries = async (userId: string) => {
   return querySnapshot.docs
 }
 
+export const getPublishedGalleries = async () => {
+  const now = await getServerTime()
+
+  const q = query(
+    col,
+    where('publishedAt', '<=', now),
+    orderBy('publishedAt', 'desc'),
+  )
+
+  const querySnapshot = await getDocs(q)
+
+  return querySnapshot.docs
+}
+
 export const addGallery = async (userId: string) => {
   const docRef = await addDoc(col, { userId, created: Date.now() })
 
@@ -74,7 +88,13 @@ export const removeAllPhotosFromGallery = async (galleryId: string) => {
   })
 }
 
-export const getGalleryById = async (userId: string, galleryId: string) => {
+export const getGalleryById = async (galleryId: string) => {
+  const docRef = doc(db, COLLECTION_NAME_GALLERY, galleryId)
+  const docSnap = await getDoc(docRef)
+  return docSnap.data()
+}
+
+export const getUserGalleryById = async (userId: string, galleryId: string) => {
   const docRef = doc(db, COLLECTION_NAME_GALLERY, galleryId)
   const docSnap = await getDoc(docRef)
   const data = docSnap.data()

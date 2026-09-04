@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 
 import { CloudinaryUploadWidget } from '#/components/CloudinaryUploadWidget'
-import { addPhotoToGallery, getGalleryById } from '#/firebase/gallery'
+import { addPhotoToGallery, getUserGalleryById } from '#/firebase/gallery'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import FullWidthSpinner from '#/components/FullWidthSpinner'
 import { useAuth } from '#/auth'
@@ -40,7 +40,7 @@ function RouteComponent() {
 
   const { isPending, error, data } = useQuery({
     queryKey,
-    queryFn: async () => getGalleryById(user?.uid || '-', galleryId),
+    queryFn: async () => getUserGalleryById(user?.uid || '-', galleryId),
   })
 
   if (error) return <Error message={error.message} fullHeight={false} />

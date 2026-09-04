@@ -14,6 +14,7 @@ import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LogoutRouteImport } from './routes/logout'
 import { Route as AuthDashboardRouteImport } from './routes/_auth.dashboard'
+import { Route as ShowGalleryIdRouteImport } from './routes/show.$galleryId'
 import { Route as AuthGalleryIndexRouteImport } from './routes/_auth.gallery.index'
 import { Route as AuthGalleryGalleryIdRouteImport } from './routes/_auth.gallery.$galleryId'
 
@@ -41,6 +42,11 @@ const AuthDashboardRoute = AuthDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthRoute,
 } as any)
+const ShowGalleryIdRoute = ShowGalleryIdRouteImport.update({
+  id: '/show/$galleryId',
+  path: '/show/$galleryId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthGalleryIndexRoute = AuthGalleryIndexRouteImport.update({
   id: '/gallery/',
   path: '/gallery/',
@@ -57,6 +63,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/dashboard': typeof AuthDashboardRoute
+  '/show/$galleryId': typeof ShowGalleryIdRoute
   '/gallery/$galleryId': typeof AuthGalleryGalleryIdRoute
   '/gallery/': typeof AuthGalleryIndexRoute
 }
@@ -65,6 +72,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/dashboard': typeof AuthDashboardRoute
+  '/show/$galleryId': typeof ShowGalleryIdRoute
   '/gallery/$galleryId': typeof AuthGalleryGalleryIdRoute
   '/gallery': typeof AuthGalleryIndexRoute
 }
@@ -75,6 +83,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/_auth/dashboard': typeof AuthDashboardRoute
+  '/show/$galleryId': typeof ShowGalleryIdRoute
   '/_auth/gallery/$galleryId': typeof AuthGalleryGalleryIdRoute
   '/_auth/gallery/': typeof AuthGalleryIndexRoute
 }
@@ -85,6 +94,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/logout'
     | '/dashboard'
+    | '/show/$galleryId'
     | '/gallery/$galleryId'
     | '/gallery/'
   fileRoutesByTo: FileRoutesByTo
@@ -93,6 +103,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/logout'
     | '/dashboard'
+    | '/show/$galleryId'
     | '/gallery/$galleryId'
     | '/gallery'
   id:
@@ -102,6 +113,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/logout'
     | '/_auth/dashboard'
+    | '/show/$galleryId'
     | '/_auth/gallery/$galleryId'
     | '/_auth/gallery/'
   fileRoutesById: FileRoutesById
@@ -111,6 +123,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   LoginRoute: typeof LoginRoute
   LogoutRoute: typeof LogoutRoute
+  ShowGalleryIdRoute: typeof ShowGalleryIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -150,6 +163,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDashboardRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/show/$galleryId': {
+      id: '/show/$galleryId'
+      path: '/show/$galleryId'
+      fullPath: '/show/$galleryId'
+      preLoaderRoute: typeof ShowGalleryIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_auth/gallery/': {
       id: '/_auth/gallery/'
       path: '/gallery'
@@ -186,6 +206,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   LoginRoute: LoginRoute,
   LogoutRoute: LogoutRoute,
+  ShowGalleryIdRoute: ShowGalleryIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
