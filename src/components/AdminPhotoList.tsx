@@ -27,6 +27,7 @@ const SortableItem = memo(
     photo,
     handleImageDelete,
     isDeleting,
+    isDangerModeOn,
     ...props
   }: {
     id: string
@@ -37,22 +38,32 @@ const SortableItem = memo(
       photo: GalleryPhoto,
     ) => Promise<void>
     isDeleting: boolean
+    isDangerModeOn: boolean
   }) => {
     const { ref } = useSortable({ id, index })
 
     return (
-      <div {...props} ref={ref} className="flex max-w-24 flex-col">
-        <img src={photo.thumbnail_url} />
-        <Button
-          variant="destructive"
-          onClick={(event) => handleImageDelete(event, photo)}
+      <div {...props} ref={ref} className="flex flex-col">
+        <img src={photo.thumbnail_url} className="h-36 object-cover" />
+        <div
+          className={`grid transition-all duration-200 ${isDangerModeOn ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
         >
-          {!!isDeleting ? (
-            <Spinner data-icon="inline-start" />
-          ) : (
-            <Trash2 data-icon="inline-start" />
-          )}
-        </Button>
+          <div className="overflow-hidden">
+            {!!isDangerModeOn && (
+              <Button
+                variant="destructive"
+                onClick={(event) => handleImageDelete(event, photo)}
+                className="animate-in slide-in-from-top w-full duration-200"
+              >
+                {!!isDeleting ? (
+                  <Spinner data-icon="inline-start" />
+                ) : (
+                  <Trash2 data-icon="inline-start" />
+                )}
+              </Button>
+            )}
+          </div>
+        </div>
       </div>
     )
   },
@@ -62,10 +73,12 @@ export function AdminPhotoList({
   photos,
   galleryId,
   invalidateRouteData,
+  isDangerModeOn,
 }: {
   photos: Array<GalleryPhoto>
   galleryId: string
   invalidateRouteData: () => void
+  isDangerModeOn: boolean
 }) {
   const isDragging = useRef(false)
   const [items, setItems] = useState(photos ?? [])
@@ -144,7 +157,7 @@ export function AdminPhotoList({
           setItems((items: Array<GalleryPhoto>) => move(items, event))
         }}
       >
-        <Gallery className="mx-auto flex max-w-max gap-4">
+        <Gallery className="grid grid-cols-3 gap-2">
           {items.map((photo: GalleryPhoto, index: number) => (
             <SortableItem
               id={photo.id}
@@ -153,6 +166,7 @@ export function AdminPhotoList({
               key={photo.id}
               handleImageDelete={handleImageDelete}
               isDeleting={pendingDeleteImages.includes(photo.id)}
+              isDangerModeOn={isDangerModeOn}
             />
           ))}
         </Gallery>

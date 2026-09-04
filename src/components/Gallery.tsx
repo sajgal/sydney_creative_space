@@ -10,7 +10,7 @@ import {
   type ReactNode,
 } from 'react'
 import { Button } from './ui/button'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { ArrowLeft, ArrowRight, X } from 'lucide-react'
 
 type RenderProps = { photo: GalleryPhoto } & React.ComponentProps<'div'>
 
@@ -21,7 +21,7 @@ const Dialog = ({
   return (
     <div
       {...props}
-      className="fixed top-0 left-0 h-screen w-screen overflow-hidden bg-white/30 backdrop-blur-sm"
+      className="data-open:animate-in data-open:fade-in-0 fixed top-0 left-0 h-screen w-screen overflow-hidden bg-white/30 backdrop-blur-sm duration-200 supports-backdrop-filter:backdrop-blur-xs"
     >
       {children}
     </div>
@@ -38,15 +38,26 @@ const DialogContent = ({
   handleLeftArrowClick: (event: React.MouseEvent<HTMLButtonElement>) => void
 }) => {
   return (
-    <div className="flex h-screen items-center">
-      <Button className="mr-2 size-20" onClick={handleLeftArrowClick}>
-        <ArrowLeft className="size-5" />
-      </Button>
-      <div className="flex grow justify-center">{children}</div>
-      <Button className="ml-2 size-20" onClick={handleRightArrowClick}>
-        <ArrowRight className="size-5" />
-      </Button>
-    </div>
+    <>
+      <div>
+        <Button
+          className="fixed top-0 right-0 size-14 bg-amber-200"
+          // there is no need for handling click functionality here
+          // click will propagate to the modal background and close the dialog
+        >
+          <X className="size-4" />
+        </Button>
+      </div>
+      <div className="flex h-screen items-center">
+        <Button className="mr-2 size-20" onClick={handleLeftArrowClick}>
+          <ArrowLeft className="size-5" />
+        </Button>
+        <div className="flex grow justify-center">{children}</div>
+        <Button className="ml-2 size-20" onClick={handleRightArrowClick}>
+          <ArrowRight className="size-5" />
+        </Button>
+      </div>
+    </>
   )
 }
 
@@ -138,7 +149,10 @@ export function Gallery({
       {childrenWithClick}
 
       {isModalVisible && (
-        <Dialog onClick={() => handleCloseDialog()}>
+        <Dialog
+          onClick={() => handleCloseDialog()}
+          {...(isModalVisible ? { 'data-open': true } : {})}
+        >
           <DialogContent
             handleLeftArrowClick={handleLeftArrowClick}
             handleRightArrowClick={handleRightArrowClick}

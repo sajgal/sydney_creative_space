@@ -34,6 +34,8 @@ export const CloudinaryUploadWidget: React.FC<CloudinaryUploadWidgetProps> = ({
 }) => {
   const uploadWidgetRef = useRef<any>(null)
   const uploadButtonRef = useRef<HTMLButtonElement>(null)
+  const IMAGE_FULL_SCREEN = 0
+  const IMAGE_THUMB = 1
 
   useEffect(() => {
     const initializeUploadWidget = () => {
@@ -45,6 +47,7 @@ export const CloudinaryUploadWidget: React.FC<CloudinaryUploadWidgetProps> = ({
             uploadPreset: import.meta.env.VITE_PUBLIC_CLOUDINARY_UPLOAD_PRESET,
             folder: galleryId,
             tags: [galleryId],
+            maxFileSize: 5_242_880, // 5MB file size limit
           },
           (error: any, result: any) => {
             if (!error && result && result.event === 'success') {
@@ -53,8 +56,8 @@ export const CloudinaryUploadWidget: React.FC<CloudinaryUploadWidgetProps> = ({
 
               const [addPhotoToGallery, invalidateQuery] = onUpload
               addPhotoToGallery?.(galleryId, {
-                thumbnail_url,
-                secure_url: eager[0].secure_url,
+                thumbnail_url: eager[IMAGE_THUMB].secure_url ?? thumbnail_url,
+                secure_url: eager[IMAGE_FULL_SCREEN].secure_url,
                 id: public_id,
               })
               invalidateQuery()

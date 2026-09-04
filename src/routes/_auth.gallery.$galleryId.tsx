@@ -11,10 +11,12 @@ import { GalleryStatus } from '#/components/GalleryStatus'
 import { getServerTime } from '#/utils/server-functions'
 import { Button } from '#/components/ui/button'
 import { ChevronLeft } from 'lucide-react'
-import { deleteAllGalleryPhotos } from '#/utils/handleDelete'
-import { Spinner } from '#/components/ui/spinner'
 import { GalleryDetailsForm } from '#/components/GalleryDetailsForm'
 import { AdminPhotoList } from '#/components/AdminPhotoList'
+import { Switch } from '#/components/ui/switch'
+import { Label } from '#/components/ui/label'
+import { DeleteAllImagesButton } from '#/components/DeleteAllImagesButton'
+import { EmptyGalleryCard } from '#/components/EmptyGalleryCard'
 
 export const Route = createFileRoute('/_auth/gallery/$galleryId')({
   component: RouteComponent,
@@ -28,8 +30,8 @@ function RouteComponent() {
   const { galleryId } = Route.useParams()
   const serverTime = Route.useLoaderData()
   const queryKey = ['galleryData', galleryId]
-  const [isPendingBatchImageDeletion, setIsPendingBatchImageDeletion] =
-    useState(false)
+
+  const [isDangerModeOn, setDangerModeOn] = useState(false)
 
   const invalidateRouteData = async () => {
     await queryClient.refetchQueries({ queryKey })
@@ -41,19 +43,6 @@ function RouteComponent() {
     queryFn: async () => getGalleryById(user?.uid || '-', galleryId),
   })
 
-  const handleDeleteAll = async (galleryId: string) => {
-    setIsPendingBatchImageDeletion(true)
-
-    try {
-      await deleteAllGalleryPhotos(galleryId)
-    } catch (error) {
-      console.error('Error while deleting images from gallery', error)
-    }
-
-    await invalidateRouteData()
-    setIsPendingBatchImageDeletion(false)
-  }
-
   if (error) return <Error message={error.message} fullHeight={false} />
 
   const isEmpty = !data?.photos?.length
@@ -64,12 +53,27 @@ function RouteComponent() {
 
       {!!data && (
         <>
-          <div className="flex max-w-full items-end justify-between gap-2">
+          <div className="flex max-w-full items-center justify-between gap-2">
             <Link to="/gallery">
               <Button variant="outline">
                 <ChevronLeft data-icon="inline-start" /> Back
               </Button>
             </Link>
+            <div className="flex space-x-2">
+              <Switch
+                id="danger-mode"
+                disabled={isEmpty}
+                checked={!isEmpty && isDangerModeOn}
+                onClick={() => setDangerModeOn((prev) => !prev)}
+                className="data-[state=checked]:bg-red-400"
+              />
+              <Label
+                htmlFor="danger-mode"
+                className={`${!isEmpty && isDangerModeOn ? 'shimmer' : ''}`}
+              >
+                Danger mode
+              </Label>
+            </div>
             <GalleryStatus
               publishedAt={data?.publishedAt}
               serverTime={serverTime}
@@ -82,29 +86,40 @@ function RouteComponent() {
             />
           </div>
           <div className="mt-4 flex max-w-full flex-col">
-            <Button
-              disabled={isPendingBatchImageDeletion || isEmpty}
-              onClick={() => handleDeleteAll(galleryId)}
+            <div
+              className={`grid transition-all duration-200 ${isDangerModeOn ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
             >
-              {!!isPendingBatchImageDeletion ? (
-                <Spinner data-icon="inline-start" />
-              ) : (
-                'Delete all photos'
+              {!!isDangerModeOn && !isEmpty && (
+                <DeleteAllImagesButton
+                  className="overflow-hidden"
+                  galleryId={galleryId}
+                  invalidateRouteData={invalidateRouteData}
+                />
               )}
-            </Button>
+            </div>
             <div className="flex flex-col gap-2">
               <GalleryDetailsForm
                 galleryData={{ ...data, galleryId }}
                 onSave={invalidateRouteData}
               />
 
-              {isEmpty && <div>No photos yet.</div>}
+              {isEmpty && (
+                <EmptyGalleryCard>
+                  <div className="animate-wiggle">
+                    <CloudinaryUploadWidget
+                      galleryId={galleryId}
+                      onUpload={[addPhotoToGallery, invalidateRouteData]}
+                    />
+                  </div>
+                </EmptyGalleryCard>
+              )}
 
               {!isEmpty && (
                 <AdminPhotoList
                   photos={data?.photos}
                   galleryId={galleryId}
                   invalidateRouteData={invalidateRouteData}
+                  isDangerModeOn={isDangerModeOn}
                 />
               )}
             </div>

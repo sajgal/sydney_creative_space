@@ -2,7 +2,7 @@ import { publishGallery, unpublishGallery } from '#/firebase/gallery'
 import { useState } from 'react'
 import { Button } from './ui/button'
 import { Spinner } from './ui/spinner'
-import dayjs from 'dayjs'
+// import dayjs from 'dayjs'
 import { Rocket, Unplug } from 'lucide-react'
 
 export function GalleryStatus({
@@ -18,7 +18,7 @@ export function GalleryStatus({
 }) {
   const published = publishedAt <= serverTime
   const [isPending, setIsPending] = useState(false)
-  const formattedDate = dayjs(publishedAt || 0).format('DD.MM.YYYY HH:mm:ss')
+  // const formattedDate = dayjs(publishedAt || 0).format('DD.MM.YYYY HH:mm:ss')
 
   const handlePublish = async () => {
     setIsPending(true)
@@ -36,11 +36,11 @@ export function GalleryStatus({
 
   return (
     <div className="flex flex-col items-center gap-2">
-      {!isPending && (
+      {/* {!isPending && (
         <p className="text-sidebar-ring text-xs">
           {published ? `Published on ${formattedDate}` : 'Not published yet'}
         </p>
-      )}
+      )} */}
       {published ? (
         <Button variant="destructive" onClick={handleUnPublish}>
           {!!isPending ? (
