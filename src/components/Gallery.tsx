@@ -21,7 +21,7 @@ const Dialog = ({
   return (
     <div
       {...props}
-      className="data-open:animate-in data-open:fade-in-0 fixed top-0 left-0 h-screen w-screen overflow-hidden bg-white/30 backdrop-blur-sm duration-200 supports-backdrop-filter:backdrop-blur-xs"
+      className="data-open:animate-in data-open:fade-in-0 fixed top-0 left-0 h-screen w-screen overflow-hidden bg-black/90 backdrop-blur-sm duration-200 supports-backdrop-filter:backdrop-blur-xs"
     >
       {children}
     </div>
@@ -41,20 +41,26 @@ const DialogContent = ({
     <>
       <div>
         <Button
-          className="fixed top-0 right-0 size-14 bg-amber-200"
+          className="fixed top-0 right-0 size-20 bg-transparent hover:bg-gray-800"
           // there is no need for handling click functionality here
           // click will propagate to the modal background and close the dialog
         >
-          <X className="size-4" />
+          <X className="size-4" color="white" />
         </Button>
       </div>
       <div className="flex h-screen items-center">
-        <Button className="mr-2 size-20" onClick={handleLeftArrowClick}>
-          <ArrowLeft className="size-5" />
+        <Button
+          className="mr-2 size-20 h-screen bg-transparent hover:bg-gray-800"
+          onClick={handleLeftArrowClick}
+        >
+          <ArrowLeft className="size-5" color="white" />
         </Button>
         <div className="flex grow justify-center">{children}</div>
-        <Button className="ml-2 size-20" onClick={handleRightArrowClick}>
-          <ArrowRight className="size-5" />
+        <Button
+          className="ml-2 size-20 h-screen bg-transparent hover:bg-gray-800"
+          onClick={handleRightArrowClick}
+        >
+          <ArrowRight className="size-5" color="white" />
         </Button>
       </div>
     </>
