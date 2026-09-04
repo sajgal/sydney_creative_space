@@ -9,16 +9,7 @@ import {
 } from '@/components/ui/item'
 import { useNavigate } from '@tanstack/react-router'
 import { DeleteGalleryAlertDialog } from './DeleteGalleryAlertDialog'
-
-type Gallery = {
-  id: string
-  title?: string
-  artist?: string
-  album?: string
-  duration?: string
-  created?: number
-  photos?: { thumbnail_url: string; secure_url: string }[]
-}
+import type { Gallery } from '#/types/gallery'
 
 export default function GalleryListItem({
   gallery,
