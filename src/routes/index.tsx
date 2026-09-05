@@ -56,7 +56,10 @@ function HomeComponent() {
             const gallery = rawGallery.data() as Gallery
 
             return (
-              <div key={index}>
+              <div key={index} className="mb-2">
+                <div className="mb-1 pl-2 text-xl font-bold">
+                  {gallery.title}
+                </div>
                 <Link
                   to="/show/$galleryId"
                   params={{ galleryId: rawGallery.id }}
@@ -66,16 +69,8 @@ function HomeComponent() {
                     className="h-56 w-full border-8 border-white object-cover"
                   />
                 </Link>
-                <div className="flex justify-between">
-                  <div>
-                    <span>{gallery.title}</span>
-                  </div>
-                  <div className="flex gap-2">
-                    <span>By Matej</span>
-                    <span>
-                      {dayjs(gallery.publishedAt || 0).format('MMMM YYYY')}
-                    </span>
-                  </div>
+                <div className="mt-1 flex justify-end pr-2 text-sm font-light text-gray-800">
+                  <span>By Matej, {dayjs(gallery.publishedAt || 0).format('MMMM YYYY')}</span>
                 </div>
               </div>
             )
