@@ -51,7 +51,7 @@ const DialogContent = ({
           onClick={handleLeftArrowClick}
           className="w-full bg-transparent hover:bg-gray-800 md:h-full"
         >
-          <ArrowLeft className="size-5" color="white" />
+          <ArrowLeft className="size-7" color="white" />
         </Button>
       </div>
       <div className="order-2 col-start-1 col-end-3 row-start-2 row-end-3 min-h-0 md:order-3 md:col-start-2 md:col-end-3 md:row-start-1 md:row-end-3">
@@ -62,7 +62,7 @@ const DialogContent = ({
           onClick={handleRightArrowClick}
           className="w-full bg-transparent hover:bg-gray-800 md:h-full"
         >
-          <ArrowRight className="size-5" color="white" />
+          <ArrowRight className="size-7" color="white" />
         </Button>
       </div>
     </div>
