@@ -97,6 +97,10 @@ export function Gallery({
     setActivePhotoWithinRange(photos.indexOf(activePhoto) + 1)
   })
 
+  useHotkey('Space', () => {
+    setActivePhotoWithinRange(photos.indexOf(activePhoto) + 1)
+  })
+
   useHotkey('ArrowLeft', () => {
     setActivePhotoWithinRange(photos.indexOf(activePhoto) - 1)
   })
