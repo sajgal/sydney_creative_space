@@ -178,15 +178,11 @@ export function Gallery({
             handleLeftArrowClick={handleLeftArrowClick}
             handleRightArrowClick={handleRightArrowClick}
           >
-            <div className="h-full w-full flex items-center">
-              <button className='h-fit w-fit' onClick={handleRightArrowClick}>
-                <img
-                  className="object-contain"
-                  src={activePhoto.secure_url}
-                  alt="gallery picture"
-                />
-              </button>
-            </div>
+            <img
+              className="h-full w-full object-contain"
+              src={activePhoto.secure_url}
+              alt="gallery picture"
+            />
           </DialogContent>
         </Dialog>
       )}
