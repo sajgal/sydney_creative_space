@@ -118,6 +118,15 @@ export function Gallery({
     }
   }, [isModalVisible, activePhoto])
 
+  // disables scrolling when modal is visible
+  useEffect(() => {
+    if (isModalVisible) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'auto'
+    }
+  }, [isModalVisible])
+
   const handleGalleryListPhotoClick = (photo: GalleryPhoto) => {
     setActivePhoto(photo)
     setIsModalVisible(true)
