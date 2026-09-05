@@ -38,32 +38,34 @@ const DialogContent = ({
   handleLeftArrowClick: (event: React.MouseEvent<HTMLButtonElement>) => void
 }) => {
   return (
-    <>
-      <div>
-        <Button
-          className="fixed top-0 right-0 size-20 bg-transparent hover:bg-gray-800"
-          // there is no need for handling click functionality here
-          // click will propagate to the modal background and close the dialog
-        >
-          <X className="size-4" color="white" />
+    <div className="grid h-screen grid-cols-2 grid-rows-[auto_1fr_auto] md:grid-cols-[auto_1fr_auto] md:grid-rows-[auto_1fr]">
+      <div className="order-1 col-start-1 col-end-3 row-start-1 row-end-2 flex justify-end md:order-1 md:col-start-3 md:col-end-4 md:row-start-1 md:row-end-2">
+        <Button className="flex w-full justify-end bg-transparent hover:bg-gray-800">
+          {/* there is no need for handling click functionality of close button */}
+          {/* click will propagate and close the dialog */}
+          <X className="size-5" color="white" />
         </Button>
       </div>
-      <div className="flex h-screen items-center">
+      <div className="order-3 col-start-1 col-end-2 row-start-3 row-end-4 flex items-center justify-center md:order-2 md:col-start-1 md:col-end-2 md:row-start-2 md:row-end-3">
         <Button
-          className="mr-2 size-20 h-screen bg-transparent hover:bg-gray-800"
           onClick={handleLeftArrowClick}
+          className="w-full bg-transparent hover:bg-gray-800 md:h-full"
         >
           <ArrowLeft className="size-5" color="white" />
         </Button>
-        <div className="flex grow justify-center">{children}</div>
+      </div>
+      <div className="order-2 col-start-1 col-end-3 row-start-2 row-end-3 min-h-0 md:order-3 md:col-start-2 md:col-end-3 md:row-start-1 md:row-end-3">
+        {children}
+      </div>
+      <div className="order-3 col-start-2 col-end-3 row-start-3 row-end-4 flex items-center justify-center md:order-4 md:col-start-3 md:col-end-4 md:row-start-2 md:row-end-3">
         <Button
-          className="ml-2 size-20 h-screen bg-transparent hover:bg-gray-800"
           onClick={handleRightArrowClick}
+          className="w-full bg-transparent hover:bg-gray-800 md:h-full"
         >
           <ArrowRight className="size-5" color="white" />
         </Button>
       </div>
-    </>
+    </div>
   )
 }
 
@@ -177,7 +179,7 @@ export function Gallery({
             handleRightArrowClick={handleRightArrowClick}
           >
             <img
-              className="max-h-screen object-contain"
+              className="h-full w-full object-contain"
               src={activePhoto.secure_url}
               alt="gallery picture"
             />
