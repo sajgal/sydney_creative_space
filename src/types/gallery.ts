@@ -1,3 +1,5 @@
+import type { User } from "./user"
+
 export type Gallery = {
   id: string
   title?: string
@@ -5,6 +7,8 @@ export type Gallery = {
   publishedAt?: number
   photos?: Array<GalleryPhoto>
   description?: string
+  userId: string
+  userData?: User
 }
 
 export type GalleryPhoto = {

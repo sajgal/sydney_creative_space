@@ -70,7 +70,7 @@ function RouteComponent() {
             {data.map((doc, key) => (
               <GalleryListItem
                 key={key}
-                gallery={{ ...doc.data(), id: doc.id }}
+                gallery={{ ...doc.data(), id: doc.id, userId }}
                 invalidateRouteData={invalidateRouteData}
               />
             ))}

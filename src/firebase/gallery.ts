@@ -15,7 +15,8 @@ import {
 } from 'firebase/firestore'
 import { db } from '@/firebase/config'
 import { getServerTime } from '#/utils/server-functions'
-import type { GalleryPhoto } from '#/types/gallery'
+import type { Gallery, GalleryPhoto } from '#/types/gallery'
+import { getUsersInArray } from './user'
 
 export type UpdateableFields = 'title' | 'description' | 'photos'
 
@@ -28,13 +29,13 @@ export const getUserGalleries = async (userId: string) => {
     where('userId', '==', userId),
     orderBy('created', 'desc'),
   )
-  // const q = query(col, where('userId', '==', userId))
+
   const querySnapshot = await getDocs(q)
 
   return querySnapshot.docs
 }
 
-export const getPublishedGalleries = async () => {
+export const getPublishedGalleries = async (): Promise<Array<Gallery>> => {
   const now = await getServerTime()
 
   const q = query(
@@ -43,9 +44,18 @@ export const getPublishedGalleries = async () => {
     orderBy('publishedAt', 'desc'),
   )
 
-  const querySnapshot = await getDocs(q)
+  const galleries = await getDocs(q)
+  const uniqueUserIds = [...new Set(galleries.docs.map((g) => g.data().userId))]
+  const userMap = await getUsersInArray(uniqueUserIds)
 
-  return querySnapshot.docs
+  return galleries.docs.map((gallery) => {
+    const galleryData = { id: gallery.id, ...gallery.data() } as Gallery
+
+    return {
+      ...galleryData,
+      userData: userMap.get(galleryData.userId),
+    }
+  })
 }
 
 export const addGallery = async (userId: string) => {

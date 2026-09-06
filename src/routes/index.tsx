@@ -7,7 +7,6 @@ import { useQuery } from '@tanstack/react-query'
 import { getPublishedGalleries } from '#/firebase/gallery'
 import { Error } from '#/components/Error'
 import FullWidthSpinner from '#/components/FullWidthSpinner'
-import type { Gallery } from '#/types/gallery'
 import dayjs from 'dayjs'
 
 export const Route = createFileRoute('/')({
@@ -52,9 +51,7 @@ function HomeComponent() {
         {!!isEmpty && <div>Empty :( </div>}
 
         {data &&
-          data.map((rawGallery, index) => {
-            const gallery = rawGallery.data() as Gallery
-
+          data.map((gallery, index) => {
             return (
               <div key={index} className="mb-2">
                 <div className="mb-1 pl-2 text-xl font-bold">
@@ -62,7 +59,7 @@ function HomeComponent() {
                 </div>
                 <Link
                   to="/show/$galleryId"
-                  params={{ galleryId: rawGallery.id }}
+                  params={{ galleryId: gallery.id }}
                 >
                   <img
                     src={gallery.photos && gallery.photos[0].secure_url}
@@ -70,7 +67,10 @@ function HomeComponent() {
                   />
                 </Link>
                 <div className="mt-1 flex justify-end pr-2 text-sm font-light text-gray-800">
-                  <span>By Matej, {dayjs(gallery.publishedAt || 0).format('MMMM YYYY')}</span>
+                  <span>
+                    {gallery.userData?.displayName || 'Anonymous'},{' '}
+                    {dayjs(gallery.publishedAt || 0).format('MMMM YYYY')}
+                  </span>
                 </div>
               </div>
             )
