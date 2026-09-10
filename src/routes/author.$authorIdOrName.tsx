@@ -9,14 +9,16 @@ import { Error } from '#/components/Error'
 import FullWidthSpinner from '#/components/FullWidthSpinner'
 import dayjs from 'dayjs'
 
-export const Route = createFileRoute('/')({
-  component: HomeComponent,
+export const Route = createFileRoute('/author/$authorIdOrName')({
+  component: AuthorComponent,
 })
 
-function HomeComponent() {
+function AuthorComponent() {
+  const { authorIdOrName } = Route.useParams()
+
   const { isPending, error, data } = useQuery({
-    queryKey: ['homepagee'],
-    queryFn: async () => getPublishedGalleries(),
+    queryKey: ['authorPage', authorIdOrName],
+    queryFn: async () => getPublishedGalleries(authorIdOrName),
   })
 
   const isEmpty = !isPending && data && data?.length === 0
@@ -28,13 +30,13 @@ function HomeComponent() {
   return (
     <div className="mx-auto max-w-3xl p-4">
       <section className="mb-6 flex items-center justify-between">
-        <h1 className="mb-4 text-2xl font-bold">
-          Sydney
-          <br />
-          Creative
-          <br />
-          .space
-        </h1>
+        <Link to="/">
+          <h1 className="mb-4 text-2xl font-bold">
+            Author
+            <br />
+            Page
+          </h1>
+        </Link>
 
         <Link to="/gallery">
           <Button size="icon-lg" aria-label="Admin" variant="outline">
@@ -65,17 +67,8 @@ function HomeComponent() {
                 </Link>
                 <div className="mt-1 flex justify-end pr-2 text-sm font-light text-gray-800">
                   <span>
-                    <Link
-                      to="/author/$authorIdOrName"
-                      params={{
-                        authorIdOrName:
-                          gallery.userData?.id ||
-                          '-',
-                      }}
-                    >
-                      {gallery.userData?.displayName || 'Anonymous'}
-                    </Link>
-                    , {dayjs(gallery.publishedAt || 0).format('MMMM YYYY')}
+                    {gallery.userData?.displayName || 'Anonymous'},{' '}
+                    {dayjs(gallery.publishedAt || 0).format('MMMM YYYY')}
                   </span>
                 </div>
               </div>

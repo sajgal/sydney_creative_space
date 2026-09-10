@@ -12,6 +12,7 @@ import {
   arrayRemove,
   deleteField,
   deleteDoc,
+  QueryConstraint,
 } from 'firebase/firestore'
 import { db } from '@/firebase/config'
 import { getServerTime } from '#/utils/server-functions'
@@ -35,13 +36,25 @@ export const getUserGalleries = async (userId: string) => {
   return querySnapshot.docs
 }
 
-export const getPublishedGalleries = async (): Promise<Array<Gallery>> => {
+export const getPublishedGalleries = async (
+  userId?: string,
+): Promise<Array<Gallery>> => {
   const now = await getServerTime()
+
+  const constraints: QueryConstraint[] = [
+    where('publishedAt', '<=', now),
+    orderBy('publishedAt', 'desc'),
+  ]
+
+  if(userId) {
+    constraints.push(
+      where('userId', '<=', userId)
+    )
+  }
 
   const q = query(
     col,
-    where('publishedAt', '<=', now),
-    orderBy('publishedAt', 'desc'),
+    ...constraints
   )
 
   const galleries = await getDocs(q)
