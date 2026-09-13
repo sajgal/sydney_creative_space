@@ -48,7 +48,7 @@ export const getPublishedGalleries = async (
 
   if(userId) {
     constraints.push(
-      where('userId', '<=', userId)
+      where('userId', '==', userId)
     )
   }
 

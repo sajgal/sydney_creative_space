@@ -11,6 +11,13 @@ import dayjs from 'dayjs'
 
 export const Route = createFileRoute('/author/$authorIdOrName')({
   component: AuthorComponent,
+  head: () => ({
+    meta: [
+      {
+        title: 'Author page',
+      },
+    ],
+  }),
 })
 
 function AuthorComponent() {
