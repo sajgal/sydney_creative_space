@@ -59,6 +59,9 @@ export const getPublishedGalleries = async (
 
   const galleries = await getDocs(q)
   const uniqueUserIds = [...new Set(galleries.docs.map((g) => g.data().userId))]
+
+  if (uniqueUserIds.length === 0) return [];
+  
   const userMap = await getUsersInArray(uniqueUserIds)
 
   return galleries.docs.map((gallery) => {
