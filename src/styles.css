@@ -4,6 +4,7 @@
 @import 'shadcn/tailwind.css';
 @import '@fontsource-variable/inter';
 @import '@fontsource-variable/jetbrains-mono';
+@import '@fontsource-variable/playfair-display';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -99,6 +100,10 @@ body {
   --font-heading: var(--font-sans);
   --font-sans: 'Inter Variable', sans-serif;
   --font-mono: 'JetBrains Mono Variable', monospace;
+  --font-serif: 'Playfair Display', 'serif';
+  --rose: oklch(0.5858 0.222 17.58);
+  --color-pea: oklch(0.4177 0.039 226.69);
+  --color-greenish-500: oklch(0.9284 0.0111 225.99);
 }
 
 :root {
