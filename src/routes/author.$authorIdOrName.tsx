@@ -1,13 +1,12 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { ShieldKeyhole } from 'lucide-react'
-
+import { createFileRoute } from '@tanstack/react-router'
 import { Separator } from '#/components/ui/separator'
-import { Button } from '#/components/ui/button'
 import { useQuery } from '@tanstack/react-query'
 import { getPublishedGalleries } from '#/firebase/gallery'
 import { Error } from '#/components/Error'
 import FullWidthSpinner from '#/components/FullWidthSpinner'
-import dayjs from 'dayjs'
+import { SubHeader } from '#/components/SubHeader'
+import { getUserData } from '#/firebase/user'
+import { GalleryLinksOld } from '#/components/GalleryLinksOld'
 
 export const Route = createFileRoute('/author/$authorIdOrName')({
   component: AuthorComponent,
@@ -25,10 +24,18 @@ function AuthorComponent() {
 
   const { isPending, error, data } = useQuery({
     queryKey: ['authorPage', authorIdOrName],
-    queryFn: async () => getPublishedGalleries(authorIdOrName),
+    queryFn: async () => {
+      const galleries = await getPublishedGalleries(authorIdOrName)
+      const author = await getUserData(authorIdOrName)
+
+      return {
+        galleries,
+        author,
+      }
+    },
   })
 
-  const isEmpty = !isPending && data && data?.length === 0
+  const isEmpty = !isPending && data && data.galleries?.length === 0
 
   if (error) {
     return <Error message={error.message} />
@@ -36,51 +43,21 @@ function AuthorComponent() {
 
   return (
     <div className="mx-auto max-w-3xl p-4">
-      <section className="mb-6 flex items-center justify-between">
-        <Link to="/">
-          <h1 className="mb-4 text-2xl font-bold">
-            Author
-            <br />
-            Page
-          </h1>
-        </Link>
-
-        <Link to="/gallery">
-          <Button size="icon-lg" aria-label="Admin" variant="outline">
-            <ShieldKeyhole />
-          </Button>
-        </Link>
-      </section>
-
-      <Separator />
+      {!isPending && (
+        <>
+          <SubHeader title={data?.author?.displayName || 'Anonymous'} />
+          <Separator className="my-4" />
+        </>
+      )}
 
       <section className="mt-2 mb-6 flex flex-col gap-4">
         {!!isPending && <FullWidthSpinner />}
 
         {!!isEmpty && <div>Empty :( </div>}
 
-        {data &&
-          data.map((gallery, index) => {
-            return (
-              <div key={index} className="mb-2">
-                <div className="mb-1 pl-2 text-xl font-bold">
-                  {gallery.title}
-                </div>
-                <Link to="/show/$galleryId" params={{ galleryId: gallery.id }}>
-                  <img
-                    src={gallery.photos && gallery.photos[0].secure_url}
-                    className="h-56 w-full border-8 border-white object-cover"
-                  />
-                </Link>
-                <div className="mt-1 flex justify-end pr-2 text-sm font-light text-gray-800">
-                  <span>
-                    {gallery.userData?.displayName || 'Anonymous'},{' '}
-                    {dayjs(gallery.publishedAt || 0).format('MMMM YYYY')}
-                  </span>
-                </div>
-              </div>
-            )
-          })}
+        {!!data && data.galleries.length > 0 && (
+          <GalleryLinksOld galleries={data.galleries} />
+        )}
       </section>
     </div>
   )

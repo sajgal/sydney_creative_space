@@ -7,7 +7,7 @@ export function SubHeader({
   author,
 }: {
   title: string
-  author: string
+  author?: string
 }) {
   return (
     <header className="flex flex-col items-center justify-between sm:flex-row">
@@ -22,7 +22,9 @@ export function SubHeader({
             {title}
           </span>
         </h1>
-        <div className="text-xs font-light text-gray-500">By {author}</div>
+        {!!author && (
+          <div className="text-xs font-light text-gray-500">by {author}</div>
+        )}
       </Link>
     </header>
   )
