@@ -13,7 +13,7 @@ export const Route = createFileRoute('/')({
 
 function HomeComponent() {
   const { isPending, error, data } = useQuery({
-    queryKey: ['homepagee'],
+    queryKey: ['homepage'],
     queryFn: async () => getPublishedGalleries(),
   })
 

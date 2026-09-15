@@ -1,5 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-
+import { createFileRoute } from '@tanstack/react-router'
 import { Separator } from '#/components/ui/separator'
 import { useQuery } from '@tanstack/react-query'
 import { getGalleryById } from '#/firebase/gallery'
@@ -7,6 +6,7 @@ import { Error } from '#/components/Error'
 import FullWidthSpinner from '#/components/FullWidthSpinner'
 import type { Gallery as GalleryType, GalleryPhoto } from '#/types/gallery'
 import { Gallery } from '#/components/Gallery'
+import { SubHeader } from '#/components/SubHeader'
 
 export const Route = createFileRoute('/show/$galleryId')({
   component: ShowGalleryComponent,
@@ -31,7 +31,7 @@ function ShowGalleryComponent() {
     queryFn: async () => getGalleryById(galleryId),
   })
 
-  const isEmpty = !isPending && data && data?.length === 0
+  const isEmpty = !isPending && data?.id
 
   if (error) {
     return <Error message={error.message} />
@@ -49,27 +49,28 @@ function ShowGalleryComponent() {
 
   return (
     <div className="mx-auto max-w-3xl p-4">
-      <section className="mb-6 flex items-center justify-between">
-        <Link to="/">
-          <h1 className="mb-4 text-2xl font-bold">Back</h1>
-        </Link>
-      </section>
+      <SubHeader
+        title={gallery.title || '-'}
+        author={gallery.userData?.displayName || 'Anonyous'}
+      />
 
-      <Separator />
+      <Separator className="my-4" />
 
       <section className="mt-2 mb-6 flex flex-col gap-4">
-        <h1>{gallery.title}</h1>
         <div>{gallery.description}</div>
 
         {gallery?.photos && (
-          <Gallery className="mt-4 grid grid-cols-3 gap-2">
+          <Gallery className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
             {gallery.photos.map((photo: GalleryPhoto, index: number) => (
               <PhotoWrapper
                 key={index}
                 className="flex cursor-pointer flex-col"
                 photo={photo}
               >
-                <img src={photo.thumbnail_url} className="h-36 object-cover" />
+                <img
+                  src={photo.thumbnail_url}
+                  className="aspect-square object-cover transition-transform duration-200 hover:scale-105 hover:shadow-md"
+                />
               </PhotoWrapper>
             ))}
           </Gallery>

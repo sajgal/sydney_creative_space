@@ -17,7 +17,7 @@ import {
 import { db } from '@/firebase/config'
 import { getServerTime } from '#/utils/server-functions'
 import type { Gallery, GalleryPhoto } from '#/types/gallery'
-import { getUsersInArray } from './user'
+import { getUserData, getUsersInArray } from './user'
 
 export type UpdateableFields = 'title' | 'description' | 'photos'
 
@@ -46,22 +46,17 @@ export const getPublishedGalleries = async (
     orderBy('publishedAt', 'desc'),
   ]
 
-  if(userId) {
-    constraints.push(
-      where('userId', '==', userId)
-    )
+  if (userId) {
+    constraints.push(where('userId', '==', userId))
   }
 
-  const q = query(
-    col,
-    ...constraints
-  )
+  const q = query(col, ...constraints)
 
   const galleries = await getDocs(q)
   const uniqueUserIds = [...new Set(galleries.docs.map((g) => g.data().userId))]
 
-  if (uniqueUserIds.length === 0) return [];
-  
+  if (uniqueUserIds.length === 0) return []
+
   const userMap = await getUsersInArray(uniqueUserIds)
 
   return galleries.docs.map((gallery) => {
@@ -114,10 +109,16 @@ export const removeAllPhotosFromGallery = async (galleryId: string) => {
   })
 }
 
-export const getGalleryById = async (galleryId: string) => {
+export const getGalleryById = async (galleryId: string): Promise<Gallery> => {
   const docRef = doc(db, COLLECTION_NAME_GALLERY, galleryId)
   const docSnap = await getDoc(docRef)
-  return docSnap.data()
+  const galleryData = docSnap.data() as Gallery
+  const userData = await getUserData(galleryData.userId)
+
+  return {
+    ...galleryData,
+    userData,
+  }
 }
 
 export const getUserGalleryById = async (userId: string, galleryId: string) => {
