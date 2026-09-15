@@ -35,7 +35,7 @@ export function GalleryLinks({
                 className="relative z-20 aspect-video w-full object-cover"
               />
             </Link>
-            <CardHeader>
+            <CardHeader className="-mt-2">
               {index === 0 && (
                 <CardAction>
                   <Badge variant="default">New</Badge>
@@ -57,7 +57,7 @@ export function GalleryLinks({
             </CardHeader>
 
             {!!simple && (
-              <CardFooter className="mb-4 -mt-4">
+              <CardFooter className="-mt-4 mb-4">
                 <div className="flex w-full justify-between gap-4 text-xs font-light text-gray-500">
                   <Link
                     to="/author/$authorIdOrName"

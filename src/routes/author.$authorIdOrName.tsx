@@ -6,7 +6,7 @@ import { Error } from '#/components/Error'
 import FullWidthSpinner from '#/components/FullWidthSpinner'
 import { SubHeader } from '#/components/SubHeader'
 import { getUserData } from '#/firebase/user'
-import { GalleryLinksOld } from '#/components/GalleryLinksOld'
+import { GalleryLinks } from '#/components/GalleryLinks'
 
 export const Route = createFileRoute('/author/$authorIdOrName')({
   component: AuthorComponent,
@@ -56,7 +56,7 @@ function AuthorComponent() {
         {!!isEmpty && <div>Empty :( </div>}
 
         {!!data && data.galleries.length > 0 && (
-          <GalleryLinksOld galleries={data.galleries} />
+          <GalleryLinks simple={true} galleries={data.galleries || []} />
         )}
       </section>
     </div>
