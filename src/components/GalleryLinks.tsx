@@ -13,7 +13,13 @@ import {
 import { Separator } from './ui/separator'
 import dayjs from 'dayjs'
 
-export function GalleryLinks({ galleries }: { galleries: Array<Gallery> }) {
+export function GalleryLinks({
+  galleries,
+  simple,
+}: {
+  galleries: Array<Gallery>
+  simple: boolean
+}) {
   if (galleries.length < 1) return <div></div>
 
   return (
@@ -40,29 +46,52 @@ export function GalleryLinks({ galleries }: { galleries: Array<Gallery> }) {
                   {gallery.title || '-'}
                 </Link>
               </CardTitle>
-              <CardDescription className="line-clamp-3">
-                <div>{gallery.description || '-'}</div>
-              </CardDescription>
+
+              {!simple && (
+                <CardDescription>
+                  <div className="line-clamp-3">
+                    {gallery.description || '-'}
+                  </div>
+                </CardDescription>
+              )}
             </CardHeader>
-            <CardFooter className="bg-muted flex flex-col border-t pb-5">
-              <Link
-                className="mb-3 w-full"
-                to="/show/$galleryId"
-                params={{ galleryId: gallery.id }}
-              >
-                <Button className="w-full">View Gallery</Button>
-              </Link>
-              <div className="flex w-full justify-between gap-4 text-xs font-light text-gray-500">
+
+            {!!simple && (
+              <CardFooter className="mb-4 -mt-4">
+                <div className="flex w-full justify-between gap-4 text-xs font-light text-gray-500">
+                  <Link
+                    to="/author/$authorIdOrName"
+                    params={{ authorIdOrName: gallery.userId }}
+                  >
+                    {gallery.userData?.displayName || 'Anonymous'}
+                  </Link>
+                  <Separator orientation="vertical" />
+                  {dayjs(gallery.publishedAt).format('MMMM YYYY')}
+                </div>
+              </CardFooter>
+            )}
+
+            {!simple && (
+              <CardFooter className="bg-muted flex flex-col border-t pb-5">
                 <Link
-                  to="/author/$authorIdOrName"
-                  params={{ authorIdOrName: gallery.userId }}
+                  className="mb-3 w-full"
+                  to="/show/$galleryId"
+                  params={{ galleryId: gallery.id }}
                 >
-                  {gallery.userData?.displayName || 'Anonymous'}
+                  <Button className="w-full">View Gallery</Button>
                 </Link>
-                <Separator orientation="vertical" />
-                {dayjs(gallery.publishedAt).format('MMMM YYYY')}
-              </div>
-            </CardFooter>
+                <div className="flex w-full justify-between gap-4 text-xs font-light text-gray-500">
+                  <Link
+                    to="/author/$authorIdOrName"
+                    params={{ authorIdOrName: gallery.userId }}
+                  >
+                    {gallery.userData?.displayName || 'Anonymous'}
+                  </Link>
+                  <Separator orientation="vertical" />
+                  {dayjs(gallery.publishedAt).format('MMMM YYYY')}
+                </div>
+              </CardFooter>
+            )}
           </Card>
         )
       })}
