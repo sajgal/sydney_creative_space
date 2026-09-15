@@ -82,7 +82,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="bg-greenish-500">
+      <body className="bg-beige">
         <QueryClientProvider client={queryClient}>
           <AuthContextProvider>
             <AuthProviderInnerApp>
