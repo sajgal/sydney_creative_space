@@ -11,8 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/_auth'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LogoutRouteImport } from './routes/logout'
+import { Route as PhotographersRouteImport } from './routes/photographers'
 import { Route as AuthAboutMeRouteImport } from './routes/_auth.about-me'
 import { Route as AuthorAuthorIdOrNameRouteImport } from './routes/author.$authorIdOrName'
 import { Route as ShowGalleryIdRouteImport } from './routes/show.$galleryId'
@@ -28,6 +30,11 @@ const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -36,6 +43,11 @@ const LoginRoute = LoginRouteImport.update({
 const LogoutRoute = LogoutRouteImport.update({
   id: '/logout',
   path: '/logout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PhotographersRoute = PhotographersRouteImport.update({
+  id: '/photographers',
+  path: '/photographers',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthAboutMeRoute = AuthAboutMeRouteImport.update({
@@ -66,8 +78,10 @@ const AuthGalleryGalleryIdRoute = AuthGalleryGalleryIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
+  '/photographers': typeof PhotographersRoute
   '/about-me': typeof AuthAboutMeRoute
   '/author/$authorIdOrName': typeof AuthorAuthorIdOrNameRoute
   '/show/$galleryId': typeof ShowGalleryIdRoute
@@ -76,8 +90,10 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
+  '/photographers': typeof PhotographersRoute
   '/about-me': typeof AuthAboutMeRoute
   '/author/$authorIdOrName': typeof AuthorAuthorIdOrNameRoute
   '/show/$galleryId': typeof ShowGalleryIdRoute
@@ -88,8 +104,10 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
+  '/about': typeof AboutRoute
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
+  '/photographers': typeof PhotographersRoute
   '/_auth/about-me': typeof AuthAboutMeRoute
   '/author/$authorIdOrName': typeof AuthorAuthorIdOrNameRoute
   '/show/$galleryId': typeof ShowGalleryIdRoute
@@ -100,8 +118,10 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/login'
     | '/logout'
+    | '/photographers'
     | '/about-me'
     | '/author/$authorIdOrName'
     | '/show/$galleryId'
@@ -110,8 +130,10 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/login'
     | '/logout'
+    | '/photographers'
     | '/about-me'
     | '/author/$authorIdOrName'
     | '/show/$galleryId'
@@ -121,8 +143,10 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_auth'
+    | '/about'
     | '/login'
     | '/logout'
+    | '/photographers'
     | '/_auth/about-me'
     | '/author/$authorIdOrName'
     | '/show/$galleryId'
@@ -133,8 +157,10 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRouteWithChildren
+  AboutRoute: typeof AboutRoute
   LoginRoute: typeof LoginRoute
   LogoutRoute: typeof LogoutRoute
+  PhotographersRoute: typeof PhotographersRoute
   AuthorAuthorIdOrNameRoute: typeof AuthorAuthorIdOrNameRoute
   ShowGalleryIdRoute: typeof ShowGalleryIdRoute
 }
@@ -155,6 +181,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -167,6 +200,13 @@ declare module '@tanstack/react-router' {
       path: '/logout'
       fullPath: '/logout'
       preLoaderRoute: typeof LogoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/photographers': {
+      id: '/photographers'
+      path: '/photographers'
+      fullPath: '/photographers'
+      preLoaderRoute: typeof PhotographersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth/about-me': {
@@ -224,8 +264,10 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRouteWithChildren,
+  AboutRoute: AboutRoute,
   LoginRoute: LoginRoute,
   LogoutRoute: LogoutRoute,
+  PhotographersRoute: PhotographersRoute,
   AuthorAuthorIdOrNameRoute: AuthorAuthorIdOrNameRoute,
   ShowGalleryIdRoute: ShowGalleryIdRoute,
 }
