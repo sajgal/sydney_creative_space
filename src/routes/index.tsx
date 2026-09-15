@@ -6,16 +6,12 @@ import { Error } from '#/components/Error'
 import FullWidthSpinner from '#/components/FullWidthSpinner'
 import { GalleryLinks } from '#/components/GalleryLinks'
 import { Header } from '#/components/Header'
-import { getServerTime } from '#/utils/server-functions'
 
 export const Route = createFileRoute('/')({
   component: HomeComponent,
-  loader: () => getServerTime(),
 })
 
 function HomeComponent() {
-  const serverTime = Route.useLoaderData()
-
   const { isPending, error, data } = useQuery({
     queryKey: ['homepagee'],
     queryFn: async () => getPublishedGalleries(),
@@ -29,9 +25,9 @@ function HomeComponent() {
 
   return (
     <div className="mx-auto max-w-3xl p-4">
-      <Header serverTime={serverTime} />
+      <Header />
 
-      <Separator className="m-4" />
+      <Separator className="my-4" />
 
       <section className="mt-2 mb-6 flex flex-col gap-4">
         {!!isPending && <FullWidthSpinner />}
