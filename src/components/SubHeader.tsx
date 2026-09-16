@@ -10,20 +10,23 @@ export function SubHeader({
   author?: string
 }) {
   return (
-    <header className="flex flex-col items-center justify-between sm:flex-row">
-      <Link className="hidden grow-0 sm:block" to="/">
+    <header className="flex flex-row items-center justify-between">
+      <Link className="grow-0" to="/">
         <Button variant="ghost">
           <ChevronLeft />
         </Button>
       </Link>
-      <Link to="/" className="flex flex-1 flex-col items-center">
-        <h1 className="text-redred mb-1 flex flex-col items-center font-serif font-black tracking-tighter">
-          <span className="text-center text-3xl md:text-4xl lg:text-5xl">
-            {title}
-          </span>
+      <Link
+        to="/"
+        className="flex grow flex-col items-center border-2 text-right"
+      >
+        <h1 className="text-redred mb-1 flex w-full flex-col items-end border-2 font-serif font-black tracking-tighter sm:w-auto sm:items-center">
+          <span className="text-3xl md:text-4xl lg:text-5xl">{title}</span>
         </h1>
         {!!author && (
-          <div className="text-xs font-light text-gray-500">by {author}</div>
+          <div className="w-full border-2 text-xs font-light text-gray-500 sm:w-auto">
+            by {author}
+          </div>
         )}
       </Link>
     </header>
