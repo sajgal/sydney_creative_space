@@ -35,21 +35,17 @@ const DialogContent = ({
   handleCloseDialog,
 }: {
   children: React.ReactNode
-  handleRightArrowClick: (event: React.MouseEvent<HTMLButtonElement>) => void
-  handleLeftArrowClick: (
-    event: React.MouseEvent<HTMLButtonElement & HTMLDivElement>,
-  ) => void
-  handleCloseDialog: (
-    event: React.MouseEvent<HTMLButtonElement & HTMLDivElement>,
-  ) => void
+  handleRightArrowClick: (event: React.MouseEvent<HTMLElement>) => void
+  handleLeftArrowClick: (event: React.MouseEvent<HTMLElement>) => void
+  handleCloseDialog: (event: React.MouseEvent<HTMLElement>) => void
 }) => {
   return (
-    <div
-      onClick={handleCloseDialog}
-      className="grid h-screen grid-cols-2 grid-rows-[auto_1fr_auto] md:grid-cols-[auto_1fr_auto] md:grid-rows-[auto_1fr]"
-    >
+    <div className="grid h-screen grid-cols-2 grid-rows-[auto_1fr_auto] md:grid-cols-[auto_1fr_auto] md:grid-rows-[auto_1fr]">
       <div className="order-1 col-start-1 col-end-3 row-start-1 row-end-2 flex justify-end md:order-1 md:col-start-3 md:col-end-4 md:row-start-1 md:row-end-2">
-        <Button className="flex w-full justify-end bg-transparent hover:bg-gray-800">
+        <Button
+          className="flex w-full justify-end bg-transparent hover:bg-gray-800"
+          onClick={handleCloseDialog}
+        >
           {/* there is no need for handling click functionality of close button */}
           {/* click will propagate and close the dialog */}
           <X className="size-5" color="white" />
@@ -63,13 +59,8 @@ const DialogContent = ({
           <ArrowLeft className="size-7" color="white" />
         </Button>
       </div>
-      <div
-        onClick={handleCloseDialog}
-        className="order-2 col-start-1 col-end-3 row-start-2 row-end-3 flex h-full min-h-0 w-full md:order-3 md:col-start-2 md:col-end-3 md:row-start-1 md:row-end-3"
-      >
-        <span className="h-fit self-center" onClick={handleLeftArrowClick}>
-          {children}
-        </span>
+      <div className="order-2 col-start-1 col-end-3 row-start-2 row-end-3 min-h-0 md:order-3 md:col-start-2 md:col-end-3 md:row-start-1 md:row-end-3">
+        {children}
       </div>
       <div className="order-3 col-start-2 col-end-3 row-start-3 row-end-4 flex items-center justify-center md:order-4 md:col-start-3 md:col-end-4 md:row-start-2 md:row-end-3">
         <Button
@@ -156,13 +147,13 @@ export function Gallery({
     setIsModalVisible(false)
   }
 
-  const handleLeftArrowClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleLeftArrowClick = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation()
     setActivePhotoWithinRange(photos.indexOf(activePhoto) - 1)
   }
 
   const handleRightArrowClick = (
-    event: React.MouseEvent<HTMLButtonElement>,
+    event: React.MouseEvent<HTMLElement>,
   ) => {
     event.stopPropagation()
     setActivePhotoWithinRange(photos.indexOf(activePhoto) + 1)
@@ -185,7 +176,7 @@ export function Gallery({
 
       {isModalVisible && (
         <Dialog
-          onClick={() => handleCloseDialog()}
+          onClick={handleLeftArrowClick}
           {...(isModalVisible ? { 'data-open': true } : {})}
         >
           <DialogContent
@@ -194,7 +185,7 @@ export function Gallery({
             handleCloseDialog={handleCloseDialog}
           >
             <img
-              className="object-contain"
+              className="h-full w-full object-contain"
               src={activePhoto.secure_url}
               alt="gallery picture"
             />
