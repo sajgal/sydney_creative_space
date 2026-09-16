@@ -32,13 +32,22 @@ const DialogContent = ({
   children,
   handleLeftArrowClick,
   handleRightArrowClick,
+  handleCloseDialog,
 }: {
   children: React.ReactNode
   handleRightArrowClick: (event: React.MouseEvent<HTMLButtonElement>) => void
-  handleLeftArrowClick: (event: React.MouseEvent<HTMLButtonElement>) => void
+  handleLeftArrowClick: (
+    event: React.MouseEvent<HTMLButtonElement & HTMLDivElement>,
+  ) => void
+  handleCloseDialog: (
+    event: React.MouseEvent<HTMLButtonElement & HTMLDivElement>,
+  ) => void
 }) => {
   return (
-    <div className="grid h-screen grid-cols-2 grid-rows-[auto_1fr_auto] md:grid-cols-[auto_1fr_auto] md:grid-rows-[auto_1fr]">
+    <div
+      onClick={handleCloseDialog}
+      className="grid h-screen grid-cols-2 grid-rows-[auto_1fr_auto] md:grid-cols-[auto_1fr_auto] md:grid-rows-[auto_1fr]"
+    >
       <div className="order-1 col-start-1 col-end-3 row-start-1 row-end-2 flex justify-end md:order-1 md:col-start-3 md:col-end-4 md:row-start-1 md:row-end-2">
         <Button className="flex w-full justify-end bg-transparent hover:bg-gray-800">
           {/* there is no need for handling click functionality of close button */}
@@ -54,8 +63,13 @@ const DialogContent = ({
           <ArrowLeft className="size-7" color="white" />
         </Button>
       </div>
-      <div className="order-2 col-start-1 col-end-3 row-start-2 row-end-3 min-h-0 md:order-3 md:col-start-2 md:col-end-3 md:row-start-1 md:row-end-3">
-        {children}
+      <div
+        onClick={handleCloseDialog}
+        className="order-2 col-start-1 col-end-3 row-start-2 row-end-3 flex h-full min-h-0 w-full md:order-3 md:col-start-2 md:col-end-3 md:row-start-1 md:row-end-3"
+      >
+        <span className="h-fit self-center" onClick={handleLeftArrowClick}>
+          {children}
+        </span>
       </div>
       <div className="order-3 col-start-2 col-end-3 row-start-3 row-end-4 flex items-center justify-center md:order-4 md:col-start-3 md:col-end-4 md:row-start-2 md:row-end-3">
         <Button
@@ -177,9 +191,10 @@ export function Gallery({
           <DialogContent
             handleLeftArrowClick={handleLeftArrowClick}
             handleRightArrowClick={handleRightArrowClick}
+            handleCloseDialog={handleCloseDialog}
           >
             <img
-              className="h-full w-full object-contain"
+              className="object-contain"
               src={activePhoto.secure_url}
               alt="gallery picture"
             />
