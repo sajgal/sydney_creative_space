@@ -16,7 +16,10 @@ export function SubHeader({
           <ChevronLeft />
         </Button>
       </Link>
-      <Link to="/" className="flex grow flex-col items-center text-right">
+      <Link
+        to="/"
+        className="flex grow flex-col items-center text-right sm:text-center"
+      >
         <h1 className="text-redred mb-1 flex w-full flex-col items-end font-serif font-black tracking-tighter sm:w-auto sm:items-center">
           <span className="text-3xl md:text-4xl lg:text-5xl">{title}</span>
         </h1>

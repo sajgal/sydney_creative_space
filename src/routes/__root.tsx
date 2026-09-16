@@ -14,9 +14,9 @@ import { pacerDevtoolsPlugin } from '@tanstack/react-pacer-devtools'
 
 import { AuthContextProvider, useAuth, type AuthContextType } from '#/auth'
 import appCss from '#/styles.css?url'
-import { Spinner } from '#/components/ui/spinner'
 import { NotFound } from '#/components/NotFound'
 import { Error } from '#/components/Error'
+import FullWidthSpinner from '#/components/FullWidthSpinner'
 
 export type MyRouterContext = {
   auth: AuthContextType
@@ -66,11 +66,7 @@ function AuthProviderInnerApp({ children }: { children: React.ReactNode }) {
   }, [auth.isAuthenticated, auth.isInitialLoading])
 
   if (auth.isInitialLoading) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center p-4">
-        <Spinner className="size-10" />
-      </div>
-    )
+    return <FullWidthSpinner fullHeight={true} />
   }
 
   return children

@@ -38,7 +38,7 @@ function ShowGalleryComponent() {
   }
 
   if (isPending) {
-    return <FullWidthSpinner />
+    return <FullWidthSpinner fullHeight={true} />
   }
 
   if (isEmpty) {
