@@ -100,7 +100,7 @@ body {
   --font-heading: var(--font-sans);
   --font-sans: 'Inter Variable', sans-serif;
   --font-mono: 'JetBrains Mono Variable', monospace;
-  --font-serif: 'Playfair Display', 'serif';
+  --font-serif: 'Playfair Display Variable', 'serif';
   --rose: oklch(0.5858 0.222 17.58);
   --color-redred: oklch(0.6473 0.2385 27.3);
   --color-beige: oklch(0.9525 0.0221 89.79);
