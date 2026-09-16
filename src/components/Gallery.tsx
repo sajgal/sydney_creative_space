@@ -136,6 +136,11 @@ export function Gallery({
     } else {
       document.body.style.overflow = 'auto'
     }
+
+    // Cleanup function needed when the gallery dialog is open and browser back button (history) is pressed
+    return () => {
+      document.body.style.overflow = 'auto'
+    }
   }, [isModalVisible])
 
   const handleGalleryListPhotoClick = (photo: GalleryPhoto) => {
@@ -152,9 +157,7 @@ export function Gallery({
     setActivePhotoWithinRange(photos.indexOf(activePhoto) - 1)
   }
 
-  const handleRightArrowClick = (
-    event: React.MouseEvent<HTMLElement>,
-  ) => {
+  const handleRightArrowClick = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation()
     setActivePhotoWithinRange(photos.indexOf(activePhoto) + 1)
   }
