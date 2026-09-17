@@ -17,7 +17,7 @@ export function GalleryLinks({ galleries }: { galleries: Array<Gallery> }) {
             className="mx-auto flex w-full max-w-sm justify-between gap-2 p-0"
           >
             <div className="flex flex-col p-0">
-              <Link to="/show/$galleryId" params={{ galleryId: gallery.id }}>
+              <Link to="/gallery/$galleryId" params={{ galleryId: gallery.id }}>
                 <img
                   src={gallery.photos && gallery.photos[0].secure_url}
                   alt="Event cover"
@@ -27,7 +27,7 @@ export function GalleryLinks({ galleries }: { galleries: Array<Gallery> }) {
               <div className="flex justify-between px-6 pt-4">
                 <CardTitle className="line-clamp-2">
                   <Link
-                    to="/show/$galleryId"
+                    to="/gallery/$galleryId"
                     params={{ galleryId: gallery.id }}
                   >
                     {gallery.title || '-'}

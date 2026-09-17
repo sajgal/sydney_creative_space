@@ -12,7 +12,7 @@ import { Error } from '#/components/Error'
 import { useState } from 'react'
 import { Spinner } from '#/components/ui/spinner'
 
-export const Route = createFileRoute('/_auth/gallery/')({
+export const Route = createFileRoute('/_auth/admin/')({
   component: RouteComponent,
 })
 
@@ -33,7 +33,7 @@ function RouteComponent() {
   const handleNewGalleryClick = async () => {
     setNewGalleryLoading(true)
     const galleryId = await addGallery(userId)
-    navigate({ to: '/gallery/$galleryId', params: { galleryId } })
+    navigate({ to: '/admin/gallery/$galleryId', params: { galleryId } })
   }
 
   const invalidateRouteData = async () => {

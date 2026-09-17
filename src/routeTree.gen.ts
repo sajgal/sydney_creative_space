@@ -17,9 +17,9 @@ import { Route as LogoutRouteImport } from './routes/logout'
 import { Route as PhotographersRouteImport } from './routes/photographers'
 import { Route as AuthAboutMeRouteImport } from './routes/_auth.about-me'
 import { Route as AuthorAuthorIdOrNameRouteImport } from './routes/author.$authorIdOrName'
-import { Route as ShowGalleryIdRouteImport } from './routes/show.$galleryId'
-import { Route as AuthGalleryIndexRouteImport } from './routes/_auth.gallery.index'
-import { Route as AuthGalleryGalleryIdRouteImport } from './routes/_auth.gallery.$galleryId'
+import { Route as GalleryGalleryIdRouteImport } from './routes/gallery.$galleryId'
+import { Route as AuthAdminIndexRouteImport } from './routes/_auth.admin.index'
+import { Route as AuthAdminGalleryGalleryIdRouteImport } from './routes/_auth.admin.gallery.$galleryId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -60,21 +60,22 @@ const AuthorAuthorIdOrNameRoute = AuthorAuthorIdOrNameRouteImport.update({
   path: '/author/$authorIdOrName',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ShowGalleryIdRoute = ShowGalleryIdRouteImport.update({
-  id: '/show/$galleryId',
-  path: '/show/$galleryId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthGalleryIndexRoute = AuthGalleryIndexRouteImport.update({
-  id: '/gallery/',
-  path: '/gallery/',
-  getParentRoute: () => AuthRoute,
-} as any)
-const AuthGalleryGalleryIdRoute = AuthGalleryGalleryIdRouteImport.update({
+const GalleryGalleryIdRoute = GalleryGalleryIdRouteImport.update({
   id: '/gallery/$galleryId',
   path: '/gallery/$galleryId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthAdminIndexRoute = AuthAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
   getParentRoute: () => AuthRoute,
 } as any)
+const AuthAdminGalleryGalleryIdRoute =
+  AuthAdminGalleryGalleryIdRouteImport.update({
+    id: '/admin/gallery/$galleryId',
+    path: '/admin/gallery/$galleryId',
+    getParentRoute: () => AuthRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -84,9 +85,9 @@ export interface FileRoutesByFullPath {
   '/photographers': typeof PhotographersRoute
   '/about-me': typeof AuthAboutMeRoute
   '/author/$authorIdOrName': typeof AuthorAuthorIdOrNameRoute
-  '/show/$galleryId': typeof ShowGalleryIdRoute
-  '/gallery/$galleryId': typeof AuthGalleryGalleryIdRoute
-  '/gallery/': typeof AuthGalleryIndexRoute
+  '/gallery/$galleryId': typeof GalleryGalleryIdRoute
+  '/admin/': typeof AuthAdminIndexRoute
+  '/admin/gallery/$galleryId': typeof AuthAdminGalleryGalleryIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -96,9 +97,9 @@ export interface FileRoutesByTo {
   '/photographers': typeof PhotographersRoute
   '/about-me': typeof AuthAboutMeRoute
   '/author/$authorIdOrName': typeof AuthorAuthorIdOrNameRoute
-  '/show/$galleryId': typeof ShowGalleryIdRoute
-  '/gallery/$galleryId': typeof AuthGalleryGalleryIdRoute
-  '/gallery': typeof AuthGalleryIndexRoute
+  '/gallery/$galleryId': typeof GalleryGalleryIdRoute
+  '/admin': typeof AuthAdminIndexRoute
+  '/admin/gallery/$galleryId': typeof AuthAdminGalleryGalleryIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -110,9 +111,9 @@ export interface FileRoutesById {
   '/photographers': typeof PhotographersRoute
   '/_auth/about-me': typeof AuthAboutMeRoute
   '/author/$authorIdOrName': typeof AuthorAuthorIdOrNameRoute
-  '/show/$galleryId': typeof ShowGalleryIdRoute
-  '/_auth/gallery/$galleryId': typeof AuthGalleryGalleryIdRoute
-  '/_auth/gallery/': typeof AuthGalleryIndexRoute
+  '/gallery/$galleryId': typeof GalleryGalleryIdRoute
+  '/_auth/admin/': typeof AuthAdminIndexRoute
+  '/_auth/admin/gallery/$galleryId': typeof AuthAdminGalleryGalleryIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -124,9 +125,9 @@ export interface FileRouteTypes {
     | '/photographers'
     | '/about-me'
     | '/author/$authorIdOrName'
-    | '/show/$galleryId'
     | '/gallery/$galleryId'
-    | '/gallery/'
+    | '/admin/'
+    | '/admin/gallery/$galleryId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -136,9 +137,9 @@ export interface FileRouteTypes {
     | '/photographers'
     | '/about-me'
     | '/author/$authorIdOrName'
-    | '/show/$galleryId'
     | '/gallery/$galleryId'
-    | '/gallery'
+    | '/admin'
+    | '/admin/gallery/$galleryId'
   id:
     | '__root__'
     | '/'
@@ -149,9 +150,9 @@ export interface FileRouteTypes {
     | '/photographers'
     | '/_auth/about-me'
     | '/author/$authorIdOrName'
-    | '/show/$galleryId'
-    | '/_auth/gallery/$galleryId'
-    | '/_auth/gallery/'
+    | '/gallery/$galleryId'
+    | '/_auth/admin/'
+    | '/_auth/admin/gallery/$galleryId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -162,7 +163,7 @@ export interface RootRouteChildren {
   LogoutRoute: typeof LogoutRoute
   PhotographersRoute: typeof PhotographersRoute
   AuthorAuthorIdOrNameRoute: typeof AuthorAuthorIdOrNameRoute
-  ShowGalleryIdRoute: typeof ShowGalleryIdRoute
+  GalleryGalleryIdRoute: typeof GalleryGalleryIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -223,25 +224,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthorAuthorIdOrNameRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/show/$galleryId': {
-      id: '/show/$galleryId'
-      path: '/show/$galleryId'
-      fullPath: '/show/$galleryId'
-      preLoaderRoute: typeof ShowGalleryIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_auth/gallery/': {
-      id: '/_auth/gallery/'
-      path: '/gallery'
-      fullPath: '/gallery/'
-      preLoaderRoute: typeof AuthGalleryIndexRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_auth/gallery/$galleryId': {
-      id: '/_auth/gallery/$galleryId'
+    '/gallery/$galleryId': {
+      id: '/gallery/$galleryId'
       path: '/gallery/$galleryId'
       fullPath: '/gallery/$galleryId'
-      preLoaderRoute: typeof AuthGalleryGalleryIdRouteImport
+      preLoaderRoute: typeof GalleryGalleryIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth/admin/': {
+      id: '/_auth/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthAdminIndexRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/admin/gallery/$galleryId': {
+      id: '/_auth/admin/gallery/$galleryId'
+      path: '/admin/gallery/$galleryId'
+      fullPath: '/admin/gallery/$galleryId'
+      preLoaderRoute: typeof AuthAdminGalleryGalleryIdRouteImport
       parentRoute: typeof AuthRoute
     }
   }
@@ -249,14 +250,14 @@ declare module '@tanstack/react-router' {
 
 interface AuthRouteChildren {
   AuthAboutMeRoute: typeof AuthAboutMeRoute
-  AuthGalleryGalleryIdRoute: typeof AuthGalleryGalleryIdRoute
-  AuthGalleryIndexRoute: typeof AuthGalleryIndexRoute
+  AuthAdminIndexRoute: typeof AuthAdminIndexRoute
+  AuthAdminGalleryGalleryIdRoute: typeof AuthAdminGalleryGalleryIdRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthAboutMeRoute: AuthAboutMeRoute,
-  AuthGalleryGalleryIdRoute: AuthGalleryGalleryIdRoute,
-  AuthGalleryIndexRoute: AuthGalleryIndexRoute,
+  AuthAdminIndexRoute: AuthAdminIndexRoute,
+  AuthAdminGalleryGalleryIdRoute: AuthAdminGalleryGalleryIdRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
@@ -269,7 +270,7 @@ const rootRouteChildren: RootRouteChildren = {
   LogoutRoute: LogoutRoute,
   PhotographersRoute: PhotographersRoute,
   AuthorAuthorIdOrNameRoute: AuthorAuthorIdOrNameRoute,
-  ShowGalleryIdRoute: ShowGalleryIdRoute,
+  GalleryGalleryIdRoute: GalleryGalleryIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

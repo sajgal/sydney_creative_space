@@ -38,7 +38,7 @@ export default function GalleryListItem({
         className="cursor-pointer"
         onClick={() =>
           navigate({
-            to: '/gallery/$galleryId',
+            to: '/admin/gallery/$galleryId',
             params: { galleryId: gallery.id },
           })
         }

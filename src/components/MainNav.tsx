@@ -6,6 +6,8 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
+import { useAuth } from '#/auth'
+import { ShieldKeyhole } from 'lucide-react'
 
 interface NavItem {
   to: string
@@ -16,10 +18,12 @@ interface NavItem {
 interface MainNavProps {
   items: NavItem[]
   className?: string
+  isAdmin?: boolean
 }
 
-export function MainNav({ items, className }: MainNavProps) {
+export function MainNav({ items, className, isAdmin }: MainNavProps) {
   const matchRoute = useMatchRoute()
+  const { isAuthenticated } = useAuth()
 
   return (
     <NavigationMenu className={className}>
@@ -41,6 +45,20 @@ export function MainNav({ items, className }: MainNavProps) {
             </NavigationMenuItem>
           )
         })}
+        {!!isAuthenticated && !isAdmin && (
+          <NavigationMenuItem key="admin">
+            <Link
+              to="/admin"
+              className={cn(
+                navigationMenuTriggerStyle(),
+                matchRoute({ to: '/admin' }) &&
+                  'bg-accent text-accent-foreground font-medium',
+              )}
+            >
+              <ShieldKeyhole />
+            </Link>
+          </NavigationMenuItem>
+        )}
       </NavigationMenuList>
     </NavigationMenu>
   )

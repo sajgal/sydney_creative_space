@@ -22,7 +22,7 @@ export const Route = createFileRoute('/_auth')({
 function AuthLayout() {
   const navItems = [
     { to: '/', label: 'Home' },
-    { to: '/gallery', label: 'My Galleries' },
+    { to: '/admin', label: 'My Galleries' },
     { to: '/about-me', label: 'Profile' },
     { to: '/logout', label: 'Logout' },
   ]
@@ -30,7 +30,7 @@ function AuthLayout() {
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-3 py-12">
       <Card className="w-full">
-        <MainNav items={navItems} className="mb-5 ml-2" />
+        <MainNav items={navItems} className="mb-5 ml-2" isAdmin={true} />
         <Outlet />
       </Card>
     </div>

@@ -8,7 +8,7 @@ import type { Gallery as GalleryType, GalleryPhoto } from '#/types/gallery'
 import { Gallery } from '#/components/Gallery'
 import { SubHeader } from '#/components/SubHeader'
 
-export const Route = createFileRoute('/show/$galleryId')({
+export const Route = createFileRoute('/gallery/$galleryId')({
   component: ShowGalleryComponent,
 })
 

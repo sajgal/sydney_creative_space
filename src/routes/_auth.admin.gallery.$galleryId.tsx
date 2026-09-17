@@ -18,7 +18,7 @@ import { Label } from '#/components/ui/label'
 import { DeleteAllImagesButton } from '#/components/DeleteAllImagesButton'
 import { EmptyGalleryCard } from '#/components/EmptyGalleryCard'
 
-export const Route = createFileRoute('/_auth/gallery/$galleryId')({
+export const Route = createFileRoute('/_auth/admin/gallery/$galleryId')({
   component: RouteComponent,
   loader: () => getServerTime(),
 })
@@ -54,7 +54,7 @@ function RouteComponent() {
       {!!data && (
         <>
           <div className="flex max-w-full items-center justify-between gap-2">
-            <Link to="/gallery">
+            <Link to="/admin">
               <Button variant="outline">
                 <ChevronLeft data-icon="inline-start" /> Back
               </Button>

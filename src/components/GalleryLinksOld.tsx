@@ -14,7 +14,7 @@ export function GalleryLinksOld({ galleries }: { galleries: Array<Gallery> }) {
   return galleries.map((gallery, index) => {
     return (
       <div key={index} className="">
-        <Link to="/show/$galleryId" params={{ galleryId: gallery.id }}>
+        <Link to="/gallery/$galleryId" params={{ galleryId: gallery.id }}>
           <div className="relative overflow-hidden">
             <div className="absolute right-0 bottom-0 m-5 ml-11 line-clamp-5 w-fit items-end bg-white pr-2 pl-2 text-xl font-bold">
               {gallery.title}

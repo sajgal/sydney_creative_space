@@ -4,7 +4,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { EmailLogin } from '#/components/EmailLogin'
 
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-const fallback = '/gallery' as const
+const fallback = '/admin' as const
 
 export const Route = createFileRoute('/login')({
   validateSearch: z.object({
