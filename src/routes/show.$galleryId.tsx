@@ -64,12 +64,12 @@ function ShowGalleryComponent() {
             {gallery.photos.map((photo: GalleryPhoto, index: number) => (
               <PhotoWrapper
                 key={index}
-                className="flex cursor-pointer flex-col"
+                className="flex cursor-pointer flex-col overflow-hidden"
                 photo={photo}
               >
                 <img
                   src={photo.thumbnail_url}
-                  className="aspect-square object-cover transition-transform duration-200 hover:scale-105 hover:shadow-md"
+                  className="aspect-square object-cover transition-transform duration-200 hover:scale-110 hover:shadow-md"
                 />
               </PhotoWrapper>
             ))}
