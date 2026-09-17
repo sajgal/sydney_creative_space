@@ -1,3 +1,5 @@
+import { Header } from '#/components/Header'
+import { Separator } from '#/components/ui/separator'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/photographers')({
@@ -5,5 +7,13 @@ export const Route = createFileRoute('/photographers')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/photographers"!</div>
+  return (
+    <div className="mx-auto max-w-3xl p-4">
+      <Header />
+
+      <Separator className="my-4" />
+
+      <section className="mt-2 mb-6 flex flex-col gap-4">Henllo</section>
+    </div>
+  )
 }
