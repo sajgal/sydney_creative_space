@@ -43,6 +43,14 @@ export const getUsersInArray = async (userIds: Array<string>) => {
   return userMap
 }
 
+export const getPublishedUsers = async (): Promise<Array<User>> => {
+  const users = await getDocs(col)
+
+  return users.docs.map((doc) => {
+    return { id: doc.id, ...doc.data() } as User
+  })
+}
+
 export const addUser = async (userId: string) => {
   const docRef = doc(db, COLLECTION_NAME_USER, userId)
   await setDoc(docRef, { created: Date.now() })

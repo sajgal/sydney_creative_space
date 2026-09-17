@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useCanGoBack, useRouter } from '@tanstack/react-router'
 import { Button } from './ui/button'
 import { ChevronLeft } from 'lucide-react'
 
@@ -9,13 +9,23 @@ export function SubHeader({
   title: string
   author?: string
 }) {
+  const router = useRouter()
+  const canGoBack = useCanGoBack()
+
   return (
     <header className="flex flex-row items-center justify-between">
-      <Link className="grow-0" to="/">
-        <Button variant="ghost">
+      {canGoBack ? (
+        <Button onClick={() => router.history.back()} variant="ghost">
           <ChevronLeft />
         </Button>
-      </Link>
+      ) : (
+        <Link className="grow-0" to="/">
+          <Button variant="ghost">
+            <ChevronLeft />
+          </Button>
+        </Link>
+      )}
+
       <Link
         to="/"
         className="flex grow flex-col items-center text-right sm:text-center"
