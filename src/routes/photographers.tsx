@@ -62,7 +62,7 @@ function RouteComponent() {
                   </Link>
                 </ItemTitle>
                 <ItemDescription className="mt-2">
-                  <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                  <span className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                     <span className="line-clamp-3">{user.bio}</span>
                     <Link
                       to="/author/$authorIdOrName"
@@ -73,7 +73,7 @@ function RouteComponent() {
                         Show Galleries <ChevronRight data-icon="inline-end" />
                       </Button>
                     </Link>
-                  </div>
+                  </span>
                 </ItemDescription>
               </ItemContent>
             </Item>
