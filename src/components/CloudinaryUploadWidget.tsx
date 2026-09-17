@@ -28,14 +28,15 @@ interface CloudinaryUploadWidgetProps {
   galleryId: string
 }
 
+export const IMAGE_FULL_SCREEN = 0
+export const IMAGE_THUMB = 1
+
 export const CloudinaryUploadWidget: React.FC<CloudinaryUploadWidgetProps> = ({
   galleryId,
   onUpload,
 }) => {
   const uploadWidgetRef = useRef<any>(null)
   const uploadButtonRef = useRef<HTMLButtonElement>(null)
-  const IMAGE_FULL_SCREEN = 0
-  const IMAGE_THUMB = 1
 
   useEffect(() => {
     const initializeUploadWidget = () => {

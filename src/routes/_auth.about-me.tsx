@@ -17,7 +17,7 @@ function RouteComponent() {
   const queryKey = ['userData', user?.uid]
 
   const invalidateQueryData = async () => {
-    await queryClient.invalidateQueries({ queryKey })
+    await queryClient.refetchQueries({ queryKey })
   }
 
   if (!user) {

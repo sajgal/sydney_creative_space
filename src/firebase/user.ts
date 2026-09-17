@@ -8,11 +8,13 @@ import {
   collection,
   getDocs,
   documentId,
+  deleteField,
 } from 'firebase/firestore'
 import { db } from '@/firebase/config'
 import type { User } from '#/types/user'
+import type { GalleryPhoto } from '#/types/gallery'
 
-export type UpdateableFields = 'bio' | 'displayName'
+export type UpdateableFields = 'bio' | 'displayName' | 'avatar'
 
 const COLLECTION_NAME_USER = 'user'
 const col = collection(db, COLLECTION_NAME_USER)
@@ -51,7 +53,7 @@ export const addUser = async (userId: string) => {
 export const updateUserField = async (
   userId: string,
   fieldName: UpdateableFields,
-  fieldContent: string,
+  fieldContent: string | GalleryPhoto,
 ) => {
   const docRef = doc(db, COLLECTION_NAME_USER, userId)
 
@@ -62,4 +64,15 @@ export const updateUserField = async (
   } catch (error) {
     console.error(`Firestore: Error updating ${fieldName} field`, error)
   }
+}
+
+export const deleteUserField = async (
+  userId: string,
+  fieldName: UpdateableFields,
+) => {
+  const docRef = doc(db, COLLECTION_NAME_USER, userId)
+
+  return await updateDoc(docRef, {
+    [fieldName]: deleteField(),
+  })
 }

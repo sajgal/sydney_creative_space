@@ -1,6 +1,10 @@
+import {
+  IMAGE_FULL_SCREEN,
+  IMAGE_THUMB,
+} from '#/components/CloudinaryUploadWidget'
 import type { GalleryPhoto } from '#/types/gallery'
 import { createServerFn } from '@tanstack/react-start'
-import { v2 as cloudinary } from 'cloudinary'
+import { v2 as cloudinary, type UploadApiResponse } from 'cloudinary'
 
 interface CloudinaryError {
   error: {
@@ -55,5 +59,35 @@ export const deleteEmptyFolder = createServerFn()
 
       console.error(error)
       throw new Error('Cloudinary: Deleting folder not successful')
+    }
+  })
+
+export const uploadImage = createServerFn({ method: 'POST' })
+  .validator((formData: FormData) => {
+    const file = formData.get('file')
+    if (!(file instanceof File)) {
+      throw new Error('No file provided')
+    }
+    return file
+  })
+  .handler(async ({ data: file }) => {
+    const arrayBuffer = await file.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
+
+    const result = await new Promise<UploadApiResponse>((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: 'avatar' },
+        (error, result) => {
+          if (error || !result) return reject(error)
+          resolve(result)
+        },
+      )
+      uploadStream.end(buffer)
+    })
+
+    return <GalleryPhoto>{
+      thumbnail_url: result.eager[IMAGE_THUMB].secure_url,
+      secure_url: result.eager[IMAGE_FULL_SCREEN].secure_url,
+      id: result.public_id,
     }
   })

@@ -6,22 +6,24 @@ import { Textarea } from './ui/textarea'
 import { useDebouncer } from '@tanstack/react-pacer'
 import type { User } from '#/types/user'
 import { updateUserField, type UpdateableFields } from '#/firebase/user'
+import { ProfileFormImageUpload } from './ProfileFormImageUpload'
 
 export function ProfileForm({
   userData,
   onSave,
 }: {
   userData: User
-  onSave?: () => void
+  onSave: () => Promise<void>
 }) {
   const [formValues, setFormValues] = useState({
     displayName: userData.displayName || '',
     bio: userData.bio || '',
   })
+
   const debouncer = useDebouncer(
     (fieldName: UpdateableFields, fieldContent: string) => {
       updateUserField(userData.id, fieldName, fieldContent)
-      !!onSave && onSave()
+      onSave()
     },
     { wait: 800 },
   )
@@ -39,6 +41,7 @@ export function ProfileForm({
       <CardContent>
         <FieldSet className="w-full">
           <FieldGroup>
+            <ProfileFormImageUpload user={userData} onSave={onSave} />
             <Field>
               <FieldLabel htmlFor="displayName">Display Name</FieldLabel>
               <Input
