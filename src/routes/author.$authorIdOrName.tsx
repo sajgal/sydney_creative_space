@@ -56,7 +56,7 @@ function AuthorComponent() {
         {!!isEmpty && <div>Empty :( </div>}
 
         {!!data && data.galleries.length > 0 && (
-          <GalleryLinks simple={true} galleries={data.galleries || []} />
+          <GalleryLinks galleries={data.galleries || []} />
         )}
       </section>
     </div>

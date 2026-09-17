@@ -8,7 +8,7 @@ export function Header() {
   ]
 
   return (
-    <header className="flex flex-col items-center justify-between font-serif md:flex-row">
+    <header className="flex flex-col items-center justify-between gap-2 font-serif md:flex-row">
       <Link to="/">
         <h1 className="text-redred flex flex-col items-center font-black tracking-tighter">
           <span className="text-5xl md:text-6xl lg:text-7xl">Sydney</span>

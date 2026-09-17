@@ -34,7 +34,7 @@ function HomeComponent() {
 
         {!!isEmpty && <div>Empty :( </div>}
 
-        <GalleryLinks simple={true} galleries={data || []} />
+        <GalleryLinks galleries={data || []} />
       </section>
     </div>
   )
