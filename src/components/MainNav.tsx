@@ -1,4 +1,3 @@
-// src/components/navigation/main-nav.tsx
 import { Link, useMatchRoute } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
 import {
