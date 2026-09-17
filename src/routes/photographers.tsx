@@ -49,16 +49,19 @@ function RouteComponent() {
                   <Link
                     to="/author/$authorIdOrName"
                     params={{ authorIdOrName: user.id }}
+                    className="relative"
                   >
+                    <h1 className="text-redred absolute right-0 bottom-0 m-2 flex w-min flex-col items-center bg-white px-2 py-1 text-right font-serif text-2xl font-black tracking-tighter sm:w-auto md:text-3xl lg:text-4xl">
+                      {user.displayName}
+                    </h1>
                     <img
                       src={user.avatar?.secure_url}
                       alt={user.displayName + '`s avatar'}
-                      className="relative aspect-video w-full object-cover"
+                      className="aspect-video object-cover"
                     />
                   </Link>
                 </ItemTitle>
                 <ItemDescription className="mt-2">
-                  <h1 className="text-black">{user.displayName}</h1>
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                     <span className="line-clamp-3">{user.bio}</span>
                     <Link
