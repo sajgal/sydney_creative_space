@@ -74,7 +74,7 @@ export function ProfileFormImageUpload({
           <img
             src={user.avatar?.secure_url}
             alt={user.displayName + '`s avatar'}
-            className="relative z-20 aspect-video w-full object-cover"
+            className="aspect-video w-full object-cover"
           />
           <div className="flex flex-col sm:flex-row">
             <Button onClick={handleUplaodClick} className="grow">
