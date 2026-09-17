@@ -14,9 +14,10 @@ function RouteComponent() {
       <Separator className="my-4" />
 
       <section className="mt-2 mb-6 flex flex-col items-center gap-4">
-        <div className="max-w-sm">
-          I made this for my friends.
-          <div className="text-right">- Matej</div>
+        <div className="max-w-sm text-center">
+          No AI.<br />
+          No Ads.<br />
+          No Algorithms.<br />
         </div>
       </section>
     </div>
