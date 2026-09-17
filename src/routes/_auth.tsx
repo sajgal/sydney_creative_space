@@ -21,8 +21,8 @@ export const Route = createFileRoute('/_auth')({
 
 function AuthLayout() {
   const navItems = [
-    { to: '/', label: 'Home' },
-    { to: '/admin', label: 'My Galleries' },
+    { to: '/', label: 'Front page' },
+    { to: '/admin', label: 'Galleries' },
     { to: '/about-me', label: 'Profile' },
     { to: '/logout', label: 'Logout' },
   ]
