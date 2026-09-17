@@ -46,9 +46,7 @@ const DialogContent = ({
           className="flex w-full justify-end bg-transparent hover:bg-gray-800"
           onClick={handleCloseDialog}
         >
-          {/* there is no need for handling click functionality of close button */}
-          {/* click will propagate and close the dialog */}
-          <X className="size-5" color="white" />
+          <X className="size-7" color="white" />
         </Button>
       </div>
       <div className="order-3 col-start-1 col-end-2 row-start-3 row-end-4 flex items-center justify-center md:order-2 md:col-start-1 md:col-end-2 md:row-start-2 md:row-end-3">
