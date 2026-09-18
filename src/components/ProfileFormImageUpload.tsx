@@ -42,7 +42,6 @@ export function ProfileFormImageUpload({
       const formData = new FormData()
       formData.append('file', file)
       const results = await uploadImage({ data: formData })
-      console.log('--------- upload results', results)
       await updateUserField(user.id, 'avatar', results)
       await onSave()
     } finally {

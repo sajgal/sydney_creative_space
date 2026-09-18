@@ -38,7 +38,7 @@ function RouteComponent() {
 
       <Separator className="my-4" />
 
-      <section className="mt-2 mb-6">
+      <section className="mt-2 mb-6 flex flex-col gap-4">
         {!!isPending && <FullWidthSpinner />}
 
         {!!data &&
