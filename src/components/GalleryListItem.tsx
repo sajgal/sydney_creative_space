@@ -57,7 +57,7 @@ export default function GalleryListItem({
           <ItemTitle className="line-clamp-1">
             {gallery.title || '-- title not set --'}
           </ItemTitle>
-          <ItemDescription>
+          <div className="text-muted-foreground line-clamp-2 text-left text-sm leading-normal font-normal">
             <div className="flex gap-2">
               <div>
                 Created:{' '}
@@ -78,7 +78,7 @@ export default function GalleryListItem({
                 </Badge>
               )}
             </div>
-          </ItemDescription>
+          </div>
         </ItemContent>
         <ItemContent className="flex-none text-center">
           <ItemDescription onClick={(event) => event.stopPropagation()}>

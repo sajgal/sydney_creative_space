@@ -4,21 +4,22 @@ import { Field, FieldGroup, FieldLabel, FieldSet } from './ui/field'
 import { Input } from './ui/input'
 import { Textarea } from './ui/textarea'
 import { useDebouncer } from '@tanstack/react-pacer'
+import type { Gallery } from '#/types/gallery'
 
 export function GalleryDetailsForm({
-  galleryData,
+  gallery,
   onSave,
 }: {
-  galleryData: { galleryId: string; title?: string; description?: string }
+  gallery: Gallery
   onSave?: () => void
 }) {
   const [formValues, setFormValues] = useState({
-    title: galleryData.title || '',
-    description: galleryData.description || '',
+    title: gallery.title || '',
+    description: gallery.description || '',
   })
   const debouncer = useDebouncer(
     (fieldName: UpdateableFields, fieldContent: string) => {
-      updateGalleryField(galleryData.galleryId, fieldName, fieldContent)
+      updateGalleryField(gallery.id, fieldName, fieldContent)
       !!onSave && onSave()
     },
     { wait: 800 },
@@ -39,6 +40,7 @@ export function GalleryDetailsForm({
           <FieldLabel htmlFor="title">Title</FieldLabel>
           <Input
             id="title"
+            disabled={gallery.isApproved}
             placeholder="Gallery Title"
             onChange={(e) => handleOnChange('title', e.target.value)}
             value={formValues.title}
@@ -48,6 +50,7 @@ export function GalleryDetailsForm({
           <FieldLabel htmlFor="description">Description</FieldLabel>
           <Textarea
             id="description"
+            disabled={gallery.isApproved}
             placeholder="Gallery description..."
             rows={4}
             onChange={(e) => handleOnChange('description', e.target.value)}

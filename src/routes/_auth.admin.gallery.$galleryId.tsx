@@ -18,6 +18,7 @@ import { Label } from '#/components/ui/label'
 import { DeleteAllImagesButton } from '#/components/DeleteAllImagesButton'
 import { EmptyGalleryCard } from '#/components/EmptyGalleryCard'
 import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card'
+import { GalleryLockedCard } from '#/components/GalleryLockedCard'
 
 export const Route = createFileRoute('/_auth/admin/gallery/$galleryId')({
   component: RouteComponent,
@@ -77,6 +78,7 @@ function RouteComponent() {
             </div>
             <CloudinaryUploadWidget
               galleryId={galleryId}
+              isLocked={data.isApproved || false}
               onUpload={[addPhotoToGallery, invalidateRouteData]}
             />
           </div>
@@ -93,13 +95,15 @@ function RouteComponent() {
               )}
             </div>
             <div className="flex flex-col gap-2">
+              {!!data.isApproved && <GalleryLockedCard />}
+
               <Card className="my-2 w-full">
                 <CardHeader>
                   <CardTitle>Gallery details</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <GalleryDetailsForm
-                    galleryData={{ ...data, galleryId }}
+                    gallery={data}
                     onSave={invalidateRouteData}
                   />
                 </CardContent>
@@ -123,6 +127,7 @@ function RouteComponent() {
                     <CloudinaryUploadWidget
                       galleryId={galleryId}
                       onUpload={[addPhotoToGallery, invalidateRouteData]}
+                      isLocked={data.isApproved || false}
                     />
                   </div>
                 </EmptyGalleryCard>

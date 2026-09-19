@@ -11,7 +11,7 @@ export function Error({
   return (
     <div
       className={
-        'flex items-center p-4 wrap-anywhere ' +
+        'flex items-center justify-center p-4 wrap-anywhere ' +
         (fullHeight === false ? 'max-h-fit' : 'min-h-screen')
       }
     >

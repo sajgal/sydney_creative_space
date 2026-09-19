@@ -26,6 +26,7 @@ interface CloudinaryUploadWidgetProps {
     () => Promise<void>,
   ]
   galleryId: string
+  isLocked: boolean
 }
 
 export const IMAGE_FULL_SCREEN = 0
@@ -34,6 +35,7 @@ export const IMAGE_THUMB = 1
 export const CloudinaryUploadWidget: React.FC<CloudinaryUploadWidgetProps> = ({
   galleryId,
   onUpload,
+  isLocked,
 }) => {
   const uploadWidgetRef = useRef<any>(null)
   const uploadButtonRef = useRef<HTMLButtonElement>(null)
@@ -91,6 +93,7 @@ export const CloudinaryUploadWidget: React.FC<CloudinaryUploadWidgetProps> = ({
       ref={uploadButtonRef}
       id="upload_widget"
       className="bg-blue-500 text-white hover:bg-blue-600"
+      disabled={isLocked}
     >
       <FileUp data-icon="inline-start" /> Upload
     </Button>
