@@ -94,6 +94,9 @@ function RouteComponent() {
             </div>
             <div className="flex flex-col gap-2">
               <Card className="my-2 w-full">
+                <CardHeader>
+                  <CardTitle>Gallery details</CardTitle>
+                </CardHeader>
                 <CardContent>
                   <GalleryDetailsForm
                     galleryData={{ ...data, galleryId }}

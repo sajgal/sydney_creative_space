@@ -11,6 +11,8 @@ import { useNavigate } from '@tanstack/react-router'
 import { DeleteGalleryAlertDialog } from './DeleteGalleryAlertDialog'
 import type { Gallery } from '#/types/gallery'
 import { datetimeFormat } from '#/utils/dateFormat'
+import { Badge } from './ui/badge'
+import { Separator } from './ui/separator'
 
 export default function GalleryListItem({
   gallery,
@@ -56,8 +58,26 @@ export default function GalleryListItem({
             {gallery.title || '-- title not set --'}
           </ItemTitle>
           <ItemDescription>
-            Created:{' '}
-            <span className="text-muted-foreground">{formattedDate}</span>
+            <div className="flex gap-2">
+              <div>
+                Created:{' '}
+                <span className="text-muted-foreground">{formattedDate}</span>
+              </div>
+              <Separator orientation="vertical" />
+              {!gallery.isWaitingForApproval && !gallery.isApproved && (
+                <Badge variant="outline">Draft</Badge>
+              )}
+              {!!gallery.isWaitingForApproval && (
+                <Badge variant="outline" className="bg-amber-100">
+                  Waiting for Approval
+                </Badge>
+              )}
+              {!!gallery.isApproved && (
+                <Badge variant="outline" className="bg-lime-200">
+                  Approved
+                </Badge>
+              )}
+            </div>
           </ItemDescription>
         </ItemContent>
         <ItemContent className="flex-none text-center">
