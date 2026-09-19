@@ -49,7 +49,7 @@ export function GalleryLinks({ galleries }: { galleries: Array<Gallery> }) {
                 {gallery.userData?.displayName || 'Anonymous'}
               </Link>
               <Separator orientation="vertical" />
-              {dayjs(gallery.publishedAt).format('MMMM YYYY')}
+              {dayjs(gallery.publishDate).format('MMMM YYYY')}
             </div>
           </Card>
         )

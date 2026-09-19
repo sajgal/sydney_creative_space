@@ -67,10 +67,10 @@ function RouteComponent() {
       {!!data && (
         <div className="mt-4 flex max-w-full flex-col">
           <ItemGroup className="gap-2">
-            {data.map((doc, key) => (
+            {data.map((gallery, key) => (
               <GalleryListItem
                 key={key}
-                gallery={{ ...doc.data(), id: doc.id, userId }}
+                gallery={gallery}
                 invalidateRouteData={invalidateRouteData}
               />
             ))}

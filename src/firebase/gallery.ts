@@ -13,13 +13,21 @@ import {
   deleteField,
   deleteDoc,
   QueryConstraint,
+  FieldValue,
 } from 'firebase/firestore'
 import { db } from '@/firebase/config'
 import { getServerTime } from '#/utils/server-functions'
 import type { Gallery, GalleryPhoto } from '#/types/gallery'
 import { getUserData, getUsersInArray } from './user'
 
-export type UpdateableFields = 'title' | 'description' | 'photos'
+export type UpdateableFields = keyof Gallery
+type ApprovalUpdates = {
+  originalApprovalDate?: number
+  askedForApprovalDate?: number | FieldValue
+  isApproved: boolean
+  isWaitingForApproval: FieldValue
+  publishDate?: number
+}
 
 const COLLECTION_NAME_GALLERY = 'gallery'
 const col = collection(db, COLLECTION_NAME_GALLERY)
@@ -28,12 +36,14 @@ export const getUserGalleries = async (userId: string) => {
   const q = query(
     col,
     where('userId', '==', userId),
-    orderBy('created', 'desc'),
+    orderBy('createdDate', 'desc'),
   )
 
-  const querySnapshot = await getDocs(q)
+  const galleries = await getDocs(q)
 
-  return querySnapshot.docs
+  return galleries.docs.map((gallery) => {
+    return { id: gallery.id, ...gallery.data() } as Gallery
+  })
 }
 
 export const getPublishedGalleries = async (
@@ -42,8 +52,9 @@ export const getPublishedGalleries = async (
   const now = await getServerTime()
 
   const constraints: QueryConstraint[] = [
-    where('publishedAt', '<=', now),
-    orderBy('publishedAt', 'desc'),
+    where('publishDate', '<=', now),
+    where('isApproved', '==', true),
+    orderBy('originalApprovalDate', 'desc'),
   ]
 
   if (userId) {
@@ -70,7 +81,7 @@ export const getPublishedGalleries = async (
 }
 
 export const addGallery = async (userId: string) => {
-  const docRef = await addDoc(col, { userId, created: Date.now() })
+  const docRef = await addDoc(col, { userId, createdDate: Date.now() })
 
   return docRef.id
 }
@@ -121,25 +132,96 @@ export const getGalleryById = async (galleryId: string): Promise<Gallery> => {
   }
 }
 
-export const getUserGalleryById = async (userId: string, galleryId: string) => {
+export const getUserGalleryById = async (
+  userId: string,
+  galleryId: string,
+  isSuperAdmin: boolean,
+) => {
   const docRef = doc(db, COLLECTION_NAME_GALLERY, galleryId)
   const docSnap = await getDoc(docRef)
-  const data = docSnap.data()
+  const gallery = docSnap.data()
 
-  if (data?.userId !== userId) {
+  if (gallery?.userId !== userId && !isSuperAdmin) {
     throw new Error('Unauthorized: userId mismatch')
   }
 
-  return data
+  return { id: docSnap.id, ...gallery } as Gallery
 }
 
-export const publishGallery = async (galleryId: string) => {
+export const updateGalleryField = async (
+  galleryId: string,
+  fieldName: UpdateableFields,
+  fieldContent: string | number | Array<GalleryPhoto>,
+) => {
+  const galleryRef = doc(db, COLLECTION_NAME_GALLERY, galleryId)
+
+  try {
+    await updateDoc(galleryRef, {
+      [fieldName]: fieldContent,
+    })
+  } catch (error) {
+    console.error(`Firestore: Error updating ${fieldName} field`, error)
+  }
+}
+
+export const getGalleriesThatAreWaitingForApproval = async (): Promise<
+  Array<Gallery>
+> => {
+  const galleries = await getDocs(
+    query(col, where('isWaitingForApproval', '==', true)),
+  )
+  const uniqueUserIds = [...new Set(galleries.docs.map((g) => g.data().userId))]
+
+  if (uniqueUserIds.length === 0) return []
+
+  const userMap = await getUsersInArray(uniqueUserIds)
+
+  return galleries.docs.map((gallery) => {
+    const galleryData = { id: gallery.id, ...gallery.data() } as Gallery
+
+    return {
+      ...galleryData,
+      userData: userMap.get(galleryData.userId),
+    }
+  })
+}
+
+export const approveGallery = async (gallery: Gallery) => {
+  const now = await getServerTime()
+  const galleryRef = doc(db, COLLECTION_NAME_GALLERY, gallery.id)
+  const updates: ApprovalUpdates = {
+    isApproved: true,
+    isWaitingForApproval: deleteField(),
+    askedForApprovalDate: deleteField(),
+  }
+
+  // if we're approving the gallery for the first time,
+  // set the originalApprovalDate
+  if (!gallery.originalApprovalDate) {
+    updates.originalApprovalDate = now
+  }
+
+  // if we want to publish the gallery ASAP,
+  // the publishDate is undefined up until the approval
+  if (!gallery.publishDate) {
+    updates.publishDate = now
+  }
+
+  return await updateDoc(galleryRef, updates)
+}
+
+export const publishGallery = async (
+  galleryId: string,
+  publishDate?: number,
+) => {
   const galleryRef = doc(db, COLLECTION_NAME_GALLERY, galleryId)
 
   try {
     const serverTime = await getServerTime()
     await updateDoc(galleryRef, {
-      publishedAt: serverTime,
+      publishDate: publishDate ? publishDate : deleteField(),
+      askedForApprovalDate: serverTime,
+      isWaitingForApproval: true,
     })
   } catch (error) {
     console.error('Error publishing gallery', error)
@@ -151,25 +233,12 @@ export const unpublishGallery = async (galleryId: string) => {
 
   try {
     await updateDoc(galleryRef, {
-      publishedAt: deleteField(),
+      publishDate: deleteField(),
+      isWaitingForApproval: deleteField(),
+      askedForApprovalDate: deleteField(),
+      isApproved: deleteField(),
     })
   } catch (error) {
     console.error('Error unpublishing gallery', error)
-  }
-}
-
-export const updateGalleryField = async (
-  galleryId: string,
-  fieldName: UpdateableFields,
-  fieldContent: string | Array<GalleryPhoto>,
-) => {
-  const galleryRef = doc(db, COLLECTION_NAME_GALLERY, galleryId)
-
-  try {
-    await updateDoc(galleryRef, {
-      [fieldName]: fieldContent,
-    })
-  } catch (error) {
-    console.error(`Firestore: Error updating ${fieldName} field`, error)
   }
 }

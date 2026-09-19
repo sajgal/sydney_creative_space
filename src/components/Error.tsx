@@ -1,4 +1,5 @@
-import { Film } from 'lucide-react'
+import { MonitorX } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 
 export function Error({
   message,
@@ -10,12 +11,18 @@ export function Error({
   return (
     <div
       className={
-        'flex w-full max-w-screen flex-col items-center justify-center p-4 ' +
-        (fullHeight === false ? '' : 'h-screen')
+        'flex items-center p-4 wrap-anywhere ' +
+        (fullHeight === false ? 'max-h-fit' : 'min-h-screen')
       }
     >
-      <Film />
-      {message || 'Error, sorry'}
+      <Card className="h-fit">
+        <CardHeader>
+          <CardTitle className="flex flex-row justify-center gap-2">
+            <MonitorX /> Error
+          </CardTitle>
+        </CardHeader>
+        <CardContent>{message || 'Error, sorry'}</CardContent>
+      </Card>
     </div>
   )
 }

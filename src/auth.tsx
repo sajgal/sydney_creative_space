@@ -15,6 +15,7 @@ import { auth } from './firebase/config'
 export type AuthContextType = {
   isAuthenticated: boolean
   isInitialLoading: boolean
+  isSuperAdmin: boolean
   login: (provider: AuthProvider) => Promise<void>
   logout: () => Promise<void>
   user: User | null
@@ -30,6 +31,9 @@ export function AuthContextProvider({
   const [user, setUser] = React.useState<User | null>(auth.currentUser)
   const [isInitialLoading, setIsInitialLoading] = React.useState(true)
   const isAuthenticated = !!user
+  const isSuperAdmin = import.meta.env.VITE_PUBLIC_SUPERADMIN_EMAILS.split(',')
+    .map((e: string) => e.trim())
+    .includes(user?.email)
 
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -63,7 +67,14 @@ export function AuthContextProvider({
 
   return (
     <AuthContext
-      value={{ isInitialLoading, isAuthenticated, user, login, logout }}
+      value={{
+        isInitialLoading,
+        isAuthenticated,
+        isSuperAdmin,
+        user,
+        login,
+        logout,
+      }}
     >
       {children}
     </AuthContext>
@@ -82,6 +93,7 @@ export function getInitialAuthObject(): AuthContextType {
   return {
     isAuthenticated: false,
     isInitialLoading: true,
+    isSuperAdmin: false,
     login: () => Promise.resolve(),
     logout: () => Promise.resolve(),
     user: null,

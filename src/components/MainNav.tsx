@@ -7,7 +7,7 @@ import {
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
 import { useAuth } from '#/auth'
-import { ShieldKeyhole } from 'lucide-react'
+import { FingerprintPattern, ShieldKeyhole } from 'lucide-react'
 
 interface NavItem {
   to: string
@@ -23,11 +23,26 @@ interface MainNavProps {
 
 export function MainNav({ items, className, isAdmin }: MainNavProps) {
   const matchRoute = useMatchRoute()
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, isSuperAdmin } = useAuth()
 
   return (
     <NavigationMenu className={className}>
       <NavigationMenuList>
+        {isSuperAdmin && isAdmin && (
+          <NavigationMenuItem key="management">
+            <Link
+              to="/management"
+              className={cn(
+                navigationMenuTriggerStyle(),
+                matchRoute({ to: '/management' }) &&
+                  'bg-accent text-accent-foreground font-medium',
+              )}
+            >
+              <FingerprintPattern />
+            </Link>
+          </NavigationMenuItem>
+        )}
+
         {items.map((item) => {
           const isActive = matchRoute({ to: item.to, fuzzy: !item.exact })
 
@@ -45,6 +60,7 @@ export function MainNav({ items, className, isAdmin }: MainNavProps) {
             </NavigationMenuItem>
           )
         })}
+
         {!!isAuthenticated && !isAdmin && (
           <NavigationMenuItem key="admin">
             <Link

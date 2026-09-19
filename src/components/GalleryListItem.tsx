@@ -10,6 +10,7 @@ import {
 import { useNavigate } from '@tanstack/react-router'
 import { DeleteGalleryAlertDialog } from './DeleteGalleryAlertDialog'
 import type { Gallery } from '#/types/gallery'
+import { datetimeFormat } from '#/utils/dateFormat'
 
 export default function GalleryListItem({
   gallery,
@@ -18,9 +19,7 @@ export default function GalleryListItem({
   gallery: Gallery
   invalidateRouteData: () => Promise<void>
 }) {
-  const formattedDate = dayjs(gallery.created || 0).format(
-    'DD.MM.YYYY HH:mm:ss',
-  )
+  const formattedDate = dayjs(gallery.createdDate || 0).format(datetimeFormat)
 
   const thumbnailUrl =
     gallery?.photos && gallery?.photos[0] && gallery?.photos[0]?.thumbnail_url

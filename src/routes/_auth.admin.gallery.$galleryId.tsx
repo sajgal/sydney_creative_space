@@ -17,6 +17,7 @@ import { Switch } from '#/components/ui/switch'
 import { Label } from '#/components/ui/label'
 import { DeleteAllImagesButton } from '#/components/DeleteAllImagesButton'
 import { EmptyGalleryCard } from '#/components/EmptyGalleryCard'
+import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card'
 
 export const Route = createFileRoute('/_auth/admin/gallery/$galleryId')({
   component: RouteComponent,
@@ -25,10 +26,9 @@ export const Route = createFileRoute('/_auth/admin/gallery/$galleryId')({
 
 function RouteComponent() {
   const router = useRouter()
-  const { user } = useAuth()
+  const { user, isSuperAdmin } = useAuth()
   const queryClient = useQueryClient()
   const { galleryId } = Route.useParams()
-  const serverTime = Route.useLoaderData()
   const queryKey = ['galleryData', galleryId]
 
   const [isDangerModeOn, setDangerModeOn] = useState(false)
@@ -40,7 +40,8 @@ function RouteComponent() {
 
   const { isPending, error, data } = useQuery({
     queryKey,
-    queryFn: async () => getUserGalleryById(user?.uid || '-', galleryId),
+    queryFn: async () =>
+      getUserGalleryById(user?.uid || '-', galleryId, isSuperAdmin),
   })
 
   if (error) return <Error message={error.message} fullHeight={false} />
@@ -74,12 +75,6 @@ function RouteComponent() {
                 Danger mode
               </Label>
             </div>
-            <GalleryStatus
-              publishedAt={data?.publishedAt}
-              serverTime={serverTime}
-              galleryId={galleryId}
-              invalidateRouteData={invalidateRouteData}
-            />
             <CloudinaryUploadWidget
               galleryId={galleryId}
               onUpload={[addPhotoToGallery, invalidateRouteData]}
@@ -98,10 +93,26 @@ function RouteComponent() {
               )}
             </div>
             <div className="flex flex-col gap-2">
-              <GalleryDetailsForm
-                galleryData={{ ...data, galleryId }}
-                onSave={invalidateRouteData}
-              />
+              <Card className="my-2 w-full">
+                <CardContent>
+                  <GalleryDetailsForm
+                    galleryData={{ ...data, galleryId }}
+                    onSave={invalidateRouteData}
+                  />
+                </CardContent>
+              </Card>
+
+              <Card className="mb-5 w-full">
+                <CardHeader>
+                  <CardTitle>Publishing</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <GalleryStatus
+                    galleryData={data}
+                    invalidateRouteData={invalidateRouteData}
+                  />
+                </CardContent>
+              </Card>
 
               {isEmpty && (
                 <EmptyGalleryCard>
@@ -116,7 +127,7 @@ function RouteComponent() {
 
               {!isEmpty && (
                 <AdminPhotoList
-                  photos={data?.photos}
+                  photos={data.photos || []}
                   galleryId={galleryId}
                   invalidateRouteData={invalidateRouteData}
                   isDangerModeOn={isDangerModeOn}
