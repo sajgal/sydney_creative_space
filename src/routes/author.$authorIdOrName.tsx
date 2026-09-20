@@ -8,6 +8,7 @@ import { SubHeader } from '#/components/SubHeader'
 import { getUserData } from '#/firebase/user'
 import { GalleryLinks } from '#/components/GalleryLinks'
 import { Item, ItemContent } from '#/components/ui/item'
+import { Markdown } from '@tanstack/markdown/react'
 
 export const Route = createFileRoute('/author/$authorIdOrName')({
   component: AuthorComponent,
@@ -64,7 +65,9 @@ function AuthorComponent() {
                 className="aspect-video object-cover sm:aspect-square sm:max-w-40"
               />
               <ItemContent>
-                <div>{photographer.bio}</div>
+                <div className="typeset">
+                  <Markdown>{photographer.bio || ''}</Markdown>
+                </div>
               </ItemContent>
             </Item>
             <Separator className="my-1" />

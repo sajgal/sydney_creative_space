@@ -5,6 +5,7 @@
 @import '@fontsource-variable/inter';
 @import '@fontsource-variable/jetbrains-mono';
 @import '@fontsource-variable/playfair-display';
+@import './typeset.css';
 
 @custom-variant dark (&:is(.dark *));
 

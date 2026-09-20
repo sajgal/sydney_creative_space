@@ -1,4 +1,4 @@
-import { Ghost } from 'lucide-react'
+import { SquareDashed } from 'lucide-react'
 import { Empty, EmptyContent, EmptyHeader, EmptyMedia } from './ui/empty'
 
 export function EmptyCard({ children }: { children: React.ReactNode }) {
@@ -6,7 +6,7 @@ export function EmptyCard({ children }: { children: React.ReactNode }) {
     <Empty className="border border-dashed bg-white">
       <EmptyHeader>
         <EmptyMedia variant="icon">
-          <Ghost />
+          <SquareDashed />
         </EmptyMedia>
       </EmptyHeader>
       <EmptyContent>{children}</EmptyContent>

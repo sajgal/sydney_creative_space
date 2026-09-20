@@ -28,6 +28,7 @@
     "@phosphor-icons/react": "^2.1.10",
     "@tabler/icons-react": "^3.46.0",
     "@tailwindcss/vite": "^4.3.3",
+    "@tanstack/markdown": "^0.0.15",
     "@tanstack/react-devtools": "latest",
     "@tanstack/react-form": "^1.33.5",
     "@tanstack/react-hotkeys": "^0.10.0",

@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, notFound } from '@tanstack/react-router'
 import { Separator } from '#/components/ui/separator'
 import { useQuery } from '@tanstack/react-query'
 import { getGalleryById } from '#/firebase/gallery'
@@ -7,6 +7,8 @@ import FullWidthSpinner from '#/components/FullWidthSpinner'
 import type { Gallery as GalleryType, GalleryPhoto } from '#/types/gallery'
 import { Gallery } from '#/components/Gallery'
 import { SubHeader } from '#/components/SubHeader'
+import { Markdown } from '@tanstack/markdown/react'
+import { useAuth } from '#/auth'
 
 export const Route = createFileRoute('/gallery/$galleryId')({
   component: ShowGalleryComponent,
@@ -25,11 +27,18 @@ function PhotoWrapper({
 
 function ShowGalleryComponent() {
   const { galleryId } = Route.useParams()
+  const { isAuthenticated } = useAuth()
 
   const { isPending, error, data } = useQuery({
     queryKey: ['showGallery', galleryId],
     queryFn: async () => getGalleryById(galleryId),
   })
+
+  const isAccessible = data?.isApproved || isAuthenticated
+
+  if (!isAccessible) {
+    throw notFound()
+  }
 
   const isEmpty = !isPending && data?.id
 
@@ -57,7 +66,9 @@ function ShowGalleryComponent() {
       <Separator className="my-4" />
 
       <section className="mt-2 mb-6 flex flex-col gap-4">
-        <div>{gallery.description}</div>
+        <div className="typeset">
+          <Markdown>{gallery.description || ''}</Markdown>
+        </div>
 
         {gallery?.photos && (
           <Gallery className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">

@@ -6,6 +6,7 @@ import { Error } from '#/components/Error'
 import FullWidthSpinner from '#/components/FullWidthSpinner'
 import { GalleryLinks } from '#/components/GalleryLinks'
 import { Header } from '#/components/Header'
+import { EmptyCard } from '#/components/EmptyCard'
 
 export const Route = createFileRoute('/')({
   component: HomeComponent,
@@ -32,7 +33,11 @@ function HomeComponent() {
       <section className="mt-2 mb-6 flex flex-col gap-4">
         {!!isPending && <FullWidthSpinner />}
 
-        {!!isEmpty && <div>Empty :( </div>}
+        {!!isEmpty && (
+          <EmptyCard>
+            We're still building our photographer community. Check back soon.
+          </EmptyCard>
+        )}
 
         <GalleryLinks galleries={data || []} />
       </section>

@@ -10,7 +10,7 @@ import { useState } from 'react'
 import { GalleryStatus } from '#/components/GalleryStatus'
 import { getServerTime } from '#/utils/server-functions'
 import { Button } from '#/components/ui/button'
-import { ChevronLeft } from 'lucide-react'
+import { ChevronLeft, TextInitial } from 'lucide-react'
 import { GalleryDetailsForm } from '#/components/GalleryDetailsForm'
 import { AdminPhotoList } from '#/components/AdminPhotoList'
 import { Switch } from '#/components/ui/switch'
@@ -19,6 +19,7 @@ import { DeleteAllImagesButton } from '#/components/DeleteAllImagesButton'
 import { EmptyGalleryCard } from '#/components/EmptyGalleryCard'
 import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card'
 import { GalleryLockedCard } from '#/components/GalleryLockedCard'
+import { Separator } from '#/components/ui/separator'
 
 export const Route = createFileRoute('/_auth/admin/gallery/$galleryId')({
   component: RouteComponent,
@@ -142,6 +143,19 @@ function RouteComponent() {
                 />
               )}
             </div>
+          </div>
+          <Separator className="my-4" />
+          <div className="text-right">
+            <Link
+              target="_blank"
+              to="/gallery/$galleryId"
+              params={{ galleryId }}
+            >
+              <Button>
+                <TextInitial data-icon="inline-start" />
+                Preview Gallery
+              </Button>
+            </Link>
           </div>
         </>
       )}
