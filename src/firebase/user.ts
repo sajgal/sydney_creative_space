@@ -13,6 +13,7 @@ import {
 import { db } from '@/firebase/config'
 import type { User } from '#/types/user'
 import type { GalleryPhoto } from '#/types/gallery'
+import { getPublishedGalleriesWithoutUserData } from './gallery'
 
 export type UpdateableFields = 'bio' | 'displayName' | 'avatar'
 
@@ -43,12 +44,14 @@ export const getUsersInArray = async (userIds: Array<string>) => {
   return userMap
 }
 
-export const getPublishedUsers = async (): Promise<Array<User>> => {
-  const users = await getDocs(col)
+export const getPublishedUsers = async () => {
+  const { uniqueUserIds } = await getPublishedGalleriesWithoutUserData()
 
-  return users.docs.map((doc) => {
-    return { id: doc.id, ...doc.data() } as User
-  })
+  if (uniqueUserIds.length === 0) return []
+
+  const users = await getUsersInArray(uniqueUserIds)
+
+  return [...users.values()]
 }
 
 export const addUser = async (userId: string) => {

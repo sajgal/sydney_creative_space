@@ -1,3 +1,4 @@
+import { EmptyCard } from '#/components/EmptyCard'
 import { Error } from '#/components/Error'
 import FullWidthSpinner from '#/components/FullWidthSpinner'
 import { Header } from '#/components/Header'
@@ -28,10 +29,6 @@ function RouteComponent() {
     return <Error message={error.message} />
   }
 
-  if (!isPending && data && data?.length === 0) {
-    return <div>Empty</div>
-  }
-
   return (
     <div className="mx-auto max-w-3xl p-4">
       <Header />
@@ -40,6 +37,12 @@ function RouteComponent() {
 
       <section className="mt-2 mb-6 flex flex-col gap-4">
         {!!isPending && <FullWidthSpinner />}
+
+        {!isPending && !!data && data?.length === 0 && (
+          <EmptyCard>
+            We're still building our photographer community. Check back soon.
+          </EmptyCard>
+        )}
 
         {!!data &&
           data.map((user, index) => (

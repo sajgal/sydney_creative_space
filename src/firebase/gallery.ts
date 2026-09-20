@@ -46,9 +46,7 @@ export const getUserGalleries = async (userId: string) => {
   })
 }
 
-export const getPublishedGalleries = async (
-  userId?: string,
-): Promise<Array<Gallery>> => {
+export const getPublishedGalleriesWithoutUserData = async (userId?: string) => {
   const now = await getServerTime()
 
   const constraints: QueryConstraint[] = [
@@ -63,19 +61,30 @@ export const getPublishedGalleries = async (
 
   const q = query(col, ...constraints)
 
-  const galleries = await getDocs(q)
-  const uniqueUserIds = [...new Set(galleries.docs.map((g) => g.data().userId))]
+  const rawGalleries = await getDocs(q)
+  const galleries = rawGalleries.docs.map((gallery) => {
+    return { id: gallery.id, ...gallery.data() } as Gallery
+  })
+
+  const uniqueUserIds = [...new Set(galleries.map((g) => g.userId))]
+
+  return { galleries, uniqueUserIds }
+}
+
+export const getPublishedGalleries = async (
+  userId?: string,
+): Promise<Array<Gallery>> => {
+  const { galleries, uniqueUserIds } =
+    await getPublishedGalleriesWithoutUserData(userId)
 
   if (uniqueUserIds.length === 0) return []
 
   const userMap = await getUsersInArray(uniqueUserIds)
 
-  return galleries.docs.map((gallery) => {
-    const galleryData = { id: gallery.id, ...gallery.data() } as Gallery
-
+  return galleries.map((gallery) => {
     return {
-      ...galleryData,
-      userData: userMap.get(galleryData.userId),
+      ...gallery,
+      userData: userMap.get(gallery.userId),
     }
   })
 }
