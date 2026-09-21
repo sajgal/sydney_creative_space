@@ -66,7 +66,7 @@ function RouteComponent() {
 
       {!!data && (
         <div className="mt-4 flex max-w-full flex-col">
-          <ItemGroup className="gap-2">
+          <ItemGroup className="gap-4 sm:gap-2">
             {data.map((gallery, key) => (
               <GalleryListItem
                 key={key}

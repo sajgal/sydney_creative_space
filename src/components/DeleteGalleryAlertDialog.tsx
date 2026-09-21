@@ -20,9 +20,11 @@ import { Spinner } from './ui/spinner'
 export function DeleteGalleryAlertDialog({
   galleryId,
   invalidateRouteData,
+  className,
 }: {
   galleryId: string
   invalidateRouteData: () => Promise<void>
+  className?: string
 }) {
   const [isPending, setIsPending] = useState(false)
 
@@ -46,6 +48,7 @@ export function DeleteGalleryAlertDialog({
     <AlertDialog key={galleryId}>
       <AlertDialogTrigger asChild>
         <Button
+          className={className}
           variant="destructive"
           onClick={(e) => {
             e.stopPropagation()

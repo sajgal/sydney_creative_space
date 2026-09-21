@@ -4,7 +4,6 @@ import {
   Item,
   ItemContent,
   ItemDescription,
-  ItemMedia,
   ItemTitle,
 } from '@/components/ui/item'
 import { useNavigate } from '@tanstack/react-router'
@@ -34,6 +33,7 @@ export default function GalleryListItem({
       variant="outline"
       asChild
       role="listitem"
+      className="flex"
     >
       <a
         className="cursor-pointer"
@@ -44,45 +44,39 @@ export default function GalleryListItem({
           })
         }
       >
-        <ItemMedia variant="image">
-          <img
-            src={thumbnailUrl || `https://avatar.vercel.sh/mat`}
-            alt={gallery.title || 'title'}
-            width={32}
-            height={32}
-            className="object-cover"
-          />
-        </ItemMedia>
+        <img
+          src={thumbnailUrl || `https://avatar.vercel.sh/mat`}
+          alt={gallery.title || 'title'}
+          className="aspect-video w-full object-fill sm:aspect-square sm:size-16"
+        />
         <ItemContent>
           <ItemTitle className="line-clamp-1">
             {gallery.title || '-- title not set --'}
           </ItemTitle>
-          <div className="text-muted-foreground line-clamp-2 text-left text-sm leading-normal font-normal">
-            <div className="flex gap-2">
-              <div>
-                Created:{' '}
-                <span className="text-muted-foreground">{formattedDate}</span>
-              </div>
-              <Separator orientation="vertical" />
-              {!gallery.isWaitingForApproval && !gallery.isApproved && (
-                <Badge variant="outline">Draft</Badge>
-              )}
-              {!!gallery.isWaitingForApproval && (
-                <Badge variant="outline" className="bg-amber-100">
-                  Waiting for Approval
-                </Badge>
-              )}
-              {!!gallery.isApproved && (
-                <Badge variant="outline" className="bg-lime-200">
-                  Approved
-                </Badge>
-              )}
-            </div>
+          <div className="text-muted-foreground line-clamp-1 flex justify-between gap-2 text-left text-sm leading-normal font-normal sm:flex-row sm:justify-start">
+            <span className="text-muted-foreground line-clamp-1">
+              {formattedDate}
+            </span>
+            <Separator orientation="vertical" className="hidden sm:block" />
+            {!gallery.isWaitingForApproval && !gallery.isApproved && (
+              <Badge variant="outline">Draft</Badge>
+            )}
+            {!!gallery.isWaitingForApproval && (
+              <Badge variant="outline" className="bg-amber-100">
+                Pending
+              </Badge>
+            )}
+            {!!gallery.isApproved && (
+              <Badge variant="outline" className="bg-lime-200">
+                Approved
+              </Badge>
+            )}
           </div>
         </ItemContent>
-        <ItemContent className="flex-none text-center">
+        <ItemContent className="w-full flex-none text-center sm:w-fit">
           <ItemDescription onClick={(event) => event.stopPropagation()}>
             <DeleteGalleryAlertDialog
+              className="w-full"
               galleryId={gallery.id}
               invalidateRouteData={invalidateRouteData}
             />
