@@ -47,7 +47,7 @@ export default function GalleryListItem({
         <img
           src={thumbnailUrl || `https://avatar.vercel.sh/mat`}
           alt={gallery.title || 'title'}
-          className="aspect-video w-full object-fill sm:aspect-square sm:size-16"
+          className="aspect-video w-full object-cover sm:aspect-square sm:size-16"
         />
         <ItemContent>
           <ItemTitle className="line-clamp-1">

@@ -3,7 +3,6 @@ import { cn } from '@/lib/utils'
 import {
   NavigationMenu,
   NavigationMenuItem,
-  NavigationMenuList,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
 import { useAuth } from '#/auth'
