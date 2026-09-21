@@ -5,11 +5,17 @@ import {
 } from '#/firebase/gallery'
 import { useState } from 'react'
 import { Button } from './ui/button'
-import { ChevronDownIcon, Rocket, Unplug, CircleCheck } from 'lucide-react'
+import {
+  ChevronDownIcon,
+  Rocket,
+  Unplug,
+  CircleCheck,
+  RotateCwFadingClock,
+} from 'lucide-react'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 import { Calendar } from './ui/calendar'
 import dayjs from 'dayjs'
-import { Field, FieldGroup, FieldLabel } from './ui/field'
+import { FieldLabel } from './ui/field'
 import { Input } from './ui/input'
 import type { Gallery } from '#/types/gallery'
 import { useAuth } from '#/auth'
@@ -88,30 +94,28 @@ export function GalleryStatus({
   }
 
   return (
-    <div className="flex flex-col items-center gap-2">
+    <>
       {!galleryData.isWaitingForApproval && !galleryData.isApproved && (
-        <>
-          <FieldGroup className="mx-auto max-w-xs flex-row">
-            <Field>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <div className="flex min-w-max grow flex-col justify-between gap-2 sm:flex-row sm:items-end">
+            <div className="grow">
               <FieldLabel htmlFor="date-picker-optional">
-                Publish Date
+                Publishing Date
               </FieldLabel>
               <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild>
+                <PopoverTrigger asChild className="min-w-full justify-start">
                   <Button
                     variant="outline"
                     id="date-picker-optional"
-                    className="w-32 justify-between font-normal"
+                    className="font-normal"
                   >
                     {date ? dayjs(date).format(dateFormat) : 'ASAP'}
                     <ChevronDownIcon />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent
-                  className="w-auto overflow-hidden p-0"
-                  align="start"
-                >
+                <PopoverContent className="overflow-hidden p-0" align="start">
                   <Calendar
+                    className="w-auto"
                     mode="single"
                     selected={date}
                     captionLayout="dropdown"
@@ -124,72 +128,80 @@ export function GalleryStatus({
                   />
                 </PopoverContent>
               </Popover>
-            </Field>
+            </div>
             {!!date && (
-              <>
-                <Field className="w-48">
-                  <FieldLabel htmlFor="time-picker-optional">Time</FieldLabel>
-                  <Input
-                    type="time"
-                    id="time-picker-optional"
-                    step="1"
-                    value={time}
-                    onChange={(e) => setTime(e.target.value)}
-                    className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                  />
-                </Field>
-
-                <Field className="w-48">
-                  <FieldLabel> </FieldLabel>
-                  <Button onClick={() => setDate(undefined)}>Clear</Button>
-                </Field>
-              </>
+              <div className="grow">
+                <FieldLabel htmlFor="time-picker-optional">Time</FieldLabel>
+                <Input
+                  type="time"
+                  id="time-picker-optional"
+                  step="1"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                  className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                />
+              </div>
             )}
-          </FieldGroup>
-          <Button onClick={handlePublish}>
+            {!!date && (
+              <Button variant="destructive" onClick={() => setDate(undefined)}>
+                Clear
+              </Button>
+            )}
+          </div>
+          <Button onClick={handlePublish} className="sm:self-end">
             <Rocket data-icon="inline-start" /> Publish
           </Button>
-        </>
-      )}
-
-      {!!galleryData.isWaitingForApproval && (
-        <>
-          <div>
-            Gallery is waiting for approval since{' '}
-            {dayjs(galleryData.askedForApprovalDate).format(
-              datetimeFormat,
-            )}{' '}
-          </div>
-          <div>
-            Publish date:{' '}
-            {galleryData.publishDate
-              ? dayjs(galleryData.publishDate).format(datetimeFormat)
-              : 'ASAP'}
-          </div>
-        </>
-      )}
-
-      {!!galleryData.isApproved && (
-        <div>
-          <div>
-            Gallery is approved since{' '}
-            {dayjs(galleryData.originalApprovalDate).format(datetimeFormat)}
-          </div>
-          <div>
-            Publish date:{' '}
-            {dayjs(galleryData.publishDate).format(datetimeFormat)}
-          </div>
         </div>
       )}
 
       {(galleryData.isWaitingForApproval || galleryData.isApproved) && (
-        <Button variant="destructive" onClick={handleUnpublish}>
-          <Unplug data-icon="inline-start" /> Unpublish
-        </Button>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <div className="bg-accent self-center rounded-lg p-2">
+            <RotateCwFadingClock />
+          </div>
+          <div className="grow text-center sm:text-left">
+            {!!galleryData.isWaitingForApproval && (
+              <div className="shimmer">
+                Waiting for approval since{' '}
+                <b>
+                  {dayjs(galleryData.askedForApprovalDate).format(
+                    datetimeFormat,
+                  )}
+                </b>
+              </div>
+            )}
+
+            {!!galleryData.isApproved && (
+              <div>
+                Approved since{' '}
+                <b>
+                  {dayjs(galleryData.originalApprovalDate).format(
+                    datetimeFormat,
+                  )}
+                </b>
+              </div>
+            )}
+
+            <div>
+              Publish date{' '}
+              <b>
+                {galleryData.publishDate
+                  ? dayjs(galleryData.publishDate).format(datetimeFormat)
+                  : 'ASAP'}
+              </b>
+            </div>
+          </div>
+
+          <div className="self-center">
+            <Button variant="destructive" onClick={handleUnpublish}>
+              <Unplug data-icon="inline-start" /> Unpublish
+            </Button>
+          </div>
+        </div>
       )}
 
       {!!isSuperAdmin && !!galleryData.isWaitingForApproval && (
-        <div className="flex w-full justify-center gap-4 border-2 border-dashed p-2">
+        <div className="mt-2 flex w-full justify-center gap-4 border-2 border-dashed p-2">
           <Button
             variant="default"
             onClick={handleApprove}
@@ -199,6 +211,6 @@ export function GalleryStatus({
           </Button>
         </div>
       )}
-    </div>
+    </>
   )
 }

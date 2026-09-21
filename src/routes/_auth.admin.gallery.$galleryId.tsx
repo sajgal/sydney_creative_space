@@ -98,7 +98,7 @@ function RouteComponent() {
             <div className="flex flex-col gap-2">
               {!!data.isApproved && <GalleryLockedCard />}
 
-              <Card className="my-2 w-full">
+              <Card className="my-2 py-4">
                 <CardHeader>
                   <CardTitle>Gallery details</CardTitle>
                 </CardHeader>
@@ -110,10 +110,7 @@ function RouteComponent() {
                 </CardContent>
               </Card>
 
-              <Card className="mb-5 w-full">
-                <CardHeader>
-                  <CardTitle>Publishing</CardTitle>
-                </CardHeader>
+              <Card className="mb-5 py-4">
                 <CardContent>
                   <GalleryStatus
                     galleryData={data}
