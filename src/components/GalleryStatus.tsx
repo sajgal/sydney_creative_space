@@ -11,6 +11,7 @@ import {
   Unplug,
   CircleCheck,
   RotateCwFadingClock,
+  CircleCheckBig,
 } from 'lucide-react'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 import { Calendar } from './ui/calendar'
@@ -157,7 +158,8 @@ export function GalleryStatus({
       {(galleryData.isWaitingForApproval || galleryData.isApproved) && (
         <div className="flex flex-col gap-2 sm:flex-row">
           <div className="bg-accent self-center rounded-lg p-2">
-            <RotateCwFadingClock />
+            {!!galleryData.isWaitingForApproval && <RotateCwFadingClock />}
+            {!!galleryData.isApproved && <CircleCheckBig />}
           </div>
           <div className="grow text-center sm:text-left">
             {!!galleryData.isWaitingForApproval && (
