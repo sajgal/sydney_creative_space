@@ -27,7 +27,7 @@ export function MainNav({ items, className, isAdmin }: MainNavProps) {
 
   return (
     <NavigationMenu className={className}>
-      <NavigationMenuList>
+      <div className="flex list-none flex-wrap justify-center">
         {isSuperAdmin && isAdmin && (
           <NavigationMenuItem key="management">
             <Link
@@ -75,7 +75,7 @@ export function MainNav({ items, className, isAdmin }: MainNavProps) {
             </Link>
           </NavigationMenuItem>
         )}
-      </NavigationMenuList>
+      </div>
     </NavigationMenu>
   )
 }
