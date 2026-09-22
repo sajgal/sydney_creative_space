@@ -149,7 +149,11 @@ export function GalleryStatus({
               </Button>
             )}
           </div>
-          <Button onClick={handlePublish} className="sm:self-end">
+          <Button
+            onClick={handlePublish}
+            className="sm:self-end"
+            disabled={(galleryData.photos?.length || 0) < 1}
+          >
             <Rocket data-icon="inline-start" /> Publish
           </Button>
         </div>
