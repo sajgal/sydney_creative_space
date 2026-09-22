@@ -103,19 +103,19 @@ export function AdminPhotoList({
       event.stopPropagation()
       setPendingDeleteImages([...pendingDeleteImages, photo.id])
 
-      const { error, response } = await destroyImage({ data: { photo } })
-
-      if (error) {
-        console.error(response)
+      try {
+        await destroyImage({ data: { photo } })
+      } catch (error) {
+        console.error(error)
         return setPendingDeleteImages(
-          pendingDeleteImages.splice(pendingDeleteImages.indexOf(photo.id), 1),
+          pendingDeleteImages.filter((id) => id !== photo.id),
         )
       }
 
       await removePhotoFromGallery(galleryId, photo)
       await invalidateRouteData()
       setPendingDeleteImages(
-        pendingDeleteImages.splice(pendingDeleteImages.indexOf(photo.id), 1),
+        pendingDeleteImages.filter((id) => id !== photo.id),
       )
     },
     [galleryId, pendingDeleteImages],
