@@ -64,6 +64,7 @@ export function MainNav({ items, className, isAdmin }: MainNavProps) {
           <NavigationMenuItem key="admin">
             <Link
               to="/admin"
+              aria-label="Admin"
               className={cn(
                 navigationMenuTriggerStyle(),
                 matchRoute({ to: '/admin' }) &&
