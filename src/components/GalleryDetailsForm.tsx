@@ -5,6 +5,7 @@ import { Input } from './ui/input'
 import { Textarea } from './ui/textarea'
 import { useDebouncer } from '@tanstack/react-pacer'
 import type { Gallery } from '#/types/gallery'
+import { SupportsMarkdown } from './SupportsMarkdown'
 
 export function GalleryDetailsForm({
   gallery,
@@ -56,6 +57,7 @@ export function GalleryDetailsForm({
             onChange={(e) => handleOnChange('description', e.target.value)}
             value={formValues.description}
           />
+          <SupportsMarkdown />
         </Field>
       </FieldGroup>
     </FieldSet>

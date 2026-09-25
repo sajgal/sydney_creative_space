@@ -1,12 +1,18 @@
 import { useState } from 'react'
 import { Card, CardContent } from './ui/card'
-import { Field, FieldGroup, FieldLabel, FieldSet } from './ui/field'
+import {
+  Field,
+  FieldGroup,
+  FieldLabel,
+  FieldSet,
+} from './ui/field'
 import { Input } from './ui/input'
 import { Textarea } from './ui/textarea'
 import { useDebouncer } from '@tanstack/react-pacer'
 import type { User } from '#/types/user'
 import { updateUserField, type UpdateableFields } from '#/firebase/user'
 import { ProfileFormImageUpload } from './ProfileFormImageUpload'
+import { SupportsMarkdown } from './SupportsMarkdown'
 
 export function ProfileForm({
   userData,
@@ -60,6 +66,7 @@ export function ProfileForm({
                 onChange={(e) => handleOnChange('bio', e.target.value)}
                 value={formValues.bio}
               />
+              <SupportsMarkdown />
             </Field>
           </FieldGroup>
         </FieldSet>
